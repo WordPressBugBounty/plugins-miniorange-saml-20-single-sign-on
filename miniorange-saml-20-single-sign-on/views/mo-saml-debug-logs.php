@@ -109,8 +109,6 @@ function mo_saml_display_log_page() {
 			</div>
 	</div>
 		<?php
-	} elseif ( 'error-codes' === $active_tab ) {
-		error_codes();
 	} else {
 		?>
 		<div class="mo-saml-bootstrap-d-flex mo-saml-bootstrap-text-center mo-saml-bootstrap-pt-3 mo-saml-bootstrap-border-bottom mo-saml-bootstrap-justify-content-center">
@@ -152,8 +150,8 @@ function mo_saml_display_tabs_troubleshoot_page( $active_tab ) {
 		}
 		?>
 			<a id="sp-setup-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( 'debug-logs' === $active_tab ? 'mo-saml-nav-tab-active' : '' ); ?>" href="<?php echo esc_url( add_query_arg( array( 'tab' => 'debug-logs' ), $server_uri ) ); ?>"><?php esc_html_e( 'Debug Tools', 'miniorange-saml-20-single-sign-on' ); ?></a>
-			<a id="sp-setup-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( 'error-codes' === $active_tab ? 'mo-saml-nav-tab-active' : '' ); ?>" href="<?php echo esc_url( add_query_arg( array( 'tab' => 'error-codes' ), $server_uri ) ); ?>"><?php esc_html_e( 'Error Codes', 'miniorange-saml-20-single-sign-on' ); ?></a>
-			<a id="sp-setup-tab" class="mo-saml-nav-tab-cstm" target="_blank" href="https://faq.miniorange.com/kb/saml-single-sign-on/">FAQs</a>
+			<a id="sp-setup-tab" class="mo-saml-nav-tab-cstm" target="_blank" href="https://developers.miniorange.com/docs/saml/wordpress/error-codes"><?php esc_html_e( 'Error Codes', 'miniorange-saml-20-single-sign-on' ); ?></a>
+			<a id="sp-setup-tab" class="mo-saml-nav-tab-cstm" target="_blank" href="https://faq.miniorange.com/kb/saml-single-sign-on/"><?php esc_html_e( 'FAQs', 'miniorange-saml-20-single-sign-on' ); ?></a>
 		</div>
 	</div>
 	<?php

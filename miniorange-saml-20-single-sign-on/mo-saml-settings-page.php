@@ -120,14 +120,14 @@ function mo_saml_is_customer_registered_saml() {
 function mo_saml_display_test_config_error_page( $error_code, $display_metadata_mismatch = '', $status_message = '' ) {
 	$error_fix     = $error_code['fix'];
 	$error_cause   = $error_code['cause'];
-	$error_message = ! empty( $error_code['testconfig_msg'] ) ? $error_code['testconfig_msg'] : '';
+	$error_message = empty( $status_message ) && ! empty( $error_code['testconfig_msg'] ) ? $error_code['testconfig_msg'] : $status_message;
 	if ( ob_get_level() > 0 ) {
 		ob_end_clean();
 	}
 
 	echo '<div style="font-family:Calibri;padding:0 3%;">';
 	echo '<div style="color: #a94442;background-color: #f2dede;padding: 15px;margin-bottom: 20px;text-align:center;border:1px solid #E6B3B2;font-size:18pt;"> ERROR ' . esc_html( $error_code['code'] ) . '</div>
-	<div style="color: #a94442;font-size:14pt; margin-bottom:20px;"><p><strong>Error: </strong>' .  wp_kses_post( $error_cause )  . '</p>
+	<div style="color: #a94442;font-size:14pt; margin-bottom:20px;"><p><strong>Error: </strong>' . wp_kses_post( $error_cause ) . '</p>
 	<p>Please contact your administrator and report the following error:</p>
 	<p><strong>Possible Cause: </strong>' . esc_html( $error_message ) . '</p>';
 	if ( ! empty( $status_message ) ) {
@@ -148,8 +148,8 @@ function mo_saml_display_test_config_error_page( $error_code, $display_metadata_
 		' . wp_kses_post( $error_fix ) . '
 	</div>
 	<div style="margin:3%;display:block;text-align:center;">';
-		if ( 'WPSAMLERR010' === $error_code['code'] || 'WPSAMLERR004' === $error_code['code'] || 'WPSAMLERR012' === $error_code['code'] ) {
-			$option_id = '';
+	if ( 'WPSAMLERR010' === $error_code['code'] || 'WPSAMLERR004' === $error_code['code'] || 'WPSAMLERR012' === $error_code['code'] ) {
+		$option_id = '';
 		switch ( $error_code['code'] ) {
 			case 'WPSAMLERR004':
 				$option_id = 'mo_fix_certificate';

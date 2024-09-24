@@ -83,7 +83,7 @@ class Mo_Saml_Options_Enum_Error_Codes extends Mo_SAML_Basic_Enum {
 		'WPSAMLERR009' => array(
 			'code'           => 'WPSAMLERR009',
 			'description'    => 'This error indicates that the Audience URI is not correctly configured at your Identity Provider.',
-			'fix'            => '<ul style="list-style: none;"><li style="list-style-type: none;">Copy the Audience URI configured in the Identity Provider from above and paste it into the SP EntityID/Issuer field in the Service Provider Metadata Tab. </li><li style="list-style-type: none; font-weight: bold; text-align: center; margin: 10px 0;">OR </li><li style="list-style-type: none;">Copy the Audience URI configured in the plugin from above and paste it into the Audience URI field in the Identity Provider.</li></ul>',
+			'fix'            => '<ul style="list-style: none;"><li style="list-style-type: none;">Copy the Audience URI configured in the Identity Provider from above and paste it into the SP EntityID/Issuer field in the Service Provider Metadata Tab. </li><li style="list-style-type: none; font-weight: bold; text-align: center; margin: 10px 0;">OR </li><li style="list-style-type: none;">Copy the Audience URI configured in the Service Provider Metadata Tab from above and paste it into the Audience URI field in the Identity Provider.</li></ul>',
 			'cause'          => 'Invalid Audience URI',
 			'testconfig_msg' => 'The value of Audience URI in the plugin settings does not match the value of Audience URI received from the Identity Provider.',
 		),

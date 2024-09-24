@@ -615,7 +615,7 @@ class Mo_SAML_Utilities {
 					$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR009'];
 					if ( 'testValidate' === $relay_state ) {
 						$display_metadata_mismatch = '<p><strong>Audience URI configured in Identity Provider: </strong>' . $audiences[0] . '<p>
-						<p><strong>Audience URI configured in the plugin: </strong>' . esc_html( $sp_entity_id ) . '</p>';
+						<p><strong>Audience URI configured in the plugin\'s Service Provider Metadata Tab: </strong>' . esc_html( $sp_entity_id ) . '</p>';
 						mo_saml_display_test_config_error_page( $error_code, $display_metadata_mismatch );
 						exit;
 					} else {

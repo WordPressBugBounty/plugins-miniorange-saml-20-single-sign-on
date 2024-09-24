@@ -431,8 +431,7 @@ class Mo_SAML_Login_Validate {
 		$match_account_by = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER ) ? get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER ) : 'email';
 		if ( strlen( $name_id ) > 60 ) {
 			echo '<p><font color="#FF0000" style="font-size:14pt;font-weight:bold">Warning: The NameID value is longer than 60 characters. User will not be created during SSO.</font></p>';
-		}
-		elseif ( 'email' === $match_account_by && ! filter_var( $name_id, FILTER_VALIDATE_EMAIL ) ) {
+		} elseif ( 'email' === $match_account_by && ! filter_var( $name_id, FILTER_VALIDATE_EMAIL ) ) {
 			echo '<p><font color="#FF0000" style="font-size:14pt;font-weight:bold">Warning: The NameID value is not a valid Email ID</font></p>';
 		}
 		echo '<span style="font-size:14pt;"><b>Hello</b>, ' . esc_html( $user_email ) . '</span>';

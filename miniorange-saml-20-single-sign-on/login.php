@@ -3,7 +3,7 @@
  * Plugin Name: miniOrange SSO using SAML 2.0
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 5.1.8
+ * Version: 5.1.9
  * Author: miniOrange
  * Author URI: https://miniorange.com/
  * License: MIT/Expat
@@ -230,22 +230,11 @@ class Saml_Mo_Login {
 		if ( ! is_user_logged_in() ) {
 			$saml_idp_name      = get_option( Mo_Saml_Options_Enum_Service_Provider::IDENTITY_NAME );
 			$custom_button_text = isset( $saml_idp_name ) ? 'Login with ' . $saml_idp_name : 'Login with SSO';
+			wp_enqueue_script( 'mo_saml_login_button_script', plugins_url( 'includes/js/sso_button.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
 			echo '
-                <script>
-                window.onload = function() {
-	                var target_btn = document.getElementById("mo_saml_button");
-	                var before_element = document.querySelector("#loginform p");
-	                before_element.before(target_btn);
-                };                  
-                    function loginWithSSOButton(id) {
-                        if( id === "mo_saml_login_sso_button")
-                            document.getElementById("saml_user_login_input").value = "saml_user_login";
-                        document.getElementById("loginform").submit();
-                    }
-				</script>
                 <input id="saml_user_login_input" type="hidden" name="option" value="">
                 <div id="mo_saml_button" style="height:88px;">
-                	<div id="mo_saml_login_sso_button" onclick="loginWithSSOButton(this.id)" style="width:100%;display:flex;justify-content:center;align-items:center;font-size:14px;margin-bottom:1.3rem" class="button button-primary">
+                	<div id="mo_saml_login_sso_button" style="width:100%;display:flex;justify-content:center;align-items:center;font-size:14px;margin-bottom:1.3rem" class="button button-primary">
                     <img style="width:20px;height:15px;padding-right:1px" src="' . esc_url( Mo_SAML_Utilities::mo_saml_get_plugin_dir_url() ) . 'images/lock-icon.webp">' . esc_html( $custom_button_text ) . '
                 	</div>
                 	<div style="padding:5px;font-size:14px;height:20px;text-align:center"><b>OR</b></div>
