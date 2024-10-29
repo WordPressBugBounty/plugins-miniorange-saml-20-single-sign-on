@@ -112,7 +112,7 @@ function get_addon_tile( $addon_name, $addon_title, $addon_desc, $addon_url ) {
 	?>
 			<div class="mo-saml-add-ons-cards mo-saml-bootstrap-mt-3">
 				<h4 class="mo-saml-addons-head"><?php echo esc_attr( $addon_title ); ?></h4>
-				<p class="mo-saml-bootstrap-pt-4 mo-saml-bootstrap-pe-2 mo-saml-bootstrap-pb-4 mo-saml-bootstrap-ps-4"><?php echo esc_html( $addon_desc ); ?></p>
+				<p class="mo-saml-bootstrap-pe-2 mo-saml-bootstrap-ps-4 mo-saml-add-on-card-desc"><?php echo esc_html( $addon_desc ); ?></p>
 				<img src="<?php echo esc_url( $icon_url ); ?>" class="mo-saml-addons-logo" alt=" Image">
 				<span class="mo-saml-add-ons-rect"></span>
 				<span class="mo-saml-add-ons-tri"></span>

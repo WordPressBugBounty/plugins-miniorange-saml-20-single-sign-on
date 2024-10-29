@@ -100,7 +100,7 @@ function mo_saml_display_saml_feedback_form() {
 	</div>
 
 	<script>
-		jQuery('a[aria-label="Deactivate miniOrange SSO using SAML 2.0"]').click(function() {
+		jQuery('a[id="deactivate-miniorange-saml-20-single-sign-on"]').click(function() {
 
 			var mo_modal = document.getElementById('mo_saml_feedback_modal');
 

@@ -132,10 +132,10 @@ function mo_saml_display_plugin_header() {
 				<?php esc_html_e( 'miniOrange SSO using SAML 2.0', 'miniorange-saml-20-single-sign-on' ); ?>
 				<span class="mo_saml_version_display"> <?php echo '[ ' . esc_html( $version ) . ' ]'; ?> </span>
 			</div>
-			<div class="mo-saml-bootstrap-col-md-3 mo-saml-bootstrap-text-end mo-saml-bootstrap-d-flex mo-saml-bootstrap-align-items-center">
+			<div class="mo-saml-bootstrap-col-md-4 mo-saml-bootstrap-text-end mo-saml-bootstrap-d-flex mo-saml-bootstrap-align-items-center">
 				<a class="mo-saml-bootstrap-text-white mo-saml-bootstrap-ps-4 mo-saml-bootstrap-pe-4 mo-saml-bootstrap-pt-2 mo-saml-bootstrap-pb-2 btn-prem prem-btn-cstm" target="_blank" href="<?php echo esc_url( $sandbox_url ); ?>"><?php esc_html_e( 'Try Paid Features', 'miniorange-saml-20-single-sign-on' ); ?></a>
 			</div>
-			<div class="mo-saml-bootstrap-col-md-4 mo-saml-bootstrap-text-end mo-saml-bootstrap-d-flex mo-saml-bootstrap-align-items-center mo-saml-bootstrap-justify-content-end">
+			<div class="mo-saml-bootstrap-col-md-3 mo-saml-bootstrap-text-end mo-saml-bootstrap-d-flex mo-saml-bootstrap-align-items-center mo-saml-bootstrap-justify-content-end">
 				<a id="license_upgrade" class="mo-saml-bootstrap-text-white mo-saml-bootstrap-ps-4 mo-saml-bootstrap-pe-4 mo-saml-bootstrap-pt-2 mo-saml-bootstrap-pb-2 btn-prem prem-btn-cstm" href="<?php echo esc_url( Mo_Saml_External_Links::PRICING_PAGE ); ?>" target="_blank"><?php esc_html_e( 'Premium Plans | Upgrade Now', 'miniorange-saml-20-single-sign-on' ); ?></a>
 			</div>
 		</div>
@@ -205,7 +205,7 @@ function mo_saml_troubleshoot_card() {
 			<h6><?php esc_html_e( 'Facing issues? Check out the Troubleshooting options available in the plugin', 'miniorange-saml-20-single-sign-on' ); ?></h6>
 			<hr />
 			<div class="mo-saml-bootstrap-row mo-saml-bootstrap-align-items-center mo-saml-bootstrap-mt-3 mo-saml-bootstrap-justify-content-center">
-				<a href="?page=mo_saml_enable_debug_logs&tab=debug-logs" class="mo-saml-bs-btn btn-cstm mo-saml-bootstrap-text-white mo-saml-bootstrap-w-50"><?php esc_html_e( 'Troubleshoot', 'miniorange-saml-20-single-sign-on' ); ?></a>
+				<a href="?page=mo_saml_enable_debug_logs&tab=debug-logs" class="mo-saml-bs-btn btn-cstm mo-saml-bootstrap-text-white mo-saml-width-auto"><?php esc_html_e( 'Troubleshoot', 'miniorange-saml-20-single-sign-on' ); ?></a>
 			</div>
 		</div>
 	</div>

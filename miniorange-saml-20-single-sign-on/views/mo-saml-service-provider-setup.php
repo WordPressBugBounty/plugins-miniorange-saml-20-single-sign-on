@@ -245,31 +245,26 @@ function mo_saml_display_sp_configuration( $saml_identity_name, $saml_login_url,
 								<p class="mo-saml-bootstrap-mt-2"><b><?php esc_html_e( 'Note', 'miniorange-saml-20-single-sign-on' ); ?></b><?php esc_html_e( ' : Disable this toggle to disable the check of time validity for SAML assertion.', 'miniorange-saml-20-single-sign-on' ); ?></p>
 							</div>
 						</div>
-						<div class="mo-saml-bootstrap-row align-items-top mt-2">
-							<div class="mo-saml-bootstrap-col-md-3"></div>
-							<div class="mo-saml-bootstrap-col-md-9">
-								<input type="submit" class="mo-saml-bs-bs-btn btn-cstm mo-saml-bootstrap-rounded mo-saml-bootstrap-mt-3 mo-saml-bootstrap-me-3 mo-saml-w-186" name="submit" value="<?php esc_html_e( 'Save', 'miniorange-saml-20-single-sign-on' ); ?>">
-								<input type="button" class="mo-saml-bs-bs-btn btn-cstm mo-saml-bootstrap-rounded mo-saml-bootstrap-mt-3 mo-saml-w-186" id="test_config" 
+						<div class="mo-saml-bootstrap-row align-items-top mt-2 mo-saml-btns-cont">
+							<div class="mo-saml-btns-cont w-500">
+								<input type="submit" class="mo-saml-bs-bs-btn btn-cstm mo-saml-bootstrap-rounded mo-saml-bootstrap-mt-3 mo-saml-bootstrap-me-3" name="submit" value="<?php esc_html_e( 'Save', 'miniorange-saml-20-single-sign-on' ); ?>" style="width: 30%;">
+								<input type="button" class="mo-saml-bs-bs-btn btn-cstm mo-saml-bootstrap-rounded mo-saml-bootstrap-mt-3" id="test_config" 
 								<?php
 								if ( ! Mo_SAML_Utilities::mo_saml_is_sp_configured() || ! get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) || ! Mo_SAML_Utilities::mo_saml_is_openssl_installed() ) {
 									echo 'disabled';}
 								?>
-									title="You can only test your Configuration after saving your Service Provider Settings." onclick="mo_saml_show_test_window();" value="<?php esc_html_e( 'Test Configuration', 'miniorange-saml-20-single-sign-on' ); ?>">
-							</div>
-							<div class="mo-saml-bootstrap-col-md-3">
-
+									title="You can only test your Configuration after saving your Service Provider Settings." onclick="mo_saml_show_test_window();" value="<?php esc_html_e( 'Test Configuration', 'miniorange-saml-20-single-sign-on' ); ?>" style="width: 70%;">
 							</div>
 						</div>
-						<div class="mo-saml-bootstrap-row align-items-top mt-2">
-							<div class="mo-saml-bootstrap-col-md-3"></div>
-							<div class="mo-saml-bootstrap-col-md-9">
-								<input type="button" class="mo-saml-bs-bs-btn btn-cstm mo-saml-bootstrap-rounded mo-saml-bootstrap-mt-3 w-372" name="saml_request" id="export-import-config" 
+						<div class="mo-saml-bootstrap-row align-items-top mt-2 mo-saml-btns-cont">
+							<div class="mo-saml-btns-cont w-500">
+								<input type="button" class="mo-saml-bs-bs-btn btn-cstm mo-saml-bootstrap-rounded mo-saml-bootstrap-mt-3" name="saml_request" id="export-import-config" 
 								<?php
 								if ( ! Mo_SAML_Utilities::mo_saml_is_sp_configured() || ! get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) ) {
 									echo 'disabled';
 								}
 								?>
-									title="Export Plugin Configuration" value="<?php esc_html_e( 'Export Plugin Configuration', 'miniorange-saml-20-single-sign-on' ); ?>" onclick="jQuery('#mo_export').submit();">
+									title="Export Plugin Configuration" value="<?php esc_html_e( 'Export Plugin Configuration', 'miniorange-saml-20-single-sign-on' ); ?>" onclick="jQuery('#mo_export').submit();" style="width: 100%;">
 							</div>
 						</div>
 					</div>

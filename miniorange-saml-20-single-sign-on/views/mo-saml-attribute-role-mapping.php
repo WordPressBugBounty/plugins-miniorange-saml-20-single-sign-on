@@ -166,7 +166,7 @@ function mo_saml_display_role_mapping( $default_role, $roles ) {
 				<div class="mo-saml-bootstrap-col-md-3">
 					<h5><?php esc_html_e( 'Default Role :', 'miniorange-saml-20-single-sign-on' ); ?> </h5>
 				</div>
-				<div class="mo-saml-bootstrap-col-md-3">
+				<div class="mo-saml-bootstrap-col-md-4">
 					<select id="saml_am_default_user_role" name="saml_am_default_user_role">
 						<?php
 						wp_dropdown_roles( $default_role );
