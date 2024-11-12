@@ -82,7 +82,7 @@ function mo_saml_display_log_page() {
 
 								<h6 class="mo-saml-bootstrap-mt-3">
 									Copy this code <code>define('MO_SAML_LOGGING', true);</code>
-									and paste it in the <a href="https://wordpress.org/support/article/editing-wp-config-php/">wp-config.php</a>
+									and paste it in the <a href="https://wordpress.org/support/article/editing-wp-config-php/" target="_blank">wp-config.php</a>
 									file before the line
 									<br> <code>/* That's all, stop editing! Happy publishing. */</code> to enable the miniOrange
 									SAML logs.
