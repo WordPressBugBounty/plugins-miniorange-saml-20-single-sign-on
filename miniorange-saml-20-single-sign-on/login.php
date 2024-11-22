@@ -3,7 +3,7 @@
  * Plugin Name: miniOrange SSO using SAML 2.0
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 5.2.1
+ * Version: 5.2.2
  * Author: miniOrange
  * Author URI: https://miniorange.com/
  * License: MIT/Expat
@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'MO_SAML_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 require_once 'handlers/class-mo-saml-base-handler.php';
+require_once 'handlers/class-mo-saml-test-config-error-handler.php';
 require_once 'class-mo-saml-idp-metadata-reader.php';
 require_once 'class-mo-saml-login-widget.php';
 require_once 'class-mo-saml-login-validate.php';
@@ -40,6 +41,7 @@ class Saml_Mo_Login {
 		add_action( 'admin_enqueue_scripts', array( $this, 'plugin_settings_script' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'plugin_settings_style' ) );
 		register_activation_hook( __FILE__, array( $this, 'mo_saml_sso_activate' ) );
+		add_action( 'admin_init', array( Mo_Saml_Test_Config_Error_Handler::class, 'mo_saml_get_settings_handler' ) );
 		add_action( 'admin_init', array( Mo_SAML_Base_Handler::class, 'mo_saml_save_settings_handler' ) );
 		add_action( 'admin_init', array( 'Mo_SAML_Logger', 'mo_saml_admin_notices' ) );
 		add_action( 'admin_init', array( $this, 'mo_saml_do_plugin_extension_checks' ) );
@@ -373,7 +375,7 @@ class Saml_Mo_Login {
 	 * @param array $links The default links provided by WordPress for Settings and Deactivate.
 	 * @return array
 	 */
-	public function mo_saml_plugin_action_links( $links ): array {
+	public function mo_saml_plugin_action_links( $links ) {
 
 		$settings_link = array( '<a href="' . esc_url( admin_url( 'admin.php?page=mo_saml_settings' ) ) . '">' . __( 'Settings', 'miniorange-saml-20-single-sign-on' ) . '</a>' );
 		$license_link  = '<a href="' . Mo_Saml_External_Links::PRICING_PAGE . '" target="_blank">' . esc_html__( 'Premium Plans', 'miniorange-saml-20-single-sign-on' ) . '</a>';

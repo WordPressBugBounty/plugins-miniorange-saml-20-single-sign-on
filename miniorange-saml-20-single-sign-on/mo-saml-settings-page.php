@@ -152,13 +152,13 @@ function mo_saml_display_test_config_error_page( $error_code, $display_metadata_
 		$option_id = '';
 		switch ( $error_code['code'] ) {
 			case 'WPSAMLERR004':
-				$option_id = 'mo_fix_certificate';
+				$option_id = 'mo_saml_fix_certificate';
 				break;
 			case 'WPSAMLERR010':
-				$option_id = 'mo_fix_entity_id';
+				$option_id = 'mo_saml_fix_entity_id';
 				break;
 			case 'WPSAMLERR012':
-				$option_id = 'mo_fix_iconv_cert';
+				$option_id = 'mo_saml_fix_iconv_cert';
 				break;
 		}
 		echo '<div>

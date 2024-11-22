@@ -76,13 +76,14 @@ class Mo_Saml_Options_Enum_Service_Provider extends Mo_SAML_Basic_Enum {
  * Defines constants for Redirection SSO Links tab.
  */
 class Mo_Saml_Sso_Constants extends Mo_SAML_Basic_Enum {
-	const MO_SAML_REDIRECT_ERROR        = 'mo_saml_redirect_error_code';
-	const MO_SAML_REDIRECT_ERROR_REASON = 'mo_saml_redirect_error_reason';
-	const MO_SAML_REQUIRED_CERTIFICATE  = 'mo_saml_required_certificate';
-	const MO_SAML_REQUIRED_ISSUER       = 'mo_saml_required_issuer';
-	const MO_SAML_TEST_STATUS           = 'MO_SAML_TEST_STATUS';
-	const MO_SAML_EXPIRE_NOTICE         = 'mo_date_expire_notice';
-	const MO_SAML_CLOSE_NOTICE          = 'mo_saml_close_notice';
+	const MO_SAML_REDIRECT_ERROR          = 'mo_saml_redirect_error_code';
+	const MO_SAML_REDIRECT_ERROR_REASON   = 'mo_saml_redirect_error_reason';
+	const MO_SAML_REQUIRED_CERTIFICATE    = 'mo_saml_required_certificate';
+	const MO_SAML_VALID_AGAINST_ENTITY_ID = 'mo_saml_valid_against_entity_id';
+	const MO_SAML_REQUIRED_ISSUER         = 'mo_saml_required_issuer';
+	const MO_SAML_TEST_STATUS             = 'MO_SAML_TEST_STATUS';
+	const MO_SAML_EXPIRE_NOTICE           = 'mo_date_expire_notice';
+	const MO_SAML_CLOSE_NOTICE            = 'mo_saml_close_notice';
 }
 
 /**
@@ -213,7 +214,7 @@ class Mo_Saml_Options_Plugin_Constants extends Mo_SAML_Basic_Enum {
 	const CMS_NAME         = 'WP';
 	const APPLICATION_NAME = 'WP miniOrange SAML 2.0 SSO Plugin';
 	const APPLICATION_TYPE = 'SAML';
-	const VERSION          = '5.2.1';
+	const VERSION          = '5.2.2';
 	const HOSTNAME         = 'https://login.xecurify.com';
 	const WP_VERSION       = '6.7';
 	const PLUGIN_FILE      = 'miniorange-saml-20-single-sign-on/login.php';
@@ -1031,7 +1032,7 @@ class Mo_Saml_Error_Log extends Mo_SAML_Basic_Enum {
 	 * @param array  $data Any additional data to be printed in the log file.
 	 * @return string The message printed in the log file.
 	 */
-	public static function mo_saml_write_message( $message, $data = array() ): string {
+	public static function mo_saml_write_message( $message, $data = array() ) {
 		$message = constant( 'self::' . $message );
 		if ( ! empty( $data ) ) {
 			foreach ( $data as $key => $value ) {

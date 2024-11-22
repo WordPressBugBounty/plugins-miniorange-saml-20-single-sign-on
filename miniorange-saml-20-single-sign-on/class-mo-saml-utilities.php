@@ -637,10 +637,9 @@ class Mo_SAML_Utilities {
 			);
 			$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR010'];
 			if ( 'testValidate' === $relay_state ) {
-				$display_metadata_mismatch = '<p><strong>Entity ID in SAML Response: </strong>' . esc_html( $issuer ) . '<p>
-				<p><strong>Entity ID configured in the plugin: </strong>' . esc_html( $issuer_to_validate_against ) . '</p>';
+				update_option( Mo_Saml_Sso_Constants::MO_SAML_VALID_AGAINST_ENTITY_ID, $issuer_to_validate_against );
 				update_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER, $issuer );
-				mo_saml_display_test_config_error_page( $error_code, $display_metadata_mismatch );
+				wp_safe_redirect( admin_url() . '?page=mo_saml_settings&option=test_config_error_wpsamlerr010' );
 				exit;
 			} else {
 					self::mo_saml_die( $error_code );

@@ -21,6 +21,7 @@ require_once __DIR__ . '/class-mo-saml-service-provider-settings-handler.php';
 require_once __DIR__ . '/class-mo-saml-sso-settings-handler.php';
 require_once __DIR__ . '/class-mo-saml-upload-metadata-handler.php';
 require_once __DIR__ . '/class-mo-saml-welcome-modal-handler.php';
+require_once __DIR__ . '/class-mo-saml-test-config-error-handler.php';
 
 /**
  * Main Form Handler class used to handle all the form submissions in the plugin.

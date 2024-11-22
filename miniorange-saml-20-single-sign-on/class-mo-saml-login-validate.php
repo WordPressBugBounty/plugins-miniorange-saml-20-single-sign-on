@@ -42,35 +42,7 @@ class Mo_SAML_Login_Validate {
 		if ( isset( $_REQUEST['option'] ) && 'mosaml_metadata' === $_REQUEST['option'] ) {
 			Mo_SAML_Service_Provider_Metadata_Handler::download_plugin_metadata();
 		}
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Ignore the nonce verification for test config operation.
-		if ( isset( $_REQUEST['option'] ) && 'export_configuration' === $_REQUEST['option'] ) {
-			if ( current_user_can( 'manage_options' ) ) {
-				mo_saml_miniorange_import_export( true );
-			}
-			exit;
-		}
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Ignore the nonce verification for test config operation.
-		if ( isset( $_REQUEST['option'] ) && 'mo_fix_certificate' === $_REQUEST['option'] && is_user_logged_in() && current_user_can( 'manage_options' ) ) {
-			$saml_required_certificate = get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_CERTIFICATE );
-			$saml_certificate          = maybe_unserialize( get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) );
-			$saml_certificate[0]       = Mo_SAML_Utilities::mo_saml_sanitize_certificate( $saml_required_certificate );
-			update_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE, $saml_certificate );
-			wp_safe_redirect( '?option=testConfig' );
-			exit;
-		}
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Ignore the nonce verification for test config operation.
-		if ( isset( $_REQUEST['option'] ) && 'mo_fix_entity_id' === $_REQUEST['option'] && is_user_logged_in() && current_user_can( 'manage_options' ) ) {
-			$saml_required_issuer = get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER );
-			update_option( Mo_Saml_Options_Enum_Service_Provider::ISSUER, $saml_required_issuer );
-			wp_safe_redirect( '?option=testConfig' );
-			exit;
-		}
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Ignore the nonce verification for test config operation.
-		if ( isset( $_REQUEST['option'] ) && 'mo_fix_iconv_cert' === $_REQUEST['option'] && is_user_logged_in() && current_user_can( 'manage_options' ) ) {
-			update_option( Mo_Saml_Options_Enum_Service_Provider::IS_ENCODING_ENABLED, 'unchecked' );
-			wp_safe_redirect( '?option=testConfig' );
-			exit;
-		}
+
 		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Ignore the nonce verification for SSO initiation.
 		if ( isset( $_REQUEST['option'] ) && ( 'saml_user_login' === $_REQUEST['option'] || 'testConfig' === $_REQUEST['option'] ) ) {
 			//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Ignore the nonce verification for extensions installation checks.
@@ -250,9 +222,7 @@ class Mo_SAML_Login_Validate {
 					Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_CERT_NOT_MATCHED' ), Mo_SAML_Logger::ERROR );
 					$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR004'];
 					if ( 'testValidate' === $relay_state ) {
-						$pem                       = '-----BEGIN CERTIFICATE-----<br>' . chunk_split( $saml_required_certificate, 64 ) . '<br>-----END CERTIFICATE-----';
-						$display_metadata_mismatch = '<p><strong>Certificate found in SAML Response: </strong><font face="Courier New";font-size:10pt><br><br>' . $pem . '</p></font>';
-						mo_saml_display_test_config_error_page( $error_code, $display_metadata_mismatch );
+						wp_safe_redirect( admin_url() . '?page=mo_saml_settings&option=test_config_error_wpsamlerr004' );
 						exit;
 					} else {
 						Mo_SAML_Utilities::mo_saml_die( $error_code );
@@ -261,7 +231,7 @@ class Mo_SAML_Login_Validate {
 					Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_CERT_NOT_MATCHED_ENCODED' ), Mo_SAML_Logger::ERROR );
 					$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR012'];
 					if ( 'testValidate' === $relay_state ) {
-						mo_saml_display_test_config_error_page( $error_code );
+						wp_safe_redirect( admin_url() . '?page=mo_saml_settings&option=test_config_error_wpsamlerr012' );
 						exit;
 					} else {
 						Mo_SAML_Utilities::mo_saml_die( $error_code );
@@ -294,6 +264,35 @@ class Mo_SAML_Login_Validate {
 			$session_index   = current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_session_index();
 			Mo_SAML_Logger::mo_saml_add_log( mo_saml_error_log::mo_saml_write_message( 'ATTRIBUTES_RECEIVED_IN_TEST_CONFIGURATION', array( 'attrs' => $attrs ) ), Mo_SAML_Logger::INFO );
 			$this->mo_saml_check_mapping( $attrs, $relay_state );
+		}
+
+		if ( is_user_logged_in() && current_user_can( 'manage_options' ) && isset( $_REQUEST['option'] ) ) {
+			//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Ignore the nonce verification for test config operation.
+			if ( 'export_configuration' === $_REQUEST['option'] ) {
+				mo_saml_miniorange_import_export( true );
+			}
+
+			if ( 'mo_saml_fix_certificate' === $_REQUEST['option'] && check_admin_referer( 'mo_saml_fix_certificate' ) ) {
+				$saml_required_certificate = get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_CERTIFICATE );
+				$saml_certificate          = maybe_unserialize( get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) );
+				$saml_certificate[0]       = Mo_SAML_Utilities::mo_saml_sanitize_certificate( $saml_required_certificate );
+				update_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE, $saml_certificate );
+				wp_safe_redirect( '?option=testConfig' );
+				exit;
+			}
+
+			if ( 'mo_saml_fix_entity_id' === $_REQUEST['option'] && check_admin_referer( 'mo_saml_fix_entity_id' ) ) {
+				$saml_required_issuer = get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER );
+				update_option( Mo_Saml_Options_Enum_Service_Provider::ISSUER, $saml_required_issuer );
+				wp_safe_redirect( '?option=testConfig' );
+				exit;
+			}
+
+			if ( 'mo_saml_fix_iconv_cert' === $_REQUEST['option'] && check_admin_referer( 'mo_saml_fix_iconv_cert' ) ) {
+				update_option( Mo_Saml_Options_Enum_Service_Provider::IS_ENCODING_ENABLED, 'unchecked' );
+				wp_safe_redirect( '?option=testConfig' );
+				exit;
+			}
 		}
 	}
 
