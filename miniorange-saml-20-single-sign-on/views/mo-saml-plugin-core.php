@@ -57,8 +57,8 @@ function mo_saml_display_welcome_page() {
 						<?php
 						esc_html_e( 'We support all SAML 2.0 compliant Identity Providers. ', 'miniorange-saml-20-single-sign-on' );
 
-										wp_kses( __( 'Please find some of the well-known <b>IdP configuration guides</b> below.' ), array( 'b' => array() ) );
-										wp_kses( __( ' If you do not find your IDP guide here, do not worry! mail us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a>' ), array( 'a' => array( 'href' => array() ) ) );
+										wp_kses( __( 'Please find some of the well-known <b>IdP configuration guides</b> below.', 'miniorange-saml-20-single-sign-on' ), array( 'b' => array() ) );
+										wp_kses( __( ' If you do not find your IDP guide here, do not worry! mail us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a>', 'miniorange-saml-20-single-sign-on' ), array( 'a' => array( 'href' => array() ) ) );
 						?>
 										</p>
 						<p class="mo-saml-bootstrap-h6">

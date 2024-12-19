@@ -79,7 +79,7 @@ function mo_saml_show_addons_page() {
 
 			if ( $is_header_displayed ) {
 				?>
-					<div class = "line_break_checkout"></div>
+					<div class = "line_break_checkout" style="display: flex; justify-content: space-between; margin-top: 30px;"></div>
 				<?php
 			}
 			?>
@@ -110,7 +110,7 @@ function mo_saml_show_addons_page() {
 function get_addon_tile( $addon_name, $addon_title, $addon_desc, $addon_url ) {
 		$icon_url = Mo_SAML_Utilities::mo_saml_get_plugin_dir_url() . 'images/addons_logos/' . $addon_name . '.webp';
 	?>
-			<div class="mo-saml-add-ons-cards mo-saml-bootstrap-mt-3">
+			<div class="mo-saml-add-ons-cards mo-saml-bootstrap-mt-3 mo-saml-bootstrap-bg-white">
 				<h4 class="mo-saml-addons-head"><?php echo esc_attr( $addon_title ); ?></h4>
 				<p class="mo-saml-bootstrap-pe-2 mo-saml-bootstrap-ps-4 mo-saml-add-on-card-desc"><?php echo esc_html( $addon_desc ); ?></p>
 				<img src="<?php echo esc_url( $icon_url ); ?>" class="mo-saml-addons-logo" alt=" Image">

@@ -100,7 +100,7 @@ function mo_saml_display_support_form( $display_attrs = false ) {
 			<?php
 		}
 		//PHPCS:ignore -- WordPress.Security.NonceVerification.Recommended -- GET parameter for checking the current page name from the URL doesn't require nonce verification.
-		$page = isset( $_GET['page'] ) ? wp_unslash( $_GET['page'] ) : '';
+		$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
 		mo_saml_display_keep_settings_intact_section();
 		mo_saml_display_suggested_idp_integration();
 		if ( 'mo_saml_enable_debug_logs' !== $page ) {

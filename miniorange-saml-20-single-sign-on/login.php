@@ -3,7 +3,7 @@
  * Plugin Name: miniOrange SSO using SAML 2.0
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 5.2.2
+ * Version: 5.2.3
  * Author: miniOrange
  * Author URI: https://miniorange.com/
  * License: MIT/Expat
@@ -28,6 +28,7 @@ require_once 'class-mo-saml-logger.php';
 require_once 'mo-saml-settings-page.php';
 require_once 'class-mo-saml-utilities.php';
 require_once 'class-mo-saml-wp-config-editor.php';
+require_once 'notices/class-mo-saml-end-year-sale-notice.php';
 
 /**
  * The Main class of the miniOrange SAML SSO Plugin.
@@ -182,6 +183,7 @@ class Saml_Mo_Login {
 	 */
 	public function plugin_settings_style( $page ) {
 		wp_enqueue_style( 'mo_saml_notice_style', plugins_url( 'includes/css/notice.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
+		wp_enqueue_style( 'mo_saml_end_year_sale_style', plugins_url( 'includes/css/end-year-sale-banner.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
 		if ( 'toplevel_page_mo_saml_settings' !== $page && 'miniorange-saml-2-0-sso_page_mo_saml_enable_debug_logs' !== $page ) {
 			return;
 		} else {
@@ -211,6 +213,7 @@ class Saml_Mo_Login {
 			wp_enqueue_script( 'mo_saml_admin_settings_phone_script', plugins_url( 'includes/js/phone.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
 		}
 		wp_enqueue_script( 'mo_saml_notice_script', plugins_url( 'includes/js/notice.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
+		wp_enqueue_script( 'mo_saml_end_year_sale_banner_script', plugins_url( 'includes/js/end-year-sale-banner.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
 	}
 
 	/**

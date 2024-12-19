@@ -135,7 +135,7 @@ class Mo_SAML_Logger {
 		) ) {
 			self::mo_saml_add_log(
 				/* translators: %1$s: message term  %2$s: file term %3$s: line term*/
-				sprintf( __( '%1$s in %2$s on line %3$s', 'mo' ), $error['message'], $error['file'], $error['line'] ) . PHP_EOL,
+				sprintf( __( '%1$s in %2$s on line %3$s', 'miniorange-saml-20-single-sign-on' ), $error['message'], $error['file'], $error['line'] ) . PHP_EOL,
 				self::CRITICAL
 			);
 		}
@@ -208,7 +208,7 @@ class Mo_SAML_Logger {
 			return sanitize_file_name( implode( '-', array( $handle, $date_suffix, $hash_suffix ) ) . '.log' );
 		} else {
 
-			_doing_it_wrong( __METHOD__, esc_html_e( 'This method should not be called before plugins_loaded.', 'miniorange' ), esc_html( Mo_Saml_Options_Plugin_Constants::VERSION ) );
+			_doing_it_wrong( __METHOD__, esc_html_e( 'This method should not be called before plugins_loaded.', 'miniorange-saml-20-single-sign-on' ), esc_html( Mo_Saml_Options_Plugin_Constants::VERSION ) );
 			return false;
 		}
 	}

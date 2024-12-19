@@ -190,7 +190,7 @@ function mo_saml_download_logs( $error_msg, $cause_msg ) {
 	echo '<div style="font-family:Calibri;padding:0 3%;">';
 	echo '<hr class="header"/>';
 	echo '          <p style="font-size: larger ;color: #a94442     ">' . wp_kses(
-		__( 'You can check out the Troubleshooting section provided in the plugin to resolve the issue.<br> If the problem persists, mail us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a>' ),
+		__( 'You can check out the Troubleshooting section provided in the plugin to resolve the issue.<br> If the problem persists, mail us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a>', 'miniorange-saml-20-single-sign-on' ),
 		array(
 			'br' => array(),
 			'a'  => array( 'href' => array() ),
