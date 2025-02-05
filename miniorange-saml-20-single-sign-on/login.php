@@ -3,7 +3,7 @@
  * Plugin Name: miniOrange SSO using SAML 2.0
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 5.2.4
+ * Version: 5.2.5
  * Author: miniOrange
  * Author URI: https://miniorange.com/
  * License: MIT/Expat
@@ -29,6 +29,7 @@ require_once 'mo-saml-settings-page.php';
 require_once 'class-mo-saml-utilities.php';
 require_once 'class-mo-saml-wp-config-editor.php';
 require_once 'notices/class-mo-saml-end-year-sale-notice.php';
+require_once 'handlers/class-mo-saml-user-login-handler.php';
 
 /**
  * The Main class of the miniOrange SAML SSO Plugin.
@@ -43,7 +44,7 @@ class Saml_Mo_Login {
 		add_action( 'admin_enqueue_scripts', array( $this, 'plugin_settings_style' ) );
 		register_activation_hook( __FILE__, array( $this, 'mo_saml_sso_activate' ) );
 		add_action( 'admin_init', array( Mo_Saml_Test_Config_Error_Handler::class, 'mo_saml_get_settings_handler' ) );
-		add_action( 'admin_init', array( Mo_SAML_Base_Handler::class, 'mo_saml_save_settings_handler' ) );
+		add_action( 'admin_init', array( Mo_SAML_Base_Handler::class, 'mo_saml_handle_save_settings' ) );
 		add_action( 'admin_init', array( 'Mo_SAML_Logger', 'mo_saml_admin_notices' ) );
 		add_action( 'admin_init', array( $this, 'mo_saml_do_plugin_extension_checks' ) );
 		add_action( 'admin_footer', array( $this, 'feedback_request' ) );
@@ -57,6 +58,7 @@ class Saml_Mo_Login {
 		register_shutdown_function( array( $this, 'log_errors' ) );
 		remove_action( 'admin_notices', array( Mo_SAML_Utilities::class, 'mo_saml_error_message' ) );
 		remove_action( 'admin_notices', array( Mo_SAML_Utilities::class, 'mo_saml_success_message' ) );
+		add_action( 'init', array( Mo_Saml_User_Login_Handler::class, 'mo_saml_handle_login_validate' ) );
 	}
 
 	/**

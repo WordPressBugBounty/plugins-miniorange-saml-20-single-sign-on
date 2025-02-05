@@ -15,6 +15,7 @@ require_once 'class-mo-saml-basic-enum.php';
  * This contains a list of error codes along with their cause and fix.
  */
 class Mo_Saml_Options_Enum_Error_Codes extends Mo_SAML_Basic_Enum {
+	const ERROR_MESSAGE = 'We could not process this request. Please contact your administrator with the mentioned error code.';
 	/**
 	 * Contains details associated with the error.
 	 *

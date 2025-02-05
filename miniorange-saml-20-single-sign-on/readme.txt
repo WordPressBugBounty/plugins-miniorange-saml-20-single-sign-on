@@ -5,7 +5,7 @@ Tags: SAML, SSO, Single Sign On, login, Azure AD
 Requires at least: 3.7
 Tested up to: 6.7
 Requires PHP: 5.6
-Stable tag: 5.2.4
+Stable tag: 5.2.5
 License: MIT/Expat
 License URI: https://docs.miniorange.com/mit-license
 
@@ -292,8 +292,11 @@ Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecur
 
 == Changelog ==
 
+= 5.2.5 =
+* Improved Exception Handling
+
 = 5.2.4 =
-* Fixed console warnings when the notice gets dismissed.
+* Fixed console warnings when the notice gets dismissed
 
 = 5.2.3 =
 * Security fixes
@@ -354,8 +357,11 @@ For older changelog entries, please see the [additional changelog.txt file](http
 
 == Upgrade Notice ==
 
+= 5.2.5 =
+* Improved Exception Handling
+
 = 5.2.4 =
-* Fixed console warnings when the notice gets dismissed.
+* Fixed console warnings when the notice gets dismissed
 
 = 5.2.3 =
 * Security fixes

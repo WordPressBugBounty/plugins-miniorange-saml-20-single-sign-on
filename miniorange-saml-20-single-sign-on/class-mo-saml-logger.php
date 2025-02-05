@@ -65,6 +65,7 @@ class Mo_SAML_Logger {
 					return;
 				}
 				if ( ! $wp_filesystem->mkdir( $log_dir, 0755, true ) && ! is_dir( $log_dir ) ) {
+					Mo_SAML_Logger::mo_saml_add_log( sprintf( 'Directory "%s" was not created', esc_html( $log_dir ) ), Mo_SAML_Logger::ERROR );
 					throw new Exception( sprintf( 'Directory "%s" was not created', esc_html( $log_dir ) ) );
 				}
 				self::mo_saml_create_files();

@@ -24,10 +24,12 @@ use RobRichards\XMLSecLibs\Mo_SAML_XML_Security_Key;
 class Mo_SAML_Login_Validate {
 
 	/**
-	 * The Constructor for the Mo_SAML_Login_Validate class. This takes care of initializing the hooks used by the plugin.
+	 * Constructor for the Mo_SAML_Login_Validate class.
+	 * Initializes and defines all functionality related to login processes 
+	 * and handling requests received from the plugin.
 	 */
 	public function __construct() {
-		add_action( 'init', array( $this, 'mo_saml_login_validate' ) );
+		$this->mo_saml_login_validate();
 	}
 
 
@@ -127,13 +129,8 @@ class Mo_SAML_Login_Validate {
 			//phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- SAML response is base64 encoded.
 			$saml_response = base64_decode( $saml_response );
 
-			$document              = new DOMDocument();
-			$load_saml_resp_result = $document->loadXML( $saml_response );
-			if ( ! $load_saml_resp_result ) {
-				$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR017'];
-				Mo_SAML_Logger::mo_saml_add_log( 'Recieved an invalid XML from the IdP in the form of SAML Response', Mo_SAML_Logger::ERROR );
-				Mo_SAML_Utilities::mo_saml_die( $error_code );
-			}
+
+			$document = Mo_SAML_Utilities::mo_saml_safe_load_xml( $saml_response );
 			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- firstChild property is Method of DOMDocument.
 			$saml_response_xml = $document->firstChild;
 			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- documentElement property is Method of DOMDocument.
@@ -175,7 +172,7 @@ class Mo_SAML_Login_Validate {
 					mo_saml_display_test_config_error_page( $error_code );
 					exit;
 				} else {
-					Mo_SAML_Utilities::mo_saml_die( $error_code );
+					throw new Mo_SAML_Signature_Not_Found_Exception("No signature was found in the SAML Response or Assertion.");
 				}
 			}
 			if ( is_array( $cert_from_plugin ) ) {
@@ -225,7 +222,7 @@ class Mo_SAML_Login_Validate {
 						wp_safe_redirect( admin_url() . '?page=mo_saml_settings&option=test_config_error_wpsamlerr004' );
 						exit;
 					} else {
-						Mo_SAML_Utilities::mo_saml_die( $error_code );
+						throw new Mo_SAML_Cert_Mismatch_Exception( 'Certificate mismatch.' );
 					}
 				} elseif ( 'checked' === $saml_is_encoding_enabled ) {
 					Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_CERT_NOT_MATCHED_ENCODED' ), Mo_SAML_Logger::ERROR );
@@ -234,11 +231,11 @@ class Mo_SAML_Login_Validate {
 						wp_safe_redirect( admin_url() . '?page=mo_saml_settings&option=test_config_error_wpsamlerr012' );
 						exit;
 					} else {
-						Mo_SAML_Utilities::mo_saml_die( $error_code );
+						throw new Mo_SAML_Cert_Mismatch_Encoding_Exception( 'Certificate mismatch due to character encoding.' );
 					}
 				} else {
-					Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_UNABLE_TO_PROCESS_RESPONSE' ), Mo_SAML_Logger::ERROR );
-					wp_die( 'Unable to process the SAML response' );
+					Mo_SAML_Logger::mo_saml_add_log( 'Unable to process the SAML Response', Mo_SAML_Logger::ERROR );
+					throw new Mo_SAML_Invalid_Assertion_Exception( 'Unable to process the SAML Response.' );
 				}
 			}
 
@@ -254,11 +251,7 @@ class Mo_SAML_Login_Validate {
 			}
 			Mo_SAML_Utilities::mo_saml_validate_issuer_and_audience( $saml_response, $sp_enity_id, $issuer, $relay_state );
 
-			try {
-				$ssoemail = current( current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_name_id() );
-			} catch ( Exception $exception ) {
-				wp_die( 'We could not sign you in. Please contact your administrator.', 'Encrypted NameID' );
-			}
+			$ssoemail = current( current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_name_id() );
 			$attrs           = current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_attributes();
 			$attrs['NameID'] = array( '0' => sanitize_text_field( $ssoemail ) );
 			$session_index   = current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_session_index();
@@ -306,69 +299,64 @@ class Mo_SAML_Login_Validate {
 	 * @return void
 	 */
 	private function mo_saml_check_mapping( $attrs, $relay_state ) {
-		try {
-			// Get encrypted user_email.
-			$email_attribute                           = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_EMAIL );
-			$mo_saml_identity_provider_identifier_name = get_option( Mo_Saml_Options_Enum_Service_Provider::IDENTITY_PROVIDER_NAME ) ? get_option( Mo_Saml_Options_Enum_Service_Provider::IDENTITY_PROVIDER_NAME ) : '';
-			if ( ! empty( $mo_saml_identity_provider_identifier_name ) && 'Azure B2C' === $mo_saml_identity_provider_identifier_name ) {
-				$email_attribute = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress';
-			}
-			$username_attribute = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_USERNAME );
-			$first_name         = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_FIRST_NAME );
-			$last_name          = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_LAST_NAME );
-			$group_name         = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_GROUP_NAME );
-			$default_role       = get_option( Mo_Saml_Options_Enum_Role_Mapping::ROLE_DEFAULT_ROLE );
-			$check_if_match_by  = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER );
-			$user_email         = '';
-			$user_name          = '';
+		// Get encrypted user_email.
+		$email_attribute                           = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_EMAIL );
+		$mo_saml_identity_provider_identifier_name = get_option( Mo_Saml_Options_Enum_Service_Provider::IDENTITY_PROVIDER_NAME ) ? get_option( Mo_Saml_Options_Enum_Service_Provider::IDENTITY_PROVIDER_NAME ) : '';
+		if ( ! empty( $mo_saml_identity_provider_identifier_name ) && 'Azure B2C' === $mo_saml_identity_provider_identifier_name ) {
+			$email_attribute = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress';
+		}
+		$username_attribute = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_USERNAME );
+		$first_name         = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_FIRST_NAME );
+		$last_name          = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_LAST_NAME );
+		$group_name         = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_GROUP_NAME );
+		$default_role       = get_option( Mo_Saml_Options_Enum_Role_Mapping::ROLE_DEFAULT_ROLE );
+		$check_if_match_by  = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER );
+		$user_email         = '';
+		$user_name          = '';
 
-			// Attribute mapping. Check if Match/Create user is by username/email:.
-			if ( ! empty( $attrs ) ) {
-				if ( ! empty( $attrs[ $first_name ] ) ) {
-					$first_name = $attrs[ $first_name ][0];
-				} else {
-					$first_name = '';
-				}
-
-				if ( ! empty( $attrs[ $last_name ] ) ) {
-					$last_name = $attrs[ $last_name ][0];
-				} else {
-					$last_name = '';
-				}
-
-				if ( ! empty( $attrs[ $username_attribute ] ) ) {
-					$user_name = $attrs[ $username_attribute ][0];
-				} else {
-					$user_name = $attrs['NameID'][0];
-				}
-
-				if ( ! empty( $attrs[ $email_attribute ] ) ) {
-					$user_email = $attrs[ $email_attribute ][0];
-				} else {
-					$user_email = $attrs['NameID'][0];
-				}
-
-				if ( ! empty( $attrs[ $group_name ] ) ) {
-					$group_name = $attrs[ $group_name ];
-				} else {
-					$group_name = array();
-				}
-
-				if ( empty( $check_if_match_by ) ) {
-					$check_if_match_by = 'email';
-				}
-			}
-
-			if ( 'testValidate' === $relay_state ) {
-				update_option( Mo_Saml_Options_Test_Configuration::TEST_CONFIG_ERROR_LOG, 'Test successful' );
-				update_option( Mo_Saml_Sso_Constants::MO_SAML_TEST_STATUS, 1 );
-				$this->mo_saml_show_test_result( $first_name, $last_name, $user_email, $group_name, $attrs );
+		// Attribute mapping. Check if Match/Create user is by username/email:.
+		if ( ! empty( $attrs ) ) {
+			if ( ! empty( $attrs[ $first_name ] ) ) {
+				$first_name = $attrs[ $first_name ][0];
 			} else {
-				$this->mo_saml_login_user( $user_email, $first_name, $last_name, $user_name, $group_name, $default_role, $relay_state, $check_if_match_by );
+				$first_name = '';
 			}
-		} catch ( Exception $e ) {
-			printf( 'An error occurred while processing the SAML Response.' );
-			exit;
+
+			if ( ! empty( $attrs[ $last_name ] ) ) {
+				$last_name = $attrs[ $last_name ][0];
+			} else {
+				$last_name = '';
+			}
+
+			if ( ! empty( $attrs[ $username_attribute ] ) ) {
+				$user_name = $attrs[ $username_attribute ][0];
+			} else {
+				$user_name = $attrs['NameID'][0];
+			}
+
+			if ( ! empty( $attrs[ $email_attribute ] ) ) {
+				$user_email = $attrs[ $email_attribute ][0];
+			} else {
+				$user_email = $attrs['NameID'][0];
+			}
+
+			if ( ! empty( $attrs[ $group_name ] ) ) {
+				$group_name = $attrs[ $group_name ];
+			} else {
+				$group_name = array();
+			}
+
+			if ( empty( $check_if_match_by ) ) {
+				$check_if_match_by = 'email';
+			}
+		}
+
+		if ( 'testValidate' === $relay_state ) {
+			update_option( Mo_Saml_Options_Test_Configuration::TEST_CONFIG_ERROR_LOG, 'Test successful' );
+			update_option( Mo_Saml_Sso_Constants::MO_SAML_TEST_STATUS, 1 );
+			$this->mo_saml_show_test_result( $first_name, $last_name, $user_email, $group_name, $attrs );
+		} else {
+			$this->mo_saml_login_user( $user_email, $first_name, $last_name, $user_name, $group_name, $default_role, $relay_state, $check_if_match_by );
 		}
 	}
 
@@ -543,12 +531,10 @@ class Mo_SAML_Login_Validate {
 			if ( is_wp_error( $user_id ) ) {
 				if ( strlen( $user_name ) > 60 ) {
 					Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_USERNAME_LENGTH_LIMIT_EXCEEDED' ), Mo_SAML_Logger::ERROR );
-					$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR011'];
-					wp_die( 'We couldn\'t sign you in. Please contact your administrator with the following error code.<br><br>Error code: <b>' . esc_attr( $error_code['code'] ) . '</b>.', 'Error: Username length limit exceeded.' );
+					throw new Mo_Saml_Username_Length_Limit_Exceeded_Exception("Username length limit exceeded.");
 				} else {
 					Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_USER_CREATION_FAILED' ), Mo_SAML_Logger::ERROR );
-					$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR005'];
-					wp_die( 'We couldn\'t sign you in. Please contact your administrator with the following error code.<br><br>Error code: <b>' . esc_attr( $error_code['code'] ) . '</b>.', 'Error: User not created.' );
+					throw new Mo_Saml_User_Creation_Exception("User not created.");
 				}
 				exit();
 			}
@@ -656,7 +642,8 @@ class Mo_SAML_Login_Validate {
 			mo_saml_display_test_config_error_page( $error_code, '', $statusmessage );
 			exit;
 		} else {
-			Mo_SAML_Utilities::mo_saml_die( $error_code );
+			Mo_SAML_Logger::mo_saml_add_log( 'Invalid status code', Mo_SAML_Logger::ERROR );
+			throw new Mo_SAML_Invalid_Status_Code_Exception( 'Invalid status code received in the SAML Response.' );
 		}
 	}
 
@@ -686,5 +673,3 @@ class Mo_SAML_Login_Validate {
 		return $relay_path;
 	}
 }
-
-$mo_saml_login_validate = new Mo_SAML_Login_Validate();

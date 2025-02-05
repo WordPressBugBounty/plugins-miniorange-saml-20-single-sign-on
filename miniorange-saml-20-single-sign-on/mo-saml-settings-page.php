@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once 'mo-saml-import-export.php';
 require_once 'class-mo-saml-logger.php';
+require_once 'class-mo-saml-utilities.php';
 
 foreach ( glob( plugin_dir_path( __FILE__ ) . 'views' . DIRECTORY_SEPARATOR . '*.php' ) as $filename ) {
 	include_once $filename;
@@ -250,5 +251,29 @@ function mo_saml_add_query_arg( $query_arg, $url ) {
 	}
 	$url = add_query_arg( $query_arg, $url );
 	return $url;
+}
+
+/**
+ * Displays the error message to end users along with the provided error code.
+ *
+ * @param array $error_code An array containing the error code details: code, fix, cause and description.
+ * @return void
+ */
+function mo_saml_display_end_user_error_message_with_code( $error_code ) {
+	wp_die( '<b>[' . esc_attr( $error_code['code'] ) . ']</b> ' . esc_attr( Mo_Saml_Options_Enum_Error_Codes::ERROR_MESSAGE ), esc_attr( $error_code['code'] ) . ' ' . esc_attr( $error_code['cause'] ) );
+}
+
+/**
+ * Displays the error message to admins via admin notice.
+ *
+ * @param array $error_code An array containing the error code details: code, fix, cause and description.
+ * @return void
+ */
+function mo_saml_display_exception_notice_to_admin( $error_code ) {
+	update_option(
+		'mo_saml_message',
+		'<b>[' . esc_html( $error_code['code'] ) . ']</b> ' . esc_html( $error_code['cause'] ) . '</br><b>Fix:</b> ' . $error_code['fix']
+	);
+	Mo_SAML_Utilities::mo_saml_show_error_message();
 }
 ?>
