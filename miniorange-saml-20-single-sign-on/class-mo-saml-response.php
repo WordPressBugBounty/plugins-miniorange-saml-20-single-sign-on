@@ -62,7 +62,7 @@ class Mo_SAML_Response {
 	 *
 	 * @param DOMElement|NULL $xml The input message.
 	 */
-	public function __construct( DOMElement $xml = null ) {
+	public function __construct( $xml = null ) {
 
 		$this->assertions   = array();
 		$this->certificates = array();

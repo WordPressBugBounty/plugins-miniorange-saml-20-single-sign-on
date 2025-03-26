@@ -639,7 +639,7 @@ class Mo_SAML_Login_Validate {
 		$error_code    = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR006'];
 		if ( 'testValidate' === $relay_state ) {
 			$statusmessage = sprintf( $error_code['testconfig_msg'], $status_code );
-			mo_saml_display_test_config_error_page( $error_code, '', $statusmessage );
+			mo_saml_display_test_config_error_page( $error_code, $statusmessage );
 			exit;
 		} else {
 			Mo_SAML_Logger::mo_saml_add_log( 'Invalid status code', Mo_SAML_Logger::ERROR );

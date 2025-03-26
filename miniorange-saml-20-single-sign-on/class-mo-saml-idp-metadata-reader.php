@@ -37,7 +37,7 @@ class Mo_SAML_IDP_Metadata_Reader {
 	 *
 	 * @param DOMNode $xml reads metadata descriptors.
 	 */
-	public function __construct( DOMNode $xml = null ) {
+	public function __construct( $xml = null ) {
 
 		$this->identity_providers = array();
 		$this->service_providers  = array();
@@ -135,7 +135,7 @@ class Mo_SAML_Identity_Providers {
 	 * @param DOMElement $xml reads metadata.
 	 * @throws Exception Missing idpssodescriptor.
 	 */
-	public function __construct( DOMElement $xml = null ) {
+	public function __construct( $xml = null ) {
 
 		$this->idp_name               = '';
 		$this->login_details          = array();

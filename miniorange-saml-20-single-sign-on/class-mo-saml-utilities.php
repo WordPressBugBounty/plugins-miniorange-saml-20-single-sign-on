@@ -602,9 +602,7 @@ class Mo_SAML_Utilities {
 					);
 					$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR009'];
 					if ( 'testValidate' === $relay_state ) {
-						$display_metadata_mismatch = '<p><strong>Audience URI configured in Identity Provider: </strong>' . $audiences[0] . '<p>
-						<p><strong>Audience URI configured in the plugin\'s Service Provider Metadata Tab: </strong>' . esc_html( $sp_entity_id ) . '</p>';
-						mo_saml_display_test_config_error_page( $error_code, $display_metadata_mismatch );
+						mo_saml_display_test_config_error_page( $error_code );
 						exit;
 					} else {
 						throw new Mo_SAML_Invalid_Audience_URI_Exception( 'Invalid Audience URI.' );
@@ -625,7 +623,6 @@ class Mo_SAML_Utilities {
 			);
 			$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR010'];
 			if ( 'testValidate' === $relay_state ) {
-				update_option( Mo_Saml_Sso_Constants::MO_SAML_VALID_AGAINST_ENTITY_ID, $issuer_to_validate_against );
 				update_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER, $issuer );
 				wp_safe_redirect( admin_url() . '?page=mo_saml_settings&option=test_config_error_wpsamlerr010' );
 				exit;

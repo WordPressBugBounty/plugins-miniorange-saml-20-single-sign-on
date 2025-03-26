@@ -213,7 +213,7 @@ class Mo_SAML_Assertion {
 	 * @param DOMElement $xml Assertion in XML format.
 	 * @throws Exception For unsupported SAML version or for missing Issuer and ID.
 	 */
-	public function __construct( DOMElement $xml = null ) {
+	public function __construct( $xml = null ) {
 		$this->id                       = Mo_SAML_Utilities::mo_saml_generate_id();
 		$this->issue_instant            = Mo_SAML_Utilities::mo_saml_generate_time_stamp();
 		$this->issuer                   = '';
@@ -765,7 +765,7 @@ class Mo_SAML_Assertion {
 	 *
 	 * @param array|NULL $valid_audiences The allowed audiences.
 	 */
-	public function mo_saml_set_valid_audiences( array $valid_audiences = null ) {
+	public function mo_saml_set_valid_audiences( $valid_audiences = null ) {
 		$this->valid_audiences = $valid_audiences;
 	}
 
@@ -1038,7 +1038,7 @@ class Mo_SAML_Assertion {
 	 *
 	 * @param Mo_SAML_XML_Security_Key|NULL $signature_key Default value NULL.
 	 */
-	public function mo_saml_set_signature_key( XMLsecurityKey $signature_key = null ) {
+	public function mo_saml_set_signature_key( $signature_key = null ) {
 		$this->signature_key = $signature_key;
 	}
 
@@ -1056,7 +1056,7 @@ class Mo_SAML_Assertion {
 	 *
 	 * @param Mo_SAML_XML_Security_Key|NULL $key Default value NULL.
 	 */
-	public function mo_saml_set_encryption_key( Mo_SAML_XML_Security_Key $key = null ) {
+	public function mo_saml_set_encryption_key( $key = null ) {
 		$this->encryption_key = $key;
 	}
 
@@ -1104,7 +1104,7 @@ class Mo_SAML_Assertion {
 	 * @param  DOMNode|NULL $parent_element The DOM node the assertion should be created in.
 	 * @return DOMElement   This assertion.
 	 */
-	public function mo_saml_to_xml( DOMNode $parent_element = null ) {
+	public function mo_saml_to_xml( $parent_element = null ) {
 		if ( null === $parent_element ) {
 			$document       = new DOMDocument();
 			$parent_element = $document;
