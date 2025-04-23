@@ -19,8 +19,8 @@ function mo_saml_show_addons_page() {
 	$addons_displayed                          = array();
 	$addon_desc                                = array(
 		'salesforce_sync'             => __( 'Allows to synchronize WordPress objects to Salesforce. Along with WordPress to Salesforce sync the plugin can also enable syncing data from Salesforce to WordPress.', 'miniorange-saml-20-single-sign-on' ),
-		'power_bi'                    => __( 'To establishing trust between the WordPress site and Power BI to securely authenticate and login users to the WordPress site.', 'miniorange-saml-20-single-sign-on' ),
-		'sharepoint'                  => __( 'To establishing trust between the WordPress site and Microsoft SharePoint to securely authenticate and login users to the WordPress site.', 'miniorange-saml-20-single-sign-on' ),
+		'power_bi'                    => __( 'To establish trust between the WordPress site and Power BI in order to securely authenticate and log in users to the WordPress site.', 'miniorange-saml-20-single-sign-on' ),
+		'sharepoint'                  => __( 'To establish trust between the WordPress site and Microsoft SharePoint in order to securely authenticate and log in users to the WordPress site.', 'miniorange-saml-20-single-sign-on' ),
 		'employee_directory'          => __( 'Creates a Central directory of Employees, Staff or Team. Provides an easily searchable, sortable list of all the Employees, group or tag your Employees based on categories and many more.', 'miniorange-saml-20-single-sign-on' ),
 		'azure_sync'                  => __( 'Provides an option for bi-directional synchronization of the users from Azure AD / Azure B2C / Office 365 to WordPress. It also supports seamless WordPress integration with all Microsoft Apps', 'miniorange-saml-20-single-sign-on' ),
 		'scim'                        => __( 'Allows real-time user sync (automatic user create, delete, and update) from your Identity Provider such as Azure, Okta, Onelogin into your WordPress site.', 'miniorange-saml-20-single-sign-on' ),

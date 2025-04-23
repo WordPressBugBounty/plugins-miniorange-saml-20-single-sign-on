@@ -189,7 +189,7 @@ function mo_saml_display_sp_configuration( $saml_identity_name, $saml_login_url,
 							</div>
 							<div class="mo-saml-bootstrap-col-md-7">
 								<input type="text" title="Please enter a valid value" name="saml_issuer" id="saml_issuer" pattern="[^\s]+\s*$" placeholder="Identity Provider Entity ID or Issuer" class="mo-saml-bootstrap-w-100" value="<?php echo esc_attr( $saml_issuer ); ?>" required="">
-								<p class="mt-2"><b><?php esc_html_e( 'Note', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( ': You can find the', 'miniorange-saml-20-single-sign-on' ); ?> <b><?php esc_html_e( 'EntityID', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( 'in Your IdP-Metadata XML file enclosed in ', 'miniorange-saml-20-single-sign-on' ); ?><code>EntityDescriptor</code> <?php esc_html_e( 'tag having attribute as', 'miniorange-saml-20-single-sign-on' ); ?> <code><?php esc_html_e( 'entityID', 'miniorange-saml-20-single-sign-on' ); ?></code></p>
+								<p class="mt-2"><b><?php esc_html_e( 'Note', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( ': You can find the', 'miniorange-saml-20-single-sign-on' ); ?> <b><?php esc_html_e( 'EntityID', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( 'in Your IdP-Metadata XML file enclosed in', 'miniorange-saml-20-single-sign-on' ); ?><code>EntityDescriptor</code> <?php esc_html_e( 'tag having attribute as', 'miniorange-saml-20-single-sign-on' ); ?> <code><?php esc_html_e( 'entityID', 'miniorange-saml-20-single-sign-on' ); ?></code></p>
 							</div>
 						</div>
 						<div class="mo-saml-bootstrap-row align-items-top mo-saml-bootstrap-mt-3">
@@ -242,7 +242,7 @@ function mo_saml_display_sp_configuration( $saml_identity_name, $saml_login_url,
 							</div>
 							<div class="mo-saml-bootstrap-col-md-8">
 								<input type="checkbox" id="switch_sync" name="mo_saml_assertion_time_validity" class="mo-saml-switch" <?php echo esc_attr( $saml_assertion_time_validity ); ?> /><label class="mo-saml-switch-label" for="switch_sync">Toggle</label>
-								<p class="mo-saml-bootstrap-mt-2"><b><?php esc_html_e( 'Note', 'miniorange-saml-20-single-sign-on' ); ?></b><?php esc_html_e( ' : Disable this toggle to disable the check of time validity for SAML assertion.', 'miniorange-saml-20-single-sign-on' ); ?></p>
+								<p class="mo-saml-bootstrap-mt-2"><b><?php esc_html_e( 'Note', 'miniorange-saml-20-single-sign-on' ); ?></b><?php esc_html_e( ':Disable this toggle to disable the check of time validity for SAML assertion.', 'miniorange-saml-20-single-sign-on' ); ?></p>
 							</div>
 						</div>
 						<div class="mo-saml-bootstrap-row align-items-top mt-2 mo-saml-btns-cont">

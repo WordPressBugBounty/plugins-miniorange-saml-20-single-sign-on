@@ -213,9 +213,9 @@ class Mo_Saml_Options_Plugin_Constants extends Mo_SAML_Basic_Enum {
 	const CMS_NAME         = 'WP';
 	const APPLICATION_NAME = 'WP miniOrange SAML 2.0 SSO Plugin';
 	const APPLICATION_TYPE = 'SAML';
-	const VERSION          = '5.2.7';
+	const VERSION          = '5.2.8';
 	const HOSTNAME         = 'https://login.xecurify.com';
-	const WP_VERSION       = '6.7';
+	const WP_VERSION       = '6.8';
 	const PLUGIN_FILE      = 'miniorange-saml-20-single-sign-on/login.php';
 }
 
@@ -1065,7 +1065,7 @@ class Mo_Saml_Messages extends Mo_SAML_Basic_Enum {
 			'INVALID_CERT'             => __( 'Invalid certificate: Please provide a valid X.509 certificate.', 'miniorange-saml-20-single-sign-on' ),
 			'FIELDS_EMPTY'             => __( 'All the fields are required. Please enter valid entries.', 'miniorange-saml-20-single-sign-on' ),
 			'INVALID_FORMAT'           => __( 'Please match the requested format for Identity Provider Name. Only alphabets, numbers and underscore is allowed.', 'miniorange-saml-20-single-sign-on' ),
-			'METADATA_EMPTY'           => __( 'Please upload a valid metadata file or URL.', 'miniorange-saml-20-single-sign-on' ),
+			'METADATA_EMPTY'           => __( 'Please upload a valid metadata file or a valid metadata URL.', 'miniorange-saml-20-single-sign-on' ),
 			'IDP_NAME_EMPTY'           => __( 'IDP Name cannot be empty. Please enter a valid Identity Provider Name.', 'miniorange-saml-20-single-sign-on' ),
 			'METADATA_NAME_EMPTY'      => __( 'Error uploading metadata. Please upload a valid metadata file.', 'miniorange-saml-20-single-sign-on' ),
 			'INVALID_IDP_NAME_FORMAT'  => __( 'Please match the requested format for Identity Provider Name. Only alphabets, numbers and underscore is allowed.', 'miniorange-saml-20-single-sign-on' ),
