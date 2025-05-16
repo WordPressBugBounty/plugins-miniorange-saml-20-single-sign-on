@@ -5,9 +5,9 @@ Tags: SAML, SSO, Single Sign On, login, Azure AD
 Requires at least: 3.7
 Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 5.2.8
+Stable tag: 5.2.9
 License: MIT/Expat
-License URI: https://docs.miniorange.com/mit-license
+License URI: https://plugins.miniorange.com/mit-license
 
 WordPress SSO ( SAML SSO ) login with Okta, Azure B2C, Azure AD, ADFS, Keycloak, Salesforce, Ping, Onelogin, Google Apps, Shibboleth, etc. | WordPress Single Sign On login (WP SSO)
 
@@ -292,6 +292,9 @@ Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecur
 
 == Changelog ==
 
+= 5.2.9 =
+* Minor fixes
+
 = 5.2.8 =
 * Compatibility with WordPress 6.8
 * Added the pot files for German and Japanese Languages
@@ -369,6 +372,9 @@ Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecur
 For older changelog entries, please see the [additional changelog.txt file](https://plugins.svn.wordpress.org/miniorange-saml-20-single-sign-on/trunk/changelog.txt) provided with the plugin.
 
 == Upgrade Notice ==
+
+= 5.2.9 =
+* Minor fixes
 
 = 5.2.8 =
 * Compatibility with WordPress 6.8
