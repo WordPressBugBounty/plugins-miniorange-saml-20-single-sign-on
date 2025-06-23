@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP-Translations - SAML Single Sign On – SSO Login\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-14 10:56+0200\n"
+"PO-Revision-Date: 2025-06-17 17:28+0530\n"
 "Last-Translator: FX Bénard <fx@wp-translations.pro>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -14,8 +14,112 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Poedit 3.6\n"
 
+#: views/mo-saml-attribute-role-mapping.php:86
+msgid "Enter attribute name for First Name"
+msgstr "Attributname für Vornamen eingeben"
+
+#: views/mo-saml-attribute-role-mapping.php:94
+msgid "Enter attribute name for Last Name"
+msgstr "Attributname für Nachname eingeben"
+
+#: views/mo-saml-attribute-role-mapping.php:102
+msgid "Enter attribute name for Group/Role"
+msgstr "Attributname für Gruppe/Rolle eingeben"
+
+#: views/mo-saml-attribute-role-mapping.php:218
+msgid "Semi-colon(;) separated Group/Role value for"
+msgstr "Durch Semikolon(;) getrennter Gruppen-/Rollenwert für"
+
+#: views/mo-saml-debug-logs.php:34
+msgid "SAML Debug Tools"
+msgstr "SAML Werkzeuge zur Fehlerbehebung"
+
+#: views/mo-saml-debug-logs.php:46
+msgid "Back To Plugin Configuration"
+msgstr "Zurück zur Plugin-Konfiguration"
+
+#: views/mo-saml-debug-logs.php:50
+msgid "If you are facing any issues with the SSO, please follow these steps for easier debugging"
+msgstr "Wenn du Probleme mit dem SSO hast, befolge bitte diese Schritte, um die Fehlersuche zu erleichtern"
+
+#: views/mo-saml-debug-logs.php:52
+msgid "Step 1:"
+msgstr "Schritt 1:"
+
+#: views/mo-saml-debug-logs.php:52
+msgid " Enable the Debug Logs option below and reproduce"
+msgstr "Aktiviere die Option Fehlerbehebungsprotokolle unten und reproduziere"
+
+#: views/mo-saml-debug-logs.php:57
+msgid "Enable miniOrange SAML Debug Logs"
+msgstr "Aktiviere die miniOrange-SAML-Fehlerbehebungsprotokolle"
+
+#: views/mo-saml-debug-logs.php:68
+msgid "Clear Log Files"
+msgstr "Logdateien löschen"
+
+#: views/mo-saml-debug-logs.php:80
+msgid "Note: "
+msgstr "Hinweis:"
+
+#: views/mo-saml-debug-logs.php:80
+msgid "If your wp-config.php is not writable"
+msgstr "Wenn deine wp-config.php-Datei nicht beschreibbar ist"
+
+#: views/mo-saml-debug-logs.php:81
+msgid "follow the steps below to Enable debug logs Manually"
+msgstr "befolge die folgenden Schritte, um Fehlerbehebungsprotokolle manuell zu aktivieren"
+
+#: views/mo-saml-debug-logs.php:85
+msgid "Copy this code"
+msgstr "Kopiere diesen Code"
+
+#: views/mo-saml-debug-logs.php:87
+msgid "and paste it in the"
+msgstr "und kopiere ihn in die"
+
+#: views/mo-saml-debug-logs.php:89
+msgid "file before the line"
+msgstr "Datei vor der Zeile"
+
+#: views/mo-saml-debug-logs.php:91
+msgid "to enable the miniOrange SAML logs."
+msgstr "um die miniOrange-SAML-Protokolle zu aktivieren."
+
+#: views/mo-saml-debug-logs.php:96
+msgid "Step 2:"
+msgstr "Schritt 2:"
+
+#: views/mo-saml-debug-logs.php:96
+msgid " Download the Debug Log File and Plugin Configurations"
+msgstr "Download der Fehlerbehebungs-Protokolldatei und der Plugin-Konfigurationen"
+
+#: views/mo-saml-debug-logs.php:99
+msgid "Download Debug Logs"
+msgstr "Fehlerbehebungsprotokolle herunterladen"
+
+#: views/mo-saml-debug-logs.php:108
+msgid "Send this file to us at"
+msgstr "Sende diese Datei an uns unter"
+
+#: views/mo-saml-redirection-sso-links.php:133
+msgid "Login with #IDP#"
+msgstr "Anmeldung mit #IDP#"
+
+#: views/mo-saml-service-provider-setup.php:191
+msgid "Identity Provider Entity ID or Issuer"
+msgstr "Identity Provider Entity ID oder Issuer"
+
+#: views/mo-saml-service-provider-setup.php:200
+msgid "Single Sign On Service URL (HTTP-Redirect binding) of your IdP"
+msgstr "Single-Sign-On-Service-URL (HTTP-Redirect-Bindung) deines IdP"
+
+#: views/mo-saml-service-provider-setup.php:212
+msgid "Copy and Paste the content from the downloaded certificate or copy the content enclosed in X509Certificate tag (has parent tag KeyDescriptor use=signing) in IdP-Metadata XML file"
+msgstr "Kopiere den Inhalt des heruntergeladenen Zertifikats oder kopiere den Inhalt des X509Certificate-Tags (mit dem übergeordneten Tag KeyDescriptor use=signing) in die IdP-Metadaten-XML-Datei"
+
 #: includes/lib/class-mo-saml-options-enum.php:1068
-msgid "Please upload a valid metadata file or enter a metadata URL."
+msgid "Please upload a valid metadata file or a valid metadata URL."
 msgstr "Bitte lade eine gültige Metadaten-Datei hoch oder gib eine Metadaten-URL ein."
 
 #: views/mo-saml-support-form.php:33
@@ -47,10 +151,12 @@ msgid "Attributes sent by the Identity Provider"
 msgstr "Vom Identitätsanbieter gesendete Attribute"
 
 #: views/mo-saml-attribute-role-mapping.php:246
+#: class-mo-saml-login-validate.php:430
 msgid "ATTRIBUTE NAME"
 msgstr "ATTRIBUTNAME"
 
 #: views/mo-saml-attribute-role-mapping.php:247
+#: class-mo-saml-login-validate.php:431
 msgid "ATTRIBUTE VALUE"
 msgstr "ATTRIBUTWERT"
 
@@ -66,11 +172,11 @@ msgstr "Bitte lösche diese Liste, nachdem du das Plugin konfiguriert hast, um d
 msgid "Click on Test configuration in Service Provider Setup tab to populate the list again."
 msgstr "Klicke auf dem Tab Dienstanbieter einrichten auf Testkonfiguration, um die Liste erneut aufzufüllen."
 
-#: views/mo-saml-addons.php:26 includes/lib/class-mo-saml-options-enum.php:302
+#: includes/lib/class-mo-saml-options-enum.php:302 views/mo-saml-addons.php:26
 msgid "Allows real-time user sync (automatic user create, delete, and update) from your Identity Provider such as Azure, Okta, Onelogin into your WordPress site."
 msgstr "Ermöglicht die Benutzersynchronisierung in Echtzeit (automatisches Erstellen, Löschen und Aktualisieren von Benutzern) von deinem Identitätsanbieter wie Azure, Okta oder Onelogin mit deiner WordPress-Website."
 
-#: views/mo-saml-addons.php:27 includes/lib/class-mo-saml-options-enum.php:296
+#: includes/lib/class-mo-saml-options-enum.php:296 views/mo-saml-addons.php:27
 msgid "Restrict access to WordPress pages/posts based on user roles and their login status, thereby protecting these pages/posts from unauthorized access."
 msgstr "Schränke den Zugriff auf WordPress-Seiten/-Beiträge auf der Grundlage von Benutzerrollen und ihrem Anmeldestatus ein und schütze diese Seiten/Beiträge so vor unberechtigtem Zugriff."
 
@@ -159,6 +265,7 @@ msgid "Anonymous Login:"
 msgstr "Anonyme Anmeldung:"
 
 #. Description of the plugin
+#: login.php
 msgid "miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site."
 msgstr "Das miniOrange SAML Plugin ermöglicht die Anmeldung über Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 und andere Identitätsanbieter. Es fungiert als SAML Service Provider, der so konfiguriert werden kann, dass er eine Vertrauensbeziehung zwischen dem Plugin und dem IdP herstellt, um den Benutzer sicher zu authentifizieren und auf der WordPress-Website anzumelden."
 
@@ -170,7 +277,7 @@ msgstr "Die Protokolldatei existiert nicht."
 msgid "Successfully cleared log files."
 msgstr "Die Protokolldateien wurden erfolgreich gelöscht."
 
-#. %1$s: message term  %2$s: file term %3$s: line term
+#. translators: %1$s: message term  %2$s: file term %3$s: line term
 #: class-mo-saml-logger.php:139
 msgid "%1$s in %2$s on line %3$s"
 msgstr "%1$s in %2$s in Zeile %3$s"
@@ -267,11 +374,11 @@ msgstr "Erstellt ein zentrales Verzeichnis von Mitarbeitern, Personal oder Teams
 msgid "Provides an option for bi-directional synchronization of the users from Azure AD / Azure B2C / Office 365 to WordPress. It also supports seamless WordPress integration with all Microsoft Apps"
 msgstr "Bietet eine Option für die bidirektionale Synchronisierung der Benutzer von Azure AD / Azure B2C / Office 365 mit WordPress. Es unterstützt auch die nahtlose Integration von WordPress mit allen Microsoft Apps"
 
-#: views/mo-saml-debug-logs.php:152
+#: views/mo-saml-debug-logs.php:155
 msgid "Debug Tools"
 msgstr "Werkzeuge zur Fehlerbehebung"
 
-#: views/mo-saml-debug-logs.php:153
+#: views/mo-saml-debug-logs.php:156
 msgid "Error Codes"
 msgstr "Fehlercodes"
 
@@ -287,12 +394,12 @@ msgstr "Um Vertrauen zwischen der WordPress-Website und Power BI aufzubauen, um 
 msgid "To establish trust between the WordPress site and Microsoft SharePoint in order to securely authenticate and log in users to the WordPress site."
 msgstr "Um Vertrauen zwischen der WordPress-Website und Microsoft SharePoint aufzubauen, um Benutzer sicher zu authentifizieren und bei der WordPress-Website anzumelden."
 
-#. %1s: search term
+#. translators: %1s: search term
 #: class-mo-saml-logger.php:295
 msgid "To allow logging, make  <code>\"%1s\"</code> directory writable.miniOrange will not be able to log the errors."
 msgstr "Um die Protokollierung zu ermöglichen, musst du das Verzeichnis <code>„%1s“</code> \" beschreibbar machen. miniOrange kann dann keine Fehler protokollieren."
 
-#. %s: search term
+#. translators: %s: search term
 #: class-mo-saml-logger.php:309
 msgid " miniOrange SAML 2.0 logs are active. Want to turn it off? <a href=\"%s\">Learn more here."
 msgstr "miniOrange SAML 2.0 Protokolle sind aktiv. Willst du sie ausschalten? <a href=\"%s\">Erfahre hier mehr."
@@ -353,11 +460,11 @@ msgstr "Das Plugin User Sync for Azure AD / Azure B2C bietet WordPress-Integrati
 msgid "User Sync for Azure AD / Azure B2C"
 msgstr "User Sync for Azure AD / Azure B2C"
 
-#: views/mo-saml-plugin-core.php:290
 #: includes/lib/class-mo-saml-options-enum.php:245
 #: includes/lib/class-mo-saml-options-enum.php:254
 #: includes/lib/class-mo-saml-options-enum.php:262
 #: includes/lib/class-mo-saml-options-enum.php:270
+#: views/mo-saml-plugin-core.php:290
 msgid "Know More"
 msgstr "Mehr erfahren"
 
@@ -463,8 +570,8 @@ msgstr "Danke, dass du dich meldest! Wir werden in Kürze auf deine E-Mail antwo
 msgid "WP-config.php is not writable, please follow the manual steps to enable/disable the debug logs."
 msgstr "WP-config.php ist nicht beschreibbar. Bitte befolge die manuellen Schritte zum Aktivieren/Deaktivieren der Fehlerprotokolle."
 
-#. Name of the plugin
-#: views/mo-saml-plugin-core.php:133
+#. Plugin Name of the plugin
+#: login.php views/mo-saml-plugin-core.php:133
 msgid "miniOrange SSO using SAML 2.0"
 msgstr "miniOrange SSO mit SAML 2.0"
 
@@ -472,8 +579,9 @@ msgstr "miniOrange SSO mit SAML 2.0"
 msgid "Hey! You are using the free version of the plugin. If you have already purchased,"
 msgstr "Hey! Du benutzt die kostenlose Version des Plugins. Wenn du es bereits gekauft hast,"
 
-#. URI of the plugin
+#. Plugin URI of the plugin
 #. Author URI of the plugin
+#: login.php
 msgid "https://miniorange.com/"
 msgstr "https://miniorange.com/"
 
@@ -482,12 +590,53 @@ msgid "you can follow these steps to download the paid plugin."
 msgstr "kannst du diese Schritte befolgen, um das kostenpflichtige Plugin herunterzuladen."
 
 #. Author of the plugin
+#: login.php
 msgid "miniOrange"
 msgstr "miniOrange"
 
 #: views/mo-saml-account-setup.php:89
 msgid "Why should I login?"
 msgstr "Warum sollte ich mich anmelden?"
+
+#: class-mo-saml-login-validate.php:388
+msgid "TEST SUCCESSFUL"
+msgstr "TEST ERFOLGREICH"
+
+#: class-mo-saml-login-validate.php:413
+msgid "TEST FAILED"
+msgstr "TEST FEHLGESCHLAGEN"
+
+#: class-mo-saml-login-validate.php:414
+msgid "WARNING: Some Attributes Did Not Match."
+msgstr "WARNUNG: Einige Attribute stimmen nicht überein."
+
+#: class-mo-saml-login-validate.php:421
+msgid "Warning: The NameID value is longer than 60 characters. User will not be created during SSO."
+msgstr "Warnung: Der NameID-Wert ist länger als 60 Zeichen. Der Benutzer wird während des SSO nicht erstellt."
+
+#: class-mo-saml-login-validate.php:423
+msgid "Warning: The NameID value is not a valid Email ID"
+msgstr "Warnung: Der NameID-Wert ist keine gültige E-Mail-Adresse"
+
+#: class-mo-saml-login-validate.php:426
+msgid "Hello"
+msgstr "Hallo"
+
+#: class-mo-saml-login-validate.php:427
+msgid "Attributes Received:"
+msgstr "Erhaltene Attribute:"
+
+#: class-mo-saml-login-validate.php:445
+msgid "No Attributes Received."
+msgstr "Keine Attribute empfangen."
+
+#: class-mo-saml-login-validate.php:451
+msgid "Configure Attribute/Role Mapping"
+msgstr "Attribut-/Rollen-Zuordnung konfigurieren"
+
+#: class-mo-saml-login-validate.php:453
+msgid "Configure SSO Settings"
+msgstr "SSO-Einstellungen konfigurieren"
 
 #: class-mo-saml-login-widget.php:28
 msgid "This is a miniOrange SAML login widget."
@@ -521,7 +670,7 @@ msgstr "Wir konnten dich nicht anmelden. Bitte kontaktiere deinen Administrator.
 msgid "Sign Up"
 msgstr "Registrieren"
 
-#. %s: user's display name
+#. translators: %s: user's display name
 #: class-mo-saml-login-widget.php:129
 msgid "Hello, %s"
 msgstr "Hallo %s"
@@ -735,6 +884,10 @@ msgstr "Bitte gib eine gültige E-Mail-Adresse ein."
 msgid "Add a Single Sign-On button on the WordPress login page"
 msgstr "Füge einen Single-Sign-on-Button auf der WordPress-Anmeldeseite hinzu"
 
+#: views/mo-saml-redirection-sso-links.php:72
+msgid "You can only add a Single Sign On button after saving your Service Provider Settings."
+msgstr "Sie können die Single Sign-On-Schaltfläche erst hinzufügen, nachdem Sie Ihre Service-Provider-Einstellungen gespeichert haben."
+
 #: includes/lib/class-mo-saml-options-enum.php:1085
 msgid "Minimum 6 characters should be present. Maximum 15 characters should be present. Only following symbols (!@#.$%^&*-_) are allowed."
 msgstr "Es sollten mindestens 6 Zeichen und maximal 15 Zeichen vorhanden sein. Nur die folgenden Symbole (!@#.$%^&*-_) sind erlaubt."
@@ -882,6 +1035,10 @@ msgstr "1. Wähle diese Option, wenn du deine Website nur auf angemeldete Benutz
 #: login.php:320 views/mo-saml-plugin-core.php:167
 msgid "Add-Ons"
 msgstr "Add-ons"
+
+#: mo-saml-import-export.php:84
+msgid "Keep Settings Intact Option Updated Successfully."
+msgstr "Die Option „Einstellungen beibehalten“ wurde erfolgreich aktualisiert."
 
 #: views/mo-saml-redirection-sso-links.php:277
 msgid "Redirect to IdP if user not logged in [PROTECT COMPLETE SITE]"
@@ -1264,12 +1421,12 @@ msgstr "In die Zwischenablage kopieren"
 msgid "Metadata XML File :"
 msgstr "Metadaten-XML-Datei:"
 
-#: views/mo-saml-plugin-core.php:289
-#: views/mo-saml-service-provider-metadata.php:122
 #: includes/lib/class-mo-saml-options-enum.php:244
 #: includes/lib/class-mo-saml-options-enum.php:253
 #: includes/lib/class-mo-saml-options-enum.php:261
 #: includes/lib/class-mo-saml-options-enum.php:269
+#: views/mo-saml-plugin-core.php:289
+#: views/mo-saml-service-provider-metadata.php:122
 msgid "Download"
 msgstr "Herunterladen"
 
@@ -1282,6 +1439,10 @@ msgstr "ODER"
 #: views/mo-saml-service-provider-metadata.php:55
 msgid "SP EntityID / Issuer :"
 msgstr "SP EntityID / Herausgeber:"
+
+#: views/mo-saml-service-provider-metadata.php:58
+msgid "Enter Service Provider Entity ID"
+msgstr "Geben Sie die Entity-ID des Serviceproviders ein"
 
 #: views/mo-saml-service-provider-metadata.php:154
 msgid "ACS (AssertionConsumerService) URL"

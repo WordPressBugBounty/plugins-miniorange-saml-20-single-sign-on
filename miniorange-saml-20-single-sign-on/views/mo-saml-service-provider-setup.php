@@ -188,7 +188,7 @@ function mo_saml_display_sp_configuration( $saml_identity_name, $saml_login_url,
 								<h6 class="mo-saml-bootstrap-text-secondary"><?php esc_html_e( 'IdP Entity ID or Issuer', 'miniorange-saml-20-single-sign-on' ); ?><span style="color: red;">*</span> :</h6>
 							</div>
 							<div class="mo-saml-bootstrap-col-md-7">
-								<input type="text" title="Please enter a valid value" name="saml_issuer" id="saml_issuer" pattern="[^\s]+\s*$" placeholder="Identity Provider Entity ID or Issuer" class="mo-saml-bootstrap-w-100" value="<?php echo esc_attr( $saml_issuer ); ?>" required="">
+								<input type="text" title="Please enter a valid value" name="saml_issuer" id="saml_issuer" pattern="[^\s]+\s*$" placeholder="<?php esc_attr_e( 'Identity Provider Entity ID or Issuer', 'miniorange-saml-20-single-sign-on' ); ?>" class="mo-saml-bootstrap-w-100" value="<?php echo esc_attr( $saml_issuer ); ?>" required="">
 								<p class="mt-2"><b><?php esc_html_e( 'Note', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( ': You can find the', 'miniorange-saml-20-single-sign-on' ); ?> <b><?php esc_html_e( 'EntityID', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( 'in Your IdP-Metadata XML file enclosed in', 'miniorange-saml-20-single-sign-on' ); ?><code>EntityDescriptor</code> <?php esc_html_e( 'tag having attribute as', 'miniorange-saml-20-single-sign-on' ); ?> <code><?php esc_html_e( 'entityID', 'miniorange-saml-20-single-sign-on' ); ?></code></p>
 							</div>
 						</div>
@@ -197,7 +197,7 @@ function mo_saml_display_sp_configuration( $saml_identity_name, $saml_login_url,
 								<h6 class="mo-saml-bootstrap-text-secondary"><?php esc_html_e( 'SAML Login URL', 'miniorange-saml-20-single-sign-on' ); ?><span style="color: red;">*</span> :</h6>
 							</div>
 							<div class="mo-saml-bootstrap-col-md-7">
-								<input type="url" title="Please enter a valid value" name="saml_login_url" pattern="[^\s]+\s*$" placeholder="Single Sign On Service URL (HTTP-Redirect binding) of your IdP" class="mo-saml-bootstrap-w-100" value="<?php echo esc_attr( $saml_login_url ); ?>" required="">
+								<input type="text" title="Please enter a valid value" name="saml_login_url" id="saml_login_url" pattern="[^\s]+\s*$" placeholder="<?php esc_attr_e( 'Single Sign On Service URL (HTTP-Redirect binding) of your IdP', 'miniorange-saml-20-single-sign-on' ); ?>" class="mo-saml-bootstrap-w-100" value="<?php echo esc_attr( $saml_login_url ); ?>" required="">
 								<p class="mt-2"><b><?php esc_html_e( 'Note', 'miniorange-saml-20-single-sign-on' ); ?></b> : <?php esc_html_e( 'You can find the', 'miniorange-saml-20-single-sign-on' ); ?> <b><?php esc_html_e( 'SAML Login URL', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( 'in Your IdP-Metadata XML file enclosed in', 'miniorange-saml-20-single-sign-on' ); ?> <code>SingleSignOnService</code> <?php esc_html_e( 'tag (Binding type: HTTP-Redirect)', 'miniorange-saml-20-single-sign-on' ); ?></p>
 							</div>
 						</div>
@@ -209,7 +209,7 @@ function mo_saml_display_sp_configuration( $saml_identity_name, $saml_login_url,
 									<h6 class="mo-saml-bootstrap-text-secondary"><?php esc_html_e( 'X.509 Certificate', 'miniorange-saml-20-single-sign-on' ); ?><span style="color: red;">*</span> :</h6>
 								</div>
 								<div class="mo-saml-bootstrap-col-md-7">
-									<textarea rows="4" cols="5" name="saml_x509_certificate[<?php esc_attr( $key ); ?>]" id="saml_x509_certificate" onkeyup="removeCertificateErrorClass();" placeholder="Copy and Paste the content from the downloaded certificate or copy the content enclosed in X509Certificate tag (has parent tag KeyDescriptor use=signing) in IdP-Metadata XML file" class="mo-saml-bootstrap-w-100" required=""><?php echo esc_html( $value ); ?></textarea>
+									<textarea rows="4" cols="5" name="saml_x509_certificate[<?php esc_attr( $key ); ?>]" id="saml_x509_certificate" onkeyup="removeCertificateErrorClass();" placeholder="<?php esc_attr_e( 'Copy and Paste the content from the downloaded certificate or copy the content enclosed in X509Certificate tag (has parent tag KeyDescriptor use=signing) in IdP-Metadata XML file', 'miniorange-saml-20-single-sign-on' ); ?>" class="mo-saml-bootstrap-w-100" required=""><?php echo esc_html( $value ); ?></textarea>
 
 
 									<span class="mo-saml-error-tip">
@@ -242,7 +242,7 @@ function mo_saml_display_sp_configuration( $saml_identity_name, $saml_login_url,
 							</div>
 							<div class="mo-saml-bootstrap-col-md-8">
 								<input type="checkbox" id="switch_sync" name="mo_saml_assertion_time_validity" class="mo-saml-switch" <?php echo esc_attr( $saml_assertion_time_validity ); ?> /><label class="mo-saml-switch-label" for="switch_sync">Toggle</label>
-								<p class="mo-saml-bootstrap-mt-2"><b><?php esc_html_e( 'Note', 'miniorange-saml-20-single-sign-on' ); ?></b><?php esc_html_e( ':Disable this toggle to disable the check of time validity for SAML assertion.', 'miniorange-saml-20-single-sign-on' ); ?></p>
+								<p class="mo-saml-bootstrap-mt-2"><b><?php esc_html_e( 'Note', 'miniorange-saml-20-single-sign-on' ); ?></b><?php esc_html_e( ': Disable this toggle to disable the check of time validity for SAML assertion.', 'miniorange-saml-20-single-sign-on' ); ?></p>
 							</div>
 						</div>
 						<div class="mo-saml-bootstrap-row align-items-top mt-2 mo-saml-btns-cont">

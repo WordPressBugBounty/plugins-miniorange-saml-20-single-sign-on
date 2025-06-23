@@ -55,7 +55,7 @@ function mo_saml_display_sp_endpoints_config( $sp_base_url, $sp_entity_id ) {
 					<h6 class="mo-saml-bootstrap-text-secondary"><?php esc_html_e( 'SP EntityID / Issuer :', 'miniorange-saml-20-single-sign-on' ); ?></h6>
 				</div>
 				<div class="mo-saml-bootstrap-col-md-9">
-					<input type="text" name="mo_saml_sp_entity_id" title="Please enter a valid value" pattern="[^\s]+\s*$" placeholder="Enter Service Provider Entity ID" class="mo-saml-bootstrap-w-100" value="<?php echo esc_attr( $sp_entity_id ); ?>" required>
+					<input type="text" name="mo_saml_sp_entity_id" title="Please enter a valid value" pattern="[^\s]+\s*$" placeholder="<?php esc_attr_e( 'Enter Service Provider Entity ID', 'miniorange-saml-20-single-sign-on' ); ?>" class="mo-saml-bootstrap-w-100" value="<?php echo esc_attr( $sp_entity_id ); ?>" required>
 					<p class="mt-2"><b><?php esc_html_e( 'Note:', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( 'If you have already shared the above URLs or Metadata with your IdP, do', 'miniorange-saml-20-single-sign-on' ); ?> <b><?php esc_html_e( 'NOT', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( 'change SP EntityID. It might break your existing login flow.', 'miniorange-saml-20-single-sign-on' ); ?></p>
 				</div>
 			</div>

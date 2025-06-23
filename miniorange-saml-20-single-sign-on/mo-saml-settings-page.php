@@ -154,14 +154,14 @@ function mo_saml_display_test_config_error_page( $error_code, $status_message = 
                 <br>
                 </p>      
             </form>    
-			<p><strong>To know more about the issue, please go through the <a href="'. $error_faq .'">FAQ</a>  
+			<p><strong>To know more about the issue, please go through the <a href="' . esc_url( $error_faq ) . '">FAQ</a>  
           </div>';
 	} else {
 		echo '<p><strong>Solution:</strong></p>
 		' . wp_kses_post( $error_fix ) . '';
 		echo '<div style="margin:3%;display:block;text-align:center;">
 				<input style="padding:1%;width:100px;background: #0091CD none repeat scroll 0% 0%;cursor: pointer;font-size:15px;border-width: 1px;border-style: solid;border-radius: 3px;white-space: nowrap;box-sizing: border-box;border-color: #0073AA;box-shadow: 0px 1px 0px rgba(120, 200, 230, 0.6) inset;color: #FFF;"type="button" value="Done" onClick="self.close();">
-			<p><strong>To fix the issue you are facing, Please go through this <a href="'. $error_faq .'">FAQ</a>
+			<p><strong>To fix the issue you are facing, Please go through this <a href="' . esc_url( $error_faq ) . '">FAQ</a>
 	</div></div>';
 	}
 	mo_saml_download_logs( $error_message, $error_cause );

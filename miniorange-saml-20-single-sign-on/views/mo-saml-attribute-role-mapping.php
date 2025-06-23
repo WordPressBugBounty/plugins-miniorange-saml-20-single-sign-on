@@ -83,7 +83,7 @@ function mo_saml_display_attribute_mapping() {
 					<h6 class="mo-saml-bootstrap-text-secondary"><?php esc_html_e( 'First Name :', 'miniorange-saml-20-single-sign-on' ); ?></h6>
 				</div>
 				<div class="mo-saml-bootstrap-col-md-6">
-					<input type="text" name="saml_am_first_name" placeholder="Enter attribute name for First Name" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
+					<input type="text" name="saml_am_first_name" placeholder="<?php esc_attr_e( 'Enter attribute name for First Name', 'miniorange-saml-20-single-sign-on' ); ?>" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
 				</div>
 			</div>
 			<div class="mo-saml-bootstrap-row align-items-top mo-saml-bootstrap-mt-4">
@@ -91,7 +91,7 @@ function mo_saml_display_attribute_mapping() {
 					<h6 class="mo-saml-bootstrap-text-secondary"><?php esc_html_e( 'Last Name :', 'miniorange-saml-20-single-sign-on' ); ?></h6>
 				</div>
 				<div class="mo-saml-bootstrap-col-md-6">
-					<input type="text" name="saml_am_last_name" placeholder="Enter attribute name for Last Name" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
+					<input type="text" name="saml_am_last_name" placeholder="<?php esc_attr_e( 'Enter attribute name for Last Name', 'miniorange-saml-20-single-sign-on' ); ?>" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
 				</div>
 			</div>
 			<div class="mo-saml-bootstrap-row align-items-top mo-saml-bootstrap-mt-4">
@@ -99,7 +99,7 @@ function mo_saml_display_attribute_mapping() {
 					<h6 class="mo-saml-bootstrap-text-secondary"><?php esc_html_e( 'Group/Role :', 'miniorange-saml-20-single-sign-on' ); ?></h6>
 				</div>
 				<div class="mo-saml-bootstrap-col-md-6">
-					<input type="text" name="" placeholder="Enter attribute name for Group/Role" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
+					<input type="text" name="" placeholder="<?php esc_attr_e( 'Enter attribute name for Group/Role', 'miniorange-saml-20-single-sign-on' ); ?>" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
 				</div>
 			</div>
 			<div class="mo-saml-bootstrap-row align-items-top mo-saml-bootstrap-mt-4">
@@ -215,7 +215,7 @@ function mo_saml_display_role_mapping( $default_role, $roles ) {
 							<h6 class="mo-saml-bootstrap-text-secondary"><?php echo esc_html( $role_name ); ?> :</h6>
 						</div>
 						<div class="mo-saml-bootstrap-col-md-7">
-							<input type="text" name="" placeholder="Semi-colon(;) separated Group/Role value for <?php echo esc_html( $role_name ); ?>" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
+							<input type="text" name="" placeholder="<?php echo esc_attr( sprintf( __( 'Semi-colon(;) separated Group/Role value for', 'miniorange-saml-20-single-sign-on' ) ) ); echo " ".esc_html( $role_name ); ?>" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
 						</div>
 					</div>
 					<?php

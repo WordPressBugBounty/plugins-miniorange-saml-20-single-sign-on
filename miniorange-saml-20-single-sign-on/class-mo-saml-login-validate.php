@@ -384,7 +384,7 @@ class Mo_SAML_Login_Validate {
 		if ( ! empty( $user_email ) ) {
 			update_option( Mo_Saml_Options_Test_Configuration::TEST_CONFIG_ATTRS, $attrs );
 			echo '<div style="color: #3c763d;
-					background-color: #dff0d8; padding:2%;margin-bottom:20px;text-align:center; border:1px solid #AEDB9A; font-size:18pt; border-radius:10px;margin-top:17px;">TEST SUCCESSFUL</div>
+					background-color: #dff0d8; padding:2%;margin-bottom:20px;text-align:center; border:1px solid #AEDB9A; font-size:18pt; border-radius:10px;margin-top:17px;">' . esc_html__( 'TEST SUCCESSFUL', 'miniorange-saml-20-single-sign-on' ) . '</div>
 					<div style="display:block;text-align:center;margin-bottom:4%;"><svg class="animate" width="100" height="100">
 					<filter id="dropshadow" height="">
 					<feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"></feGaussianBlur>
@@ -411,21 +411,24 @@ class Mo_SAML_Login_Validate {
 				}
 				</style></div>';
 		} else {
-			echo '<div style="color: #a94442;background-color: #f2dede;padding: 15px;margin-bottom: 20px;text-align:center;border:1px solid #E6B3B2;font-size:18pt;">TEST FAILED</div>
-					<div style="color: #a94442;font-size:14pt; margin-bottom:20px;">WARNING: Some Attributes Did Not Match.</div>
+			echo '<div style="color: #a94442;background-color: #f2dede;padding: 15px;margin-bottom: 20px;text-align:center;border:1px solid #E6B3B2;font-size:18pt;">' . esc_html__( 'TEST FAILED', 'miniorange-saml-20-single-sign-on' ) . '</div>
+					<div style="color: #a94442;font-size:14pt; margin-bottom:20px;">' . esc_html__( 'WARNING: Some Attributes Did Not Match.', 'miniorange-saml-20-single-sign-on' ) . '</div>
 					<div style="display:block;text-align:center;margin-bottom:4%;"><img style="width:15%;"src="' . esc_url( plugin_dir_url( __FILE__ ) ) . 'images/wrong.webp"></div>';
 		}
 		$match_account_by = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER ) ? get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER ) : 'email';
 		if ( strlen( $name_id ) > 60 ) {
-			echo '<p><font color="#FF0000" style="font-size:14pt;font-weight:bold">Warning: The NameID value is longer than 60 characters. User will not be created during SSO.</font></p>';
+			echo '<p><font color="#FF0000" style="font-size:14pt;font-weight:bold">' . esc_html__( 'Warning: The NameID value is longer than 60 characters. User will not be created during SSO.', 'miniorange-saml-20-single-sign-on' ) . '</font></p>';
 		} elseif ( 'email' === $match_account_by && ! filter_var( $name_id, FILTER_VALIDATE_EMAIL ) ) {
-			echo '<p><font color="#FF0000" style="font-size:14pt;font-weight:bold">Warning: The NameID value is not a valid Email ID</font></p>';
+			echo '<p><font color="#FF0000" style="font-size:14pt;font-weight:bold">' . esc_html__( 'Warning: The NameID value is not a valid Email ID', 'miniorange-saml-20-single-sign-on' ) . '</font></p>';
 		}
-		echo '<span style="font-size:14pt;"><b>Hello</b>, ' . esc_html( $user_email ) . '</span>';
+		echo '<span style="font-size:14pt;"><b>' . esc_html__( 'Hello', 'miniorange-saml-20-single-sign-on' ) . '</b>, ' . esc_html( $user_email ) . '</span>';
 
-		echo '<br/><p style="font-weight:bold;font-size:14pt;margin-left:1%;">Attributes Received:</p>
-					<table style="border-collapse:collapse;border-spacing:0; display:table;width:100%; font-size:14pt;word-break:break-all;">
-					<tr style="text-align:center;background:#d3e1ff;border:2.5px solid #ffffff";word-break:break-all;><td style="font-weight:bold;padding:2%;border-top-left-radius: 10px;border:2.5px solid #ffffff">ATTRIBUTE NAME</td><td style="font-weight:bold;padding:2%;border:2.5px solid #ffffff; word-wrap:break-word;border-top-right-radius:10px">ATTRIBUTE VALUE</td></tr>';
+		echo '<br/><p style="font-weight:bold;font-size:14pt;margin-left:1%;">' . esc_html__( 'Attributes Received:', 'miniorange-saml-20-single-sign-on' ) . '</p>
+				<table style="border-collapse:collapse;border-spacing:0; display:table;width:100%; font-size:14pt;word-break:break-all;">
+				<tr style="text-align:center;background:#d3e1ff;border:2.5px solid #ffffff";word-break:break-all;>
+					<td style="font-weight:bold;padding:2%;border-top-left-radius: 10px;border:2.5px solid #ffffff">' . esc_html__( 'ATTRIBUTE NAME', 'miniorange-saml-20-single-sign-on' ) . '</td>
+					<td style="font-weight:bold;padding:2%;border:2.5px solid #ffffff; word-wrap:break-word;border-top-right-radius:10px">' . esc_html__( 'ATTRIBUTE VALUE', 'miniorange-saml-20-single-sign-on' ) . '</td>
+				</tr>';
 
 		if ( ! empty( $attrs ) ) {
 			foreach ( $attrs as $key => $value ) {
@@ -438,14 +441,14 @@ class Mo_SAML_Login_Validate {
 				echo "<tr><td style='border:2.5px solid #ffffff;padding:2%;background:#e9f0ff;'>" . esc_html( $key ) . "</td><td style='padding:2%;border:2.5px solid #ffffff;background:#e9f0ff;word-wrap:break-word;'>" . wp_kses( $attr_values, $allowed_html ) . '</td></tr>';
 			}
 		} else {
-			echo 'No Attributes Received.';
+			echo esc_html__( 'No Attributes Received.', 'miniorange-saml-20-single-sign-on' );
 		}
 		echo '</table></div>';
 		echo '<div style="margin:3%;display:block;text-align:center;">
 			<input style="padding:1%;width:250px;background: linear-gradient(0deg,rgb(14 42 71) 0,rgb(26 69 138) 100%)!important;cursor: pointer;font-size:15px;border-width: 1px;border-style: solid;border-radius: 3px;white-space: nowrap;box-sizing: border-box;border-color: #0073AA;box-shadow: 0px 1px 0px rgba(120, 200, 230, 0.6) inset;color: #FFF;"
-				type="button" value="Configure Attribute/Role Mapping" onClick="close_and_redirect_to_attribute_mapping();"> &nbsp;
-			<input style="padding:1%;width:250px;background: linear-gradient(0deg,rgb(14 42 71) 0,rgb(26 69 138) 100%)!important;cursor: pointer;font-size:15px;border-width: 1px;border-style: solid;border-radius: 3px;white-space: nowrap;box-sizing: border-box;border-color: #0073AA;box-shadow: 0px 1px 0px rgba(120, 200, 230, 0.6) inset;color: #FFF;
-			"type="button" value="Configure SSO Settings" onClick="close_and_redirect_to_redir_sso();"></div>
+				type="button" value="' . esc_attr__( 'Configure Attribute/Role Mapping', 'miniorange-saml-20-single-sign-on' ) . '" onClick="close_and_redirect_to_attribute_mapping();"> &nbsp;
+			<input style="padding:1%;width:250px;background: linear-gradient(0deg,rgb(14 42 71) 0,rgb(26 69 138) 100%)!important;cursor: pointer;font-size:15px;border-width: 1px;border-style: solid;border-radius: 3px;white-space: nowrap;box-sizing: border-box;border-color: #0073AA;box-shadow: 0px 1px 0px rgba(120, 200, 230, 0.6) inset;color: #FFF;"
+				type="button" value="' . esc_attr__( 'Configure SSO Settings', 'miniorange-saml-20-single-sign-on' ) . '" onClick="close_and_redirect_to_redir_sso();"></div>
 			
 			<script>
 				function close_and_redirect_to_attribute_mapping(){
