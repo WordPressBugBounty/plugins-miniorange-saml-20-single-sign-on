@@ -122,5 +122,4 @@ class Mo_SAML_Base_Handler {
 			Mo_SAML_Utilities::mo_saml_show_error_message();
 		}
 	}
-
 }

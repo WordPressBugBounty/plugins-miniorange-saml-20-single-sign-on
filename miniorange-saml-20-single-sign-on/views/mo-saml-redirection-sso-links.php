@@ -69,7 +69,7 @@ function mo_saml_display_sso_button_config( $add_sso_button_wp ) {
 					<?php wp_nonce_field( 'mo_saml_add_sso_button_wp_option' ); ?>
 					<input type="hidden" name="option" value="mo_saml_add_sso_button_wp_option" />
 					<input type="checkbox" id="switch-sso-btn" name="mo_saml_add_sso_button_wp" <?php checked( 'true' === $add_sso_button_wp ); ?> class="mo-saml-switch mo-saml-bootstrap-mt-4" onchange="document.getElementById('mo_saml_add_sso_button_wp_form').submit();" value="true" />
-					<label class="mo-saml-switch-label" for="switch-sso-btn" title="<?php esc_attr_e( 'You can only add a Single Sign On button after saving your Service Provider Settings.', 'miniorange-saml-20-single-sign-on' ) ?>"></label>
+					<label class="mo-saml-switch-label" for="switch-sso-btn" title="<?php esc_attr_e( 'You can only add a Single Sign On button after saving your Service Provider Settings.', 'miniorange-saml-20-single-sign-on' ); ?>"></label>
 				</form>
 			</div>
 		</div>

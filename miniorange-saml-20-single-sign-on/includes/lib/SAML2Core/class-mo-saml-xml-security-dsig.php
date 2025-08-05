@@ -212,7 +212,7 @@ class Mo_SAML_XML_Security_DSig {
 	 * @param int         $pos position of singedInfo Node.
 	 *
 	 * @return DOMNode|null
-	 * @throws Exception Throws Exception for multiple signed-info nodes.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws Exception for multiple signed-info nodes.
 	 */
 	public function locate_signature( $obj_doc, $pos = 0 ) {
 		if ( $obj_doc instanceof DOMDocument ) {
@@ -263,7 +263,7 @@ class Mo_SAML_XML_Security_DSig {
 	 *
 	 * @param string $method canonical method.
 	 *
-	 * @throws Exception If canonical method is not valid.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception If canonical method is not valid.
 	 */
 	public function set_canonical_method( $method ) {
 		switch ( $method ) {
@@ -274,8 +274,8 @@ class Mo_SAML_XML_Security_DSig {
 				$this->canonical_method = $method;
 				break;
 			default:
-			\Mo_SAML_Logger::mo_saml_add_log( 'Invalid Canonical Method', \Mo_SAML_Logger::ERROR );
-			throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'Invalid Canonical Method' );
+				\Mo_SAML_Logger::mo_saml_add_log( 'Invalid Canonical Method', \Mo_SAML_Logger::ERROR );
+				throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'Invalid Canonical Method' );
 		}
 		$xpath = $this->get_x_path_obj();
 		if ( $xpath ) {
@@ -353,7 +353,7 @@ class Mo_SAML_XML_Security_DSig {
 	 * Canonicalize signed Info.
 	 *
 	 * @return null|string
-	 * @throws Exception Throws Exception for multiple signed-info nodes.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws Exception for multiple signed-info nodes.
 	 */
 	public function canonicalize_signed_info() {
 		$doc             = $this->sig_node->ownerDocument;
@@ -405,7 +405,7 @@ class Mo_SAML_XML_Security_DSig {
 	 * @param bool   $encode true if we need to return base_64 encoded digest.
 	 *
 	 * @return string
-	 * @throws Exception Throws exception is digest algorithm is not valid.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws exception is digest algorithm is not valid.
 	 */
 	public function calculate_digest( $digest_algorithm, $data, $encode = true ) {
 		switch ( $digest_algorithm ) {
@@ -663,7 +663,7 @@ class Mo_SAML_XML_Security_DSig {
 	 * Get reference IDs.
 	 *
 	 * @return array
-	 * @throws Exception For zero nodes.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For zero nodes.
 	 */
 	public function get_ref_ids() {
 		$refids = array();
@@ -685,7 +685,7 @@ class Mo_SAML_XML_Security_DSig {
 	 * Validate reference of XML.
 	 *
 	 * @return bool
-	 * @throws Exception Throws if Signature node is empty.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws if Signature node is empty.
 	 */
 	public function validate_reference() {
 		$doc_elem = $this->sig_node->ownerDocument->documentElement;
@@ -933,7 +933,7 @@ class Mo_SAML_XML_Security_DSig {
 	 * @param Mo_SAML_XML_Security_Key $obj_key instance of Mo_SAML_XML_Security_Key.
 	 *
 	 * @return bool|int
-	 * @throws Exception Throws if signature value node is empty.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws if signature value node is empty.
 	 */
 	public function verify( $obj_key ) {
 		$doc   = $this->sig_node->ownerDocument;
@@ -1124,7 +1124,7 @@ class Mo_SAML_XML_Security_DSig {
 	 * @param null|array    $options options.
 	 *
 	 * @return void
-	 * @throws Exception Throws if parent node is not valid.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws if parent node is not valid.
 	 */
 	public static function static_add509_cert(
 		$parent_ref,

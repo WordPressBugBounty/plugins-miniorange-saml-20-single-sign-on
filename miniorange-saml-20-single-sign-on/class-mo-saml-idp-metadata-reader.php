@@ -133,7 +133,7 @@ class Mo_SAML_Identity_Providers {
 	 * Constructor to initialize variables
 	 *
 	 * @param DOMElement $xml reads metadata.
-	 * @throws Exception Missing idpssodescriptor.
+	 * @throws Mo_SAML_Metadata_Reader_Exception Missing idpssodescriptor.
 	 */
 	public function __construct( $xml = null ) {
 

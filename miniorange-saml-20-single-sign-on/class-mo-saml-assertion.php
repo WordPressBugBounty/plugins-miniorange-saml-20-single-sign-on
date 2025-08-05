@@ -211,7 +211,8 @@ class Mo_SAML_Assertion {
 	 * Constructor: Initializes Assertion Processing.
 	 *
 	 * @param DOMElement $xml Assertion in XML format.
-	 * @throws Exception For unsupported SAML version or for missing Issuer and ID.
+	 * @throws Mo_SAML_Encrypted_Assertion_Exception For encrypted assertion.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For invalid assertion.
 	 */
 	public function __construct( $xml = null ) {
 		$this->id                       = Mo_SAML_Utilities::mo_saml_generate_id();
@@ -237,7 +238,8 @@ class Mo_SAML_Assertion {
 				exit;
 			} else {
 				Mo_SAML_Logger::mo_saml_add_log( 'Assertion encrypted', Mo_SAML_Logger::ERROR );
-				throw new Mo_SAML_Encrypted_Assertion_Exception( 'Encrypted Assertion not supported.' );			}
+				throw new Mo_SAML_Encrypted_Assertion_Exception( 'Encrypted Assertion not supported.' );
+			}
 		}
 		if ( ! $xml->hasAttribute( 'ID' ) ) {
 			Mo_SAML_Logger::mo_saml_add_log( 'Missing ID attribute in Assertion', Mo_SAML_Logger::ERROR );
@@ -272,7 +274,8 @@ class Mo_SAML_Assertion {
 	 * Parse subject in assertion.
 	 *
 	 * @param DOMElement $xml The assertion XML element.
-	 * @throws Exception For more than one nodes of the following: Subject, NameID, EncryptedData.
+	 * @throws Mo_SAML_Missing_NameID_Exception For missing NameID.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For invalid assertion.
 	 */
 	private function mo_saml_parse_subject( DOMElement $xml ) {
 		$subject = Mo_SAML_Utilities::mo_saml_xp_query( $xml, './saml_assertion:Subject' );
@@ -317,7 +320,7 @@ class Mo_SAML_Assertion {
 	 * Parse conditions in assertion.
 	 *
 	 * @param DOMElement $xml The assertion XML element.
-	 * @throws Exception For more than one conditions nodes in SAML Assertion or for unknown conditions.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For more than one conditions nodes in SAML Assertion or for unknown conditions.
 	 */
 	private function mo_saml_parse_conditions( DOMElement $xml ) {
 		$conditions = Mo_SAML_Utilities::mo_saml_xp_query( $xml, './saml_assertion:Conditions' );
@@ -388,7 +391,7 @@ class Mo_SAML_Assertion {
 	 * Parse AuthnStatement in assertion.
 	 *
 	 * @param DOMElement $xml The assertion XML element.
-	 * @throws Exception For multiple AuthnStatement nodes and for missing AuthnInstant.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For multiple AuthnStatement nodes and for missing AuthnInstant.
 	 */
 	private function mo_saml_parse_authn_statement( DOMElement $xml ) {
 		$authn_statements = Mo_SAML_Utilities::mo_saml_xp_query( $xml, './saml_assertion:AuthnStatement' );
@@ -422,7 +425,7 @@ class Mo_SAML_Assertion {
 	 * Parse AuthnContext in AuthnStatement.
 	 *
 	 * @param DOMElement $authn_statement_el XML element for AuthenStatement.
-	 * @throws Exception For invalid or missing Authentication Context.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For invalid or missing Authentication Context.
 	 */
 	private function mo_saml_parse_authn_context( DOMElement $authn_statement_el ) {
 		// Get the AuthnContext element.
@@ -480,7 +483,7 @@ class Mo_SAML_Assertion {
 	 * Parse attribute statements in assertion.
 	 *
 	 * @param DOMElement $xml The XML element with the assertion.
-	 * @throws Exception For missing name on SAML Attribute.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For missing name on SAML Attribute.
 	 */
 	private function mo_saml_parse_attributes( DOMElement $xml ) {
 		$first_attribute = true;
@@ -625,7 +628,7 @@ class Mo_SAML_Assertion {
 	 *
 	 * @see Mo_SAML_Utilities::addNameId()
 	 * @return array|NULL The name identifier of the assertion.
-	 * @throws Exception If the nameID is encrypted and is retrived directly.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception If the nameID is encrypted and is retrived directly.
 	 */
 	public function mo_saml_get_name_id() {
 		if ( null !== $this->encrypted_name_id ) {
@@ -896,7 +899,7 @@ class Mo_SAML_Assertion {
 	 * Set the authentication context declaration.
 	 *
 	 * @param \SAML2_XML_Chunk $authn_context_decl SAML2 XML chunk.
-	 * @throws Exception If the AuthnContextDeclRef is already registered.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception If the AuthnContextDeclRef is already registered.
 	 */
 	public function mo_saml_set_authn_context_decl( SAML2_XML_Chunk $authn_context_decl ) {
 		if ( ! empty( $this->authn_context_decl_ref ) ) {
@@ -924,7 +927,7 @@ class Mo_SAML_Assertion {
 	 * Set the authentication context declaration reference.
 	 *
 	 * @param string $authn_context_decl_ref The Authentication Context Declaration Reference.
-	 * @throws Exception If AuthnContextDecl is already registered.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception If AuthnContextDecl is already registered.
 	 */
 	public function mo_saml_set_authn_context_decl_ref( $authn_context_decl_ref ) {
 		if ( ! empty( $this->authn_context_decl ) ) {

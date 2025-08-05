@@ -25,7 +25,7 @@ class Mo_SAML_Login_Validate {
 
 	/**
 	 * Constructor for the Mo_SAML_Login_Validate class.
-	 * Initializes and defines all functionality related to login processes 
+	 * Initializes and defines all functionality related to login processes
 	 * and handling requests received from the plugin.
 	 */
 	public function __construct() {
@@ -36,6 +36,10 @@ class Mo_SAML_Login_Validate {
 	/**
 	 * Function to handle all incoming request with 'option' & "SAMLResponse Parameter"
 	 *
+	 * @throws Mo_SAML_Signature_Not_Found_Exception For missing signature.
+	 * @throws Mo_SAML_Cert_Mismatch_Exception For certificate mismatch.
+	 * @throws Mo_SAML_Cert_Mismatch_Encoding_Exception For certificate mismatch due to character encoding.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For invalid assertion.
 	 * @return void
 	 */
 	public function mo_saml_login_validate() {
@@ -172,7 +176,7 @@ class Mo_SAML_Login_Validate {
 					mo_saml_display_test_config_error_page( $error_code );
 					exit;
 				} else {
-					throw new Mo_SAML_Signature_Not_Found_Exception("No signature was found in the SAML Response or Assertion.");
+					throw new Mo_SAML_Signature_Not_Found_Exception( 'No signature was found in the SAML Response or Assertion.' );
 				}
 			}
 			if ( is_array( $cert_from_plugin ) ) {
@@ -251,7 +255,7 @@ class Mo_SAML_Login_Validate {
 			}
 			Mo_SAML_Utilities::mo_saml_validate_issuer_and_audience( $saml_response, $sp_enity_id, $issuer, $relay_state );
 
-			$ssoemail = current( current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_name_id() );
+			$ssoemail        = current( current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_name_id() );
 			$attrs           = current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_attributes();
 			$attrs['NameID'] = array( '0' => sanitize_text_field( $ssoemail ) );
 			$session_index   = current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_session_index();
@@ -508,7 +512,8 @@ class Mo_SAML_Login_Validate {
 	 * @param string       $relay_state relay state parameter passed by IDP.
 	 *
 	 * @param string       $check_if_match_by default username, parameter from which users will be matched.
-	 *
+	 * @throws Mo_Saml_Username_Length_Limit_Exceeded_Exception For username length limit exceeded.
+	 * @throws Mo_Saml_User_Creation_Exception For user creation failed.
 	 * @return void
 	 */
 	private function mo_saml_login_user( $user_email, $first_name, $last_name, $user_name, $group_name, $default_role, $relay_state, $check_if_match_by ) {
@@ -534,10 +539,10 @@ class Mo_SAML_Login_Validate {
 			if ( is_wp_error( $user_id ) ) {
 				if ( strlen( $user_name ) > 60 ) {
 					Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_USERNAME_LENGTH_LIMIT_EXCEEDED' ), Mo_SAML_Logger::ERROR );
-					throw new Mo_Saml_Username_Length_Limit_Exceeded_Exception("Username length limit exceeded.");
+					throw new Mo_Saml_Username_Length_Limit_Exceeded_Exception( 'Username length limit exceeded.' );
 				} else {
 					Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_USER_CREATION_FAILED' ), Mo_SAML_Logger::ERROR );
-					throw new Mo_Saml_User_Creation_Exception("User not created.");
+					throw new Mo_Saml_User_Creation_Exception( 'User not created.' );
 				}
 				exit();
 			}
@@ -634,6 +639,7 @@ class Mo_SAML_Login_Validate {
 	 *
 	 * @param string $statusmessage status message returned from the IDP in the SAML response.
 	 *
+	 * @throws Mo_SAML_Invalid_Status_Code_Exception For invalid status code.
 	 * @return void
 	 */
 	private function mo_saml_show_status_error( $status_code, $relay_state, $statusmessage ) {

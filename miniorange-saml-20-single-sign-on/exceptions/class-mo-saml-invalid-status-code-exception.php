@@ -5,13 +5,14 @@
  *
  * @package miniorange-saml-20-single-sign-on/exception
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 /**
  * This exception indicates that the IDP returned a status code other than SUCCESS.
  */
-class Mo_SAML_Invalid_status_Code_Exception extends Exception {
+class Mo_SAML_Invalid_Status_Code_Exception extends Exception {
 	/**
 	 * Constructor function, which defines the `$code` and `$message` for
 	 * the exception, and makes a call to the parent (`Exception`) constructor.

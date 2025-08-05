@@ -4,6 +4,7 @@
  *
  * @package miniorange-saml-20-single-sign-on/handler
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -74,7 +75,7 @@ class Mo_Saml_User_Login_Handler {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
 		} catch ( Mo_SAML_Cert_Mismatch_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
-		} catch ( Mo_SAML_Invalid_status_Code_Exception $ex ) {
+		} catch ( Mo_SAML_Invalid_Status_Code_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
 		} catch ( Mo_SAML_Missing_NameID_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );

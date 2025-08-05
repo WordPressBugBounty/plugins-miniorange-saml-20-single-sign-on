@@ -268,6 +268,7 @@ class Mo_SAML_Utilities {
 	 * Converts Date to Timestamp.
 	 *
 	 * @param  mixed $time Contains time value.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For invalid SAML2 timestamp.
 	 * @return string
 	 */
 	public static function mo_saml_xs_date_time_to_timestamp( $time ) {
@@ -321,6 +322,7 @@ class Mo_SAML_Utilities {
 	 * Validate the SAML Response.
 	 *
 	 * @param  DOMElement $root Instance of DOMElement.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For more than one signature element in root.
 	 * @return array|bool
 	 */
 	public static function mo_saml_validate_element( DOMElement $root ) {
@@ -395,6 +397,7 @@ class Mo_SAML_Utilities {
 	 *
 	 * @param  array                    $info Contains the signature Data.
 	 * @param  Mo_SAML_XML_Security_Key $key Used to verify the signature.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For missing SignatureMethod element.
 	 * @return void
 	 */
 	public static function mo_saml_validate_signature( array $info, Mo_SAML_XML_Security_Key $key ) {
@@ -429,6 +432,7 @@ class Mo_SAML_Utilities {
 	 * @param  Mo_SAML_XML_Security_Key $key Instance of MoXMLSecurityKey.
 	 * @param  string                   $algorithm Contains Algorithm.
 	 * @param  string                   $type Algorithm type.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For missing key in public key details.
 	 * @return Object
 	 */
 	public static function mo_saml_cast_key( Mo_SAML_XML_Security_Key $key, $algorithm, $type = 'public' ) {
@@ -458,6 +462,8 @@ class Mo_SAML_Utilities {
 	 *
 	 * @param  Mo_SAML_Assertion $assertion Contains SAML Assertion.
 	 * @param  string            $not_before It specifies the earliest time instant at which the assertion is valid.
+	 * @throws Mo_SAML_SP_Clock_Behind_Of_IDP_Clock_Exception For SP clock is behind the IDP clock.
+	 * @throws Mo_SAML_SP_Clock_Ahead_Of_IDP_Clock_Exception For SP clock is ahead of the IDP clock.
 	 * @return void
 	 */
 	public static function mo_saml_verify_time_window( $assertion, $not_before ) {
@@ -487,6 +493,7 @@ class Mo_SAML_Utilities {
 	 * @param  Mo_SAML_Response $response                 Contains SAML Response.
 	 * @param  string           $cert_number              Holds Cert. Number.
 	 * @param  string           $relay_state              an url where users will be redirected after successful authentication.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For destination in response doesn't match the current URL.
 	 * @return string
 	 */
 	public static function mo_saml_process_response( $current_url, $cert_fingerprint, $signature_data, Mo_SAML_Response $response, $cert_number, $relay_state ) {
@@ -528,7 +535,7 @@ class Mo_SAML_Utilities {
 	 * @param  array $signature_data Signature Node in SAML Response.
 	 * @param  int   $cert_number Holds Cert. Number.
 	 * @param  mixed $relay_state an url where users will be redirected after successful authentication.
-	 * @throws Exception Throws unable to validate signature error.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception Throws unable to validate signature error.
 	 * @return bool
 	 */
 	public static function mo_saml_check_sign( $cert_fingerprint, $signature_data, $cert_number, $relay_state ) {
@@ -578,6 +585,8 @@ class Mo_SAML_Utilities {
 	 * @param  string           $sp_entity_id Uniquely identitify the SP.
 	 * @param  string           $issuer_to_validate_against SP Issuer Value.
 	 * @param  string           $relay_state an url where users will be redirected after successful authentication.
+	 * @throws Mo_SAML_Invalid_Audience_URI_Exception For invalid audience URI.
+	 * @throws Mo_SAML_Invalid_Entity_ID_Exception For invalid issuer.
 	 * @return bool
 	 */
 	public static function mo_saml_validate_issuer_and_audience( $saml_response, $sp_entity_id, $issuer_to_validate_against, $relay_state ) {
@@ -637,6 +646,7 @@ class Mo_SAML_Utilities {
 	 *
 	 * @param  array $cert_fingerprints certificates in the SAML Response.
 	 * @param  array $certificates certificates configured in the plugin.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For invalid certificate.
 	 * @return string
 	 */
 	private static function mo_saml_find_certificate( array $cert_fingerprints, array $certificates ) {
@@ -993,13 +1003,12 @@ class Mo_SAML_Utilities {
 	/**
 	 * By default load xml doesn't throw error, instead it reports error. This function is used to throw error in case any error occurs while loading XML.
 	 *
-	 * @param $errno int error number.
-	 * @param $errstr string error string.
-	 * @param $errfile string file name of where error occurred.
-	 * @param $errline int line number where error occurred.
+	 * @param int    $errno error number.
+	 * @param string $errstr error string.
+	 * @throws Mo_SAML_Invalid_XML_Exception For invalid XML.
 	 * @return false|string
 	 */
-	public static function mo_saml_handle_xml_error( $errno, $errstr, $errfile, $errline ) {
+	public static function mo_saml_handle_xml_error( $errno, $errstr ) {
 		if ( E_WARNING === $errno && ( substr_count( $errstr, 'DOMDocument::loadXML()' ) > 0 ) ) {
 			// Log the warning when debug framework is implemented.
 			throw new Mo_SAML_Invalid_XML_Exception( 'Invalid XML Detected.' );
@@ -1011,6 +1020,8 @@ class Mo_SAML_Utilities {
 	 * This function is used to harden loadxml function to parse XML safely. Disabling loading/expansion of external and internal entities.
 	 *
 	 * @param string $xml raw xml string.
+	 * @throws Mo_SAML_DOM_Extension_Disabled_Exception For DOMDocument not installed.
+	 * @throws Mo_SAML_Invalid_XML_Exception For invalid XML.
 	 * @return DOMDocument | string
 	 */
 	public static function mo_saml_safe_load_xml( $xml ) {
@@ -1031,7 +1042,7 @@ class Mo_SAML_Utilities {
 			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- childNodes is predefined variable from DOMDocument class.
 			foreach ( $document->childNodes as $child ) {
 				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- nodeType is predefined variable from DOMDocument class.
-				if ( $child->nodeType === XML_DOCUMENT_TYPE_NODE ) {
+				if ( XML_DOCUMENT_TYPE_NODE === $child->nodeType ) {
 					Mo_SAML_Logger::mo_saml_add_log( 'Invalid XML Detected.', \Mo_SAML_Logger::ERROR );
 					throw new Mo_SAML_Invalid_XML_Exception( 'Invalid XML Detected.' );
 				}

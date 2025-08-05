@@ -124,7 +124,7 @@ function mo_saml_display_welcome_page() {
 function mo_saml_display_plugin_header() {
 
 	$sandbox_url = 'https://sandbox.miniorange.com/?mo_plugin=mo_saml&referer=' . site_url();
-	$faq_url = 'https://faq.miniorange.com/kb/saml-single-sign-on/';
+	$faq_url     = 'https://faq.miniorange.com/kb/saml-single-sign-on/';
 	$version     = 'v' . Mo_Saml_Options_Plugin_Constants::VERSION;
 	?>
 	<div class="wrap shadow-cstm mo-saml-bootstrap-p-3 mo-saml-bootstrap-me-0 mo-saml-bootstrap-mt-0 mo-saml-margin-left">

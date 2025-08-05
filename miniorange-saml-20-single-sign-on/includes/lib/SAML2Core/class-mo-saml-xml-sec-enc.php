@@ -127,7 +127,7 @@ class Mo_SAML_XML_Sec_Enc {
 	 * @param string  $name Name of the Node.
 	 * @param DOMNode $node Node DOM Document.
 	 * @param string  $type Type of the Node.
-	 * @throws Exception Throws expections if the type of node is not DOMNode.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws expections if the type of node is not DOMNode.
 	 */
 	public function mo_saml_add_reference( $name, $node, $type ) {
 		if ( ! $node instanceof DOMNode ) {
@@ -165,7 +165,7 @@ class Mo_SAML_XML_Sec_Enc {
 	 * @param Mo_SAML_XML_Security_Key $obj_key  The encryption key and algorithm.
 	 * @param bool                     $replace Whether the encrypted node should be replaced in the original tree. Default is true.
 	 * @return DOMElement  The <xenc:EncryptedData>-element.
-	 * @throws Exception Throws expections if the node to be encrypted is not set or the key is not valid.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws expections if the node to be encrypted is not set or the key is not valid.
 	 */
 	public function mo_saml_encrypt_node( $obj_key, $replace = true ) {
 		$data = '';
@@ -238,7 +238,7 @@ class Mo_SAML_XML_Sec_Enc {
 	 * Encrypts the references.
 	 *
 	 * @param Mo_SAML_XML_Security_Key $obj_key instance of MOXMLSecurityKey.
-	 * @throws Exception $e exection.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception $e exception.
 	 */
 	public function mo_saml_encrypt_references( $obj_key ) {
 		$cur_raw_node = $this->raw_node;
@@ -250,7 +250,7 @@ class Mo_SAML_XML_Sec_Enc {
 			try {
 				$enc_node                             = $this->mo_saml_encrypt_node( $obj_key );
 				$this->references[ $name ]['encnode'] = $enc_node;
-			} catch ( Exception $e ) {
+			} catch ( \Mo_SAML_XMLSecLibs_Processing_Exception $e ) {
 				$this->raw_node = $cur_raw_node;
 				$this->type     = $cur_type;
 				throw $e;
@@ -264,7 +264,7 @@ class Mo_SAML_XML_Sec_Enc {
 	 * Retrieve the CipherValue text from this encrypted node.
 	 *
 	 * @return string|null  The Ciphervalue text, or null if no CipherValue is found.
-	 * @throws Exception Throws expections if the node is not set.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws expections if the node is not set.
 	 */
 	public function mo_saml_get_cipher_value() {
 		if ( empty( $this->raw_node ) ) {
@@ -297,7 +297,7 @@ class Mo_SAML_XML_Sec_Enc {
 	 *
 	 * @param Mo_SAML_XML_Security_Key $obj_key  The decryption key that should be used when decrypting the node.
 	 * @param boolean                  $replace Whether we should replace the encrypted node in the XML document with the decrypted data. The default is true.
-	 * @throws Exception Throws expections if encrypted data is not located.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws expections if encrypted data is not located.
 	 * @return string|DOMElement  The decrypted data.
 	 */
 	public function mo_saml_decrypt_node( $obj_key, $replace = true ) {
@@ -350,7 +350,7 @@ class Mo_SAML_XML_Sec_Enc {
 	 * @param Mo_SAML_XML_Security_Key $src_key source key.
 	 * @param Mo_SAML_XML_Security_Key $raw_key raw key.
 	 * @param bool                     $append append.
-	 * @throws Exception Throws expections if the key is invalid.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws expections if the key is invalid.
 	 */
 	public function mo_saml_encrypt_key( $src_key, $raw_key, $append = true ) {
 		if ( ( ! $src_key instanceof Mo_SAML_XML_Security_Key ) || ( ! $raw_key instanceof Mo_SAML_XML_Security_Key ) ) {
@@ -391,7 +391,7 @@ class Mo_SAML_XML_Sec_Enc {
 	 *
 	 * @param Mo_SAML_XML_Security_Key $enc_key Encryption key.
 	 * @return DOMElement|string
-	 * @throws Exception Throws expections if key is not encrypted and if key has some missing data.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws expections if key is not encrypted and if key has some missing data.
 	 */
 	public function mo_saml_decrypt_key( $enc_key ) {
 		if ( ! $enc_key->is_encrypted ) {
@@ -467,7 +467,7 @@ class Mo_SAML_XML_Sec_Enc {
 	 * @param null|Mo_SAML_XML_Security_Key $obj_base_key object base key.
 	 * @param null|DOMNode                  $node Node DOM Document.
 	 * @return null|Mo_SAML_XML_Security_Key intance of the MOXMLSecurityKey.
-	 * @throws Exception Throws expections if the encrypted key is not located by ID.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws expections if the encrypted key is not located by ID.
 	 */
 	public static function mo_saml_staticlocate_key_info( $obj_base_key = null, $node = null ) {
 		if ( empty( $node ) || ( ! $node instanceof DOMNode ) ) {
@@ -547,7 +547,7 @@ class Mo_SAML_XML_Sec_Enc {
 					$key_element = $xpath->query( $query )->item( 0 );
 					if ( ! $key_element ) {
 						\Mo_SAML_Logger::mo_saml_add_log( 'Unable to locate EncryptedKey with @Id=' . $id, \Mo_SAML_Logger::ERROR );
-						throw new \Mo_SAML_XMLSecLibs_Processing_Exception(	sprintf( 'Unable to locate EncryptedKey with @Id=%s.', esc_html( $id ) ) );
+						throw new \Mo_SAML_XMLSecLibs_Processing_Exception( sprintf( 'Unable to locate EncryptedKey with @Id=%s.', esc_html( $id ) ) );
 					}
 
 					return Mo_SAML_XML_Security_Key::mo_saml_from_encrypted_key_element( $key_element );

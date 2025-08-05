@@ -215,7 +215,12 @@ function mo_saml_display_role_mapping( $default_role, $roles ) {
 							<h6 class="mo-saml-bootstrap-text-secondary"><?php echo esc_html( $role_name ); ?> :</h6>
 						</div>
 						<div class="mo-saml-bootstrap-col-md-7">
-							<input type="text" name="" placeholder="<?php echo esc_attr( sprintf( __( 'Semi-colon(;) separated Group/Role value for', 'miniorange-saml-20-single-sign-on' ) ) ); echo " ".esc_html( $role_name ); ?>" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
+							<input type="text" name="" placeholder="
+							<?php
+							echo esc_attr( sprintf( __( 'Semi-colon(;) separated Group/Role value for', 'miniorange-saml-20-single-sign-on' ) ) );
+							echo ' ' . esc_html( $role_name );
+							?>
+							" class="mo-saml-bootstrap-w-100 mo-saml-bootstrap-bg-light cursor-disabled" value="" disabled>
 						</div>
 					</div>
 					<?php

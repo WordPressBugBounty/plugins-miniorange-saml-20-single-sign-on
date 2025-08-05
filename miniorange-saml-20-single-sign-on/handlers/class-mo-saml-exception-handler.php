@@ -4,6 +4,7 @@
  *
  * @package miniorange-saml-20-single-sign-on/handler
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

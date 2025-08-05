@@ -46,13 +46,13 @@ class Mo_Saml_Test_Config_Error_Handler {
 
 		switch ( $error_type ) {
 			case 'test_config_error_wpsamlerr004':
-				$error_code                = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR004'];
+				$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR004'];
 				break;
 			case 'test_config_error_wpsamlerr012':
-				$error_code                = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR012'];
+				$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR012'];
 				break;
 			case 'test_config_error_wpsamlerr010':
-				$error_code                 = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR010'];
+				$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR010'];
 				break;
 		}
 		mo_saml_display_test_config_error_page( $error_code );

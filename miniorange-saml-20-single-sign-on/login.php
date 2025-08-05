@@ -1,12 +1,12 @@
 <?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName -- cannot change main file's name
 /**
- * Plugin Name: miniOrange SSO using SAML 2.0
+ * Plugin Name: SAML Single Sign On – SSO Login
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 5.3.0
+ * Version: 5.3.1
  * Author: miniOrange
  * Author URI: https://miniorange.com/
- * License: MIT/Expat
+ * License: Expat
  * License URI: https://plugins.miniorange.com/mit-license
  * Text Domain: miniorange-saml-20-single-sign-on
  *
@@ -45,6 +45,7 @@ class Saml_Mo_Login {
 		add_action( 'admin_init', array( Mo_Saml_Test_Config_Error_Handler::class, 'mo_saml_get_settings_handler' ) );
 		add_action( 'admin_init', array( Mo_SAML_Base_Handler::class, 'mo_saml_handle_save_settings' ) );
 		add_action( 'admin_init', array( 'Mo_SAML_Logger', 'mo_saml_admin_notices' ) );
+		add_action( 'init', array( 'Mo_SAML_Logger', 'mo_saml_force_update_htaccess' ) );
 		add_action( 'admin_init', array( $this, 'mo_saml_do_plugin_extension_checks' ) );
 		add_action( 'admin_footer', array( $this, 'feedback_request' ) );
 		add_action( 'admin_menu', array( $this, 'miniorange_sso_menu' ) );
@@ -313,7 +314,7 @@ class Saml_Mo_Login {
 		add_submenu_page(
 			$slug,
 			'miniOrange SAML 2.0 SSO',
-			'<div style="color:orange" id="mo_saml_pricing_menu"><img src="' . Mo_SAML_Utilities::mo_saml_get_plugin_dir_url() . 'images/premium_plans_icon.webp" style="height:10px;width:12px"> ' . __( 'Premium Plans', 'miniorange-saml-20-single-sign-on' ) . '</div>',
+			'<div style="color:orange" id="mo_saml_pricing_menu"><img src="' . esc_url( Mo_SAML_Utilities::mo_saml_get_plugin_dir_url() ) . 'images/premium_plans_icon.webp" style="height:10px;width:12px"> ' . __( 'Premium Plans', 'miniorange-saml-20-single-sign-on' ) . '</div>',
 			'manage_options',
 			'mo_saml_settings',
 			array( $this, 'mo_login_widget_saml_options' )

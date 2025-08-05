@@ -162,7 +162,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param string     $type Key Type.
 	 * @param null|array $params Additional information for the Certificate.
-	 * @throws Exception If passed key type is invalid or if type is required but not provided for certificate.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception If passed key type is invalid or if type is required but not provided for certificate.
 	 */
 	public function __construct( $type, $params = null ) {
 		switch ( $type ) {
@@ -303,8 +303,8 @@ class Mo_SAML_XML_Security_Key {
 				$this->crypt_params['method']  = 'http://www.w3.org/2000/09/xmldsig#hmac-sha1';
 				break;
 			default:
-			\Mo_SAML_Logger::mo_saml_add_log( 'Invalid Key Type', \Mo_SAML_Logger::ERROR );
-			throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'Invalid Key Type' );
+				\Mo_SAML_Logger::mo_saml_add_log( 'Invalid Key Type', \Mo_SAML_Logger::ERROR );
+				throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'Invalid Key Type' );
 		}
 		$this->type = $type;
 	}
@@ -328,12 +328,12 @@ class Mo_SAML_XML_Security_Key {
 	 * In case of using DES3-CBC the key is checked for a proper parity bits set.
 	 *
 	 * @return string
-	 * @throws Exception For unknown key size.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For unknown key size.
 	 */
 	public function mo_saml_generate_session_key() {
 		if ( ! isset( $this->crypt_params['keysize'] ) ) {
 			\Mo_SAML_Logger::mo_saml_add_log( 'Unknown key size for type ' . $this->type, \Mo_SAML_Logger::ERROR );
-			throw new \Mo_SAML_XMLSecLibs_Processing_Exception(	sprintf( 'Unknown key size for type "%s".', esc_html( $this->type ) ) );
+			throw new \Mo_SAML_XMLSecLibs_Processing_Exception( sprintf( 'Unknown key size for type "%s".', esc_html( $this->type ) ) );
 		}
 		$key_size = $this->crypt_params['keysize'];
 
@@ -398,7 +398,7 @@ class Mo_SAML_XML_Security_Key {
 	 * @param string $key Public Key.
 	 * @param bool   $is_file True if the key is a file.
 	 * @param bool   $is_cert True if the key passed is x509 certificate.
-	 * @throws Exception When the key is invalid.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception When the key is invalid.
 	 */
 	public function mo_saml_load_key( $key, $is_file = false, $is_cert = false ) {
 		if ( $is_file ) {
@@ -452,7 +452,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param string  $data Data to be padded.
 	 * @param integer $block_size Blocksize.
-	 * @throws Exception For Block size greater than 256.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For Block size greater than 256.
 	 * @return string
 	 */
 	private function mo_saml_pad_iso_10126( $data, $block_size ) {
@@ -482,7 +482,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param string $data Data to be encrypted.
 	 * @return string
-	 * @throws Exception For encryption failures.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For encryption failures.
 	 */
 	private function mo_saml_encrypt_symmetric( $data ) {
 		$this->iv = openssl_random_pseudo_bytes( openssl_cipher_iv_length( $this->crypt_params['cipher'] ) );
@@ -495,13 +495,13 @@ class Mo_SAML_XML_Security_Key {
 			$auth_tag  = openssl_random_pseudo_bytes( self::AUTHTAG_LENGTH );
 			$encrypted = openssl_encrypt( $data, $this->crypt_params['cipher'], $this->key, OPENSSL_RAW_DATA, $this->iv, $auth_tag );
 		} else {
-			$data = $this->mo_saml_pad_iso_10126( $data, $this->crypt_params['blocksize'] );
+			$data      = $this->mo_saml_pad_iso_10126( $data, $this->crypt_params['blocksize'] );
 			$encrypted = openssl_encrypt( $data, $this->crypt_params['cipher'], $this->key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $this->iv );
 		}
 
 		if ( false === $encrypted ) {
 			\Mo_SAML_Logger::mo_saml_add_log( 'Failure encrypting Data (openssl symmetric) - ' . openssl_error_string(), \Mo_SAML_Logger::ERROR );
-			throw new \Mo_SAML_XMLSecLibs_Processing_Exception( sprintf( 'Failure encrypting Data (openssl symmetric) - %s', esc_html( openssl_error_string() ) ) );			
+			throw new \Mo_SAML_XMLSecLibs_Processing_Exception( sprintf( 'Failure encrypting Data (openssl symmetric) - %s', esc_html( openssl_error_string() ) ) );
 		}
 		return $this->iv . $encrypted . $auth_tag;
 	}
@@ -511,7 +511,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param string $data Data to be decrypted.
 	 * @return string
-	 * @throws Exception For decryption errors.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For decryption errors.
 	 */
 	private function mo_saml_decrypt_symmetric( $data ) {
 		$iv_length = openssl_cipher_iv_length( $this->crypt_params['cipher'] );
@@ -544,7 +544,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param string $data Data to be encrypted.
 	 * @return string
-	 * @throws Exception For encryption failure.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For encryption failure.
 	 */
 	private function mo_saml_encrypt_public( $data ) {
 		if ( ! openssl_public_encrypt( $data, $encrypted, $this->key, $this->crypt_params['padding'] ) ) {
@@ -559,7 +559,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param string $data Data to be decrypted.
 	 * @return string
-	 * @throws Exception For decryption failure.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For decryption failure.
 	 */
 	private function mo_saml_decrypt_public( $data ) {
 		if ( ! openssl_public_decrypt( $data, $decrypted, $this->key, $this->crypt_params['padding'] ) ) {
@@ -574,7 +574,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param string $data Data to be encrypted.
 	 * @return string
-	 * @throws Exception For encryption failure.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For encryption failure.
 	 */
 	private function mo_saml_encrypt_private( $data ) {
 		if ( ! openssl_private_encrypt( $data, $encrypted, $this->key, $this->crypt_params['padding'] ) ) {
@@ -589,7 +589,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param string $data Data to be decrypted.
 	 * @return string
-	 * @throws Exception For decryption failure.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For decryption failure.
 	 */
 	private function mo_saml_decrypt_private( $data ) {
 		if ( ! openssl_private_decrypt( $data, $decrypted, $this->key, $this->crypt_params['padding'] ) ) {
@@ -604,7 +604,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param string $data Data to be signed.
 	 * @return string
-	 * @throws Exception For signing failure.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception For signing failure.
 	 */
 	private function mo_saml_sign_open_ssl( $data ) {
 		$algo = OPENSSL_ALGO_SHA1;
@@ -844,7 +844,7 @@ class Mo_SAML_XML_Security_Key {
 	 *
 	 * @param DOMElement $element The EncryptedKey-element.
 	 * @return Mo_SAML_XML_Security_Key The new key.
-	 * @throws Exception If no algorithm is found for the encrypted key.
+	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception If no algorithm is found for the encrypted key.
 	 */
 	public static function mo_saml_from_encrypted_key_element( DOMElement $element ) {
 		$objenc = new Mo_SAML_XML_Sec_Enc();
