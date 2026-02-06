@@ -23,6 +23,7 @@ class Mo_SAML_Logger {
 	const DEBUG    = 'DEBUG';
 	const ERROR    = 'ERROR';
 	const CRITICAL = 'CRITICAL';
+
 	/**
 	 * To check if file is writable.
 	 *
@@ -304,18 +305,6 @@ class Mo_SAML_Logger {
 			if ( $result ) {
 				update_option( 'mo_saml_htaccess_updated', true );
 			}
-		}
-	}
-
-	/**
-	 * Check if a constant is defined if not define a cosnt.
-	 *
-	 * @param string $name name constant.
-	 * @param string $value value of constant.
-	 */
-	private static function define( $name, $value ) {
-		if ( ! defined( $name ) ) {
-			define( $name, $value );
 		}
 	}
 

@@ -14,7 +14,7 @@ require_once __DIR__ . '/includes/lib/class-mo-saml-options-enum.php';
 require_once 'class-mo-saml-logger.php';
 add_action( 'admin_init', 'mo_saml_miniorange_import_export' );
 
-$tab_class_names_array = array(
+$mo_saml_tab_class_names_array = array(
 	'SSO_Login'         => 'Mo_Saml_Options_Enum_Sso_Login',
 	'Identity_Provider' => 'Mo_Saml_Options_Enum_Identity_Provider',
 	'Service_Provider'  => 'Mo_Saml_Options_Enum_Service_Provider',
@@ -24,10 +24,10 @@ $tab_class_names_array = array(
 
 if ( get_option( Mo_Saml_Sso_Constants::MO_SAML_TEST_STATUS ) !== 1 ) {
 
-	$tab_class_names_array['Test_Configuration'] = 'Mo_Saml_Options_Test_Configuration';
+	$mo_saml_tab_class_names_array['Test_Configuration'] = 'Mo_Saml_Options_Test_Configuration';
 }
 
-define( 'TAB_CLASS_NAMES', maybe_serialize( $tab_class_names_array ) );
+define( 'MO_SAML_TAB_CLASS_NAMES', maybe_serialize( $mo_saml_tab_class_names_array ) );
 
 /**
  * This Function will Send the Export Configuration to the Query as a string and It will download in a file.
@@ -53,7 +53,7 @@ function mo_saml_miniorange_import_export( $test_config_screen = false, $json_in
 			}
 
 			if ( $export_referer ) {
-				$tab_class_name      = maybe_unserialize( TAB_CLASS_NAMES );
+				$tab_class_name      = maybe_unserialize( MO_SAML_TAB_CLASS_NAMES );
 				$configuration_array = array();
 				foreach ( $tab_class_name as $key => $value ) {
 					$configuration_array[ $key ] = mo_saml_get_configuration_array( $value );

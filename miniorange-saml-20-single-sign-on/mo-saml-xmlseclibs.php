@@ -45,8 +45,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit();
 }
 
-$xmlseclibs_srcdir = __DIR__ . '/includes/lib/SAML2Core';
-require $xmlseclibs_srcdir . '/class-mo-saml-xml-security-key.php';
-require $xmlseclibs_srcdir . '/class-mo-saml-xml-security-dsig.php';
-require $xmlseclibs_srcdir . '/class-mo-saml-xml-sec-enc.php';
-require $xmlseclibs_srcdir . '/Utils/class-mo-saml-xpath.php';
+$mo_saml_xmlseclibs_srcdir = __DIR__ . '/includes/lib/SAML2Core';
+require $mo_saml_xmlseclibs_srcdir . '/class-mo-saml-xml-security-key.php';
+require $mo_saml_xmlseclibs_srcdir . '/class-mo-saml-xml-security-dsig.php';
+require $mo_saml_xmlseclibs_srcdir . '/class-mo-saml-xml-sec-enc.php';
+require $mo_saml_xmlseclibs_srcdir . '/Utils/class-mo-saml-xpath.php';

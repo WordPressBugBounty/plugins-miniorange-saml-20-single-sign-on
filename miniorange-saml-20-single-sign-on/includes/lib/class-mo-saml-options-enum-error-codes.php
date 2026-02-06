@@ -70,7 +70,7 @@ class Mo_Saml_Options_Enum_Error_Codes extends Mo_SAML_Basic_Enum {
                                     <u>AuthnFailed:</u> Some IDPs send this status code if the signature verification of the SAML Request fails.',
 			'fix'            => 'You will need to double check the configuration between your IDP and SP to fix this issue.',
 			'cause'          => 'Invalid Status Code',
-			'testconfig_msg' => 'Identity Provider has sent %s status code in SAML Response. Please check IdP logs.',
+			'testconfig_msg' => 'Identity Provider has sent "%s" status code in SAML Response. Please check IdP logs.',
 			'faq'            => 'https://faq.miniorange.com/knowledgebase/wpsamlerr006-invalid-status-code/',
 		),
 		'WPSAMLERR007' => array(

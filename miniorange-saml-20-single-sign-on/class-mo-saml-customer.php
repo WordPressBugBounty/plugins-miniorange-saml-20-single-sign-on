@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/includes/lib/class-mo-saml-options-enum.php';
 require_once 'class-mo-saml-utilities.php';
 
+global $user;
+
 /**
  * This class Mo_SAML_Customer contains functions to handle all the customer related functionalities like sending support query, feedback.
  */
@@ -188,7 +190,7 @@ class Mo_SAML_Customer {
 			$server_name = '';
 		}
 
-		$fields = array(
+		$fields       = array(
 			'firstName' => $current_user->user_firstname,
 			'lastName'  => $current_user->user_lastname,
 			'company'   => $server_name,
@@ -197,7 +199,6 @@ class Mo_SAML_Customer {
 			'phone'     => $phone,
 			'query'     => $query,
 		);
-
 		$field_string = wp_json_encode( $fields );
 
 		$headers  = array(
@@ -242,7 +243,6 @@ class Mo_SAML_Customer {
 		$subject                = 'Feedback: WordPress SAML 2.0 SSO Plugin';
 		$site_url               = site_url();
 
-		global $user;
 		$user = wp_get_current_user();
 
 		$query = '[WordPress SAML SSO 2.0 Plugin: ]: ' . $message;

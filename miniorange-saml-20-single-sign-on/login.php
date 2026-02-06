@@ -3,7 +3,7 @@
  * Plugin Name: SAML Single Sign On – SSO Login
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 5.3.1
+ * Version: 5.4.0
  * Author: miniOrange
  * Author URI: https://miniorange.com/
  * License: Expat
@@ -29,11 +29,12 @@ require_once 'mo-saml-settings-page.php';
 require_once 'class-mo-saml-utilities.php';
 require_once 'class-mo-saml-wp-config-editor.php';
 require_once 'handlers/class-mo-saml-user-login-handler.php';
+require_once 'notices/class-mo-saml-black-friday-sale.php';
 
 /**
  * The Main class of the miniOrange SAML SSO Plugin.
  */
-class Saml_Mo_Login {
+class Mo_SAML_Login {
 
 	/**
 	 * The Constructor for the main class. This takes care of initializing all the hooks used by the plugin.
@@ -59,6 +60,80 @@ class Saml_Mo_Login {
 		remove_action( 'admin_notices', array( Mo_SAML_Utilities::class, 'mo_saml_error_message' ) );
 		remove_action( 'admin_notices', array( Mo_SAML_Utilities::class, 'mo_saml_success_message' ) );
 		add_action( 'init', array( Mo_Saml_User_Login_Handler::class, 'mo_saml_handle_login_validate' ) );
+		add_action( 'admin_head', function() {
+			$screen = get_current_screen();
+
+			if ( $screen && $screen->id === 'toplevel_page_mo_saml_settings' ) {
+				add_action( 'admin_notices', array( $this, 'mo_saml_show_multisite_upgrade_notice' ) );
+			}
+		});
+		add_action( 'wp_ajax_mo_saml_dismiss_notice', array( $this, 'mo_saml_dismiss_notice' ) );
+	}
+
+	/**
+	 * Show multisite upgrade notice for free version.
+	 */
+	public function mo_saml_show_multisite_upgrade_notice() {
+
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		if ( ! is_multisite() ) {
+			return;
+		}
+
+		$dismissed_time = get_site_option( 'mo_saml_multisite_notice_dismissed_time', 0 );
+
+		if ( $dismissed_time && ( time() - $dismissed_time ) < 7 * DAY_IN_SECONDS ) {
+			return;
+		}
+		?>
+
+		<div class="mo_saml-upgrade-box" id="mo_saml-multisite-notice">
+			<span class="mo_saml-dismiss" id="mo_saml-dismiss-btn">&times;</span>
+
+			<div class="mo_saml-upgrade-title">
+				Unlock miniOrange Multisite SAML SSO Support
+				<span class="mo_saml-upgrade-tag">Premium Feature</span>
+			</div>
+
+			<div class="mo_saml-upgrade-desc">
+				Configure SSO once on the Network level and push configurations to selected subsites as needed.
+				Includes global metadata management, centralized role/attribute mapping,
+				and enterprise-grade support.
+			</div>
+
+			<a href="https://portal.miniorange.com/initializePayment?requestOrigin=wp_saml_sso_multisite_basic_plan" target="_blank" class="mo_saml-upgrade-btn">
+				Upgrade to Premium
+			</a>
+
+			<a href="https://plugins.miniorange.com/wordpress-multisite-single-sign-on-sso-login?utm_source=saml_plugin&utm_medium=multisite_saml_sso_notice&utm_campaign=saml_plugin_internal" target="_blank" class="mo_saml-secondary-btn">
+				Know More
+			</a>
+		</div>
+
+		<script>
+			document.getElementById("mo_saml-dismiss-btn").addEventListener("click", function() {
+				document.getElementById("mo_saml-multisite-notice").style.display = "none";
+
+				fetch(ajaxurl, {
+					method: "POST",
+					headers: {"Content-Type": "application/x-www-form-urlencoded"},
+					body: "action=mo_saml_dismiss_notice&nonce=<?php echo esc_js( wp_create_nonce('mo_saml_dismiss_nonce') ); ?>"
+				});
+			});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Dismiss multisite upgrade notice ajax handler.
+	 */
+	public function mo_saml_dismiss_notice() {
+		check_ajax_referer( 'mo_saml_dismiss_nonce', 'nonce' );
+    	update_site_option( 'mo_saml_multisite_notice_dismissed_time', time() );
+		wp_send_json_success();
 	}
 
 	/**
@@ -132,7 +207,11 @@ class Saml_Mo_Login {
                 <div class="mo-saml-notice-content">
                     <img src="' . esc_attr( plugin_dir_url( __FILE__ ) ) . 'images/miniorange_logo.webp" class="mo-saml-logo">
                     <span class="mo-saml-warning-text">
-                        <span class="mo-saml-warning-title">Warning:</span> Following PHP extensions (<i class="mo-saml-extension-list">' . esc_attr( $extension_display_line ) . '</i>) are disabled which are important for SSO configuration. Please enable these extensions to continue using SSO on your site.
+                        <span class="mo-saml-warning-title">' . esc_html__( 'Warning:', 'miniorange-saml-20-single-sign-on' ) . '</span> ' . sprintf(
+							/* translators: %s: List of PHP extension names */
+					esc_html__( 'Following PHP extensions (%s) are disabled which are important for SSO configuration. Please enable these extensions to continue using SSO on your site.', 'miniorange-saml-20-single-sign-on' ), 
+					'<i class="mo-saml-extension-list">' . esc_html( $extension_display_line ) . '</i>' 
+					) . '
                     </span>
                 </div>
 				</div>
@@ -189,6 +268,7 @@ class Saml_Mo_Login {
 	 */
 	public function plugin_settings_style( $page ) {
 		wp_enqueue_style( 'mo_saml_notice_style', plugins_url( 'includes/css/notice.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
+		wp_enqueue_style( 'mo_saml_black_friday_sale_style', plugins_url( 'includes/css/black-friday-sale-banner.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
 		if ( 'toplevel_page_mo_saml_settings' !== $page && 'miniorange-saml-2-0-sso_page_mo_saml_enable_debug_logs' !== $page ) {
 			return;
 		} else {
@@ -218,6 +298,7 @@ class Saml_Mo_Login {
 			wp_enqueue_script( 'mo_saml_admin_settings_phone_script', plugins_url( 'includes/js/phone.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
 		}
 		wp_enqueue_script( 'mo_saml_notice_script', plugins_url( 'includes/js/notice.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
+		wp_enqueue_script( 'mo_saml_black_friday_sale_banner_script', plugins_url( 'includes/js/black-friday-sale-banner.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
 	}
 
 	/**
@@ -385,7 +466,7 @@ class Saml_Mo_Login {
 	public function mo_saml_plugin_action_links( $links ) {
 
 		$settings_link = array( '<a href="' . esc_url( admin_url( 'admin.php?page=mo_saml_settings' ) ) . '">' . __( 'Settings', 'miniorange-saml-20-single-sign-on' ) . '</a>' );
-		$license_link  = '<a href="' . Mo_Saml_External_Links::PRICING_PAGE . '" target="_blank">' . esc_html__( 'Premium Plans', 'miniorange-saml-20-single-sign-on' ) . '</a>';
+		$license_link  = '<a href="' . Mo_Saml_External_Links::LANDING_PAGE . '?utm_source=saml_plugin&utm_medium=upgrade_button&utm_campaign=saml_plugin_internal#pricing" target="_blank">' . esc_html__( 'Premium Plans', 'miniorange-saml-20-single-sign-on' ) . '</a>';
 
 		$links = array_merge( $settings_link, $links );
 
@@ -396,4 +477,4 @@ class Saml_Mo_Login {
 		return $links;
 	}
 }
-new Saml_Mo_Login();
+new Mo_SAML_Login();

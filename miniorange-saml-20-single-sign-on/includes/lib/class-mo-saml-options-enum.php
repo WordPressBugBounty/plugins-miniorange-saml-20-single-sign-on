@@ -161,8 +161,11 @@ class Mo_Saml_Account_Setup_Constants extends Mo_SAML_Basic_Enum {
  */
 class Mo_Saml_External_Links extends Mo_SAML_Basic_Enum {
 	const FAQ_DOWNLOAD_PAID_PLUGIN = 'https://faq.miniorange.com/knowledgebase/install-premium-plugin-free-plugin/';
-	const PRICING_PAGE             = 'https://plugins.miniorange.com/wordpress-single-sign-on-sso#pricing';
+	const LANDING_PAGE             = 'https://plugins.miniorange.com/wordpress-single-sign-on-sso';
 	const SAML_TRACER_FAQ          = 'https://faq.miniorange.com/knowledgebase/error-during-sso-test-configuration/';
+	const PRICING_PAGE_UPGRADE     = 'https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=saml_plugin&utm_medium=upgrade_button&utm_campaign=saml_plugin_internal#pricing';
+	const FAQ_PAGE                 = 'https://faq.miniorange.com/kb/saml-single-sign-on/?utm_source=saml_plugin&utm_medium=faq_button&utm_campaign=saml_plugin_internal';
+	
 }
 
 /**
@@ -213,9 +216,9 @@ class Mo_Saml_Options_Plugin_Constants extends Mo_SAML_Basic_Enum {
 	const CMS_NAME         = 'WP';
 	const APPLICATION_NAME = 'WP miniOrange SAML 2.0 SSO Plugin';
 	const APPLICATION_TYPE = 'SAML';
-	const VERSION          = '5.3.1';
+	const VERSION          = '5.4.0';
 	const HOSTNAME         = 'https://login.xecurify.com';
-	const WP_VERSION       = '6.8';
+	const WP_VERSION       = '6.9';
 	const PLUGIN_FILE      = 'miniorange-saml-20-single-sign-on/login.php';
 }
 
@@ -341,55 +344,55 @@ class Mo_Saml_Options_Plugin_Idp extends Mo_SAML_Basic_Enum {
 	 * @var array
 	 */
 	public static $idp_guides = array(
-		'ADFS'           => array( 'adfs', 'saml-single-sign-on-sso-wordpress-using-adfs' ),
-		'Azure AD'       => array( 'azure-ad', 'saml-single-sign-on-sso-wordpress-using-azure-ad' ),
-		'Azure B2C'      => array( 'azure-b2c', 'saml-single-sign-on-sso-wordpress-using-azure-b2c' ),
-		'Okta'           => array( 'okta', 'saml-single-sign-on-sso-wordpress-using-okta' ),
-		'Keycloak'       => array( 'jboss-keycloak', 'saml-single-sign-on-sso-wordpress-using-jboss-keycloak' ),
-		'Google Apps'    => array( 'google-apps', 'saml-single-sign-on-sso-wordpress-using-google-apps' ),
-		'Windows SSO'    => array( 'windows', 'saml-single-sign-on-sso-wordpress-using-adfs' ),
-		'SalesForce'     => array( 'salesforce', 'saml-single-sign-on-sso-wordpress-using-salesforce' ),
-		'WordPress'      => array( 'wordpress', 'saml-single-sign-on-sso-between-two-wordpress-sites' ),
-		'Office 365'     => array( 'office365', 'wordpress-office-365-single-sign-on-sso-login' ),
-		'Auth0'          => array( 'auth0', 'saml-single-sign-on-sso-wordpress-using-auth0' ),
-		'MiniOrange'     => array( 'miniorange', 'saml-single-sign-on-sso-wordpress-using-miniorange' ),
-		'Community'      => array( 'salesforce', 'saml-single-sign-on-sso-wordpress-using-salesforce community' ),
-		'Classlink'      => array( 'classlink', 'saml-single-sign-on-sso-login-wordpress-using-classlink' ),
-		'OneLogin'       => array( 'onelogin', 'saml-single-sign-on-sso-wordpress-using-onelogin' ),
-		'Centrify'       => array( 'centrify', 'saml-single-sign-on-sso-wordpress-using-centrify' ),
-		'PingFederate'   => array( 'pingfederate', 'saml-single-sign-on-sso-wordpress-using-pingfederate' ),
-		'Shibboleth 2'   => array( 'shibboleth2', 'saml-single-sign-on-sso-wordpress-using-shibboleth2' ),
-		'Shibboleth 3'   => array( 'shibboleth3', 'saml-single-sign-on-sso-wordpress-using-shibboleth3' ),
-		'AbsorbLMS'      => array( 'absorb-lms', 'saml-single-sign-on-sso-wordpress-using-absorb-lms' ),
-		'Gluu Server'    => array( 'gluu-server', 'saml-single-sign-on-sso-wordpress-using-gluu-server' ),
-		'Dynamic CRM'    => array( 'dynamic-crm', 'saml-single-sign-on-wordpress-using-dynamics-365-crm' ),
-		'Sharepoint'     => array( 'sharepoint', 'saml-single-sign-on-wordpress-using-microsoft-sharepoint' ),
-		'JumpCloud'      => array( 'jumpcloud', 'saml-single-sign-on-sso-wordpress-using-jumpcloud' ),
-		'IdentityServer' => array( 'identityserver4', 'saml-single-sign-on-sso-wordpress-using-identityserver4' ),
-		'VMware'         => array( 'vmware', 'saml-single-sign-on-sso-wordpress-using-vmware-identity-manager' ),
-		'Degreed'        => array( 'degreed', 'saml-single-sign-on-sso-wordpress-using-degreed' ),
-		'CyberArk'       => array( 'cyberark', 'saml-single-sign-on-sso-for-wordpress-using-cyberark' ),
-		'Duo'            => array( 'duo', 'saml-single-sign-on-sso-wordpress-using-duo' ),
-		'FusionAuth'     => array( 'fusionauth', 'saml-single-sign-on-sso-wordpress-using-fusionauth' ),
-		'SiteMinder'     => array( 'siteminder', 'siteminder-saml-single-sign-on-sso-login-wordpress' ),
-		'SecureAuth'     => array( 'secureauth', 'saml-single-sign-on-sso-wordpress-using-secureauth' ),
-		'NetIQ'          => array( 'netiq', 'saml-single-sign-on-sso-wordpress-using-netIQ' ),
-		'Fonteva'        => array( 'fonteva', 'saml-single-sign-on-sso-wordpress-using-fonteva' ),
-		'SURFconext'     => array( 'surfconext', 'surfconext-saml-single-sign-on-sso-in-wordpress' ),
-		'PhenixID'       => array( 'phenixid', 'phenixid-saml-single-sign-on-sso-login-wordpresss' ),
-		'LastPass'       => array( 'lastpass', 'saml-single-sign-on-sso-wordpress-using-lastpass' ),
-		'Authanvil'      => array( 'authanvil', 'saml-single-sign-on-sso-wordpress-using-authanvil' ),
-		'Bitium'         => array( 'bitium', 'saml-single-sign-on-sso-wordpress-using-bitium' ),
-		'CA Identity'    => array( 'ca-identity', 'saml-single-sign-on-sso-wordpress-using-ca-identity' ),
-		'OpenAM'         => array( 'openam', 'saml-single-sign-on-sso-wordpress-using-openam' ),
-		'OpenAthens'     => array( 'openathens', 'openathens-saml-single-sign-on-sso-login-wordpress' ),
-		'Oracle'         => array( 'oracle-enterprise-manager', 'saml-single-sign-on-sso-wordpress-using-oracle-enterprise-manager' ),
-		'PingOne'        => array( 'pingone', 'saml-single-sign-on-sso-wordpress-using-pingone' ),
-		'RSA SecureID'   => array( 'rsa-secureid', 'saml-single-sign-on-sso-wordpress-using-rsa-secureid' ),
-		'SimpleSAMLphp'  => array( 'simplesaml', 'saml-single-sign-on-sso-wordpress-using-simplesaml' ),
-		'WSO2'           => array( 'wso2', 'saml-single-sign-on-sso-wordpress-using-wso2' ),
-		'Drupal'         => array( 'drupal', 'wordpress-sso-login-with-drupal-idp' ),
-		'Custom IDP'     => array( 'custom-idp', 'saml-single-sign-on-sso-wordpress-using-custom-idp' ),
+		'ADFS'                 => array( 'adfs', 'saml-single-sign-on-sso-wordpress-using-adfs?utm_source=saml_plugin&utm_medium=adfs_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Azure AD'             => array( 'azure-ad', 'saml-single-sign-on-sso-wordpress-using-azure-ad?utm_source=saml_plugin&utm_medium=azure_ad_setup_guide_button&utm_campaign=saml_plugin_internal' ),
+		'Azure B2C'            => array( 'azure-b2c', 'saml-single-sign-on-sso-wordpress-using-azure-b2c?utm_source=saml_plugin&utm_medium=azure_ad_b2c_button&utm_campaign=saml_plugin_internal' ),
+		'Okta'                 => array( 'okta', 'saml-single-sign-on-sso-wordpress-using-okta?utm_source=saml_plugin&utm_medium=okta_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Keycloak'             => array( 'jboss-keycloak', 'saml-single-sign-on-sso-wordpress-using-jboss-keycloak?utm_source=saml_plugin&utm_medium=keycloak_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Google Apps'          => array( 'google-apps', 'saml-single-sign-on-sso-wordpress-using-google-apps?utm_source=saml_plugin&utm_medium=g-suite_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Windows SSO'          => array( 'windows', 'saml-single-sign-on-sso-wordpress-using-adfs?utm_source=saml_plugin&utm_medium=windows_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'SalesForce'           => array( 'salesforce', 'saml-single-sign-on-sso-wordpress-using-salesforce?utm_source=saml_plugin&utm_medium=salesforce_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'WordPress'            => array( 'wordpress', 'saml-single-sign-on-sso-between-two-wordpress-sites?utm_source=saml_plugin&utm_medium=sso_for_2_websites&utm_campaign=saml_plugin_internal' ),
+		'Office 365'           => array( 'office365', 'wordpress-office-365-single-sign-on-sso-login?utm_source=saml_plugin&utm_medium=office_365_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Auth0'                => array( 'auth0', 'saml-single-sign-on-sso-wordpress-using-auth0?utm_source=saml_plugin&utm_medium=auth0_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'MiniOrange'           => array( 'miniorange', 'saml-single-sign-on-sso-wordpress-using-miniorange?utm_source=saml_plugin&utm_medium=miniorange_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Salesforce Community' => array( 'salesforce', 'saml-single-sign-on-sso-wordpress-using-salesforce%20community?utm_source=saml_plugin&utm_medium=salesforce_community_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Classlink'            => array( 'classlink', 'saml-single-sign-on-sso-login-wordpress-using-classlink?utm_source=saml_plugin&utm_medium=classlink_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'OneLogin'             => array( 'onelogin', 'saml-single-sign-on-sso-wordpress-using-onelogin?utm_source=saml_plugin&utm_medium=onelogin_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Centrify'             => array( 'centrify', 'saml-single-sign-on-sso-wordpress-using-centrify?utm_source=saml_plugin&utm_medium=centrify_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'PingFederate'         => array( 'pingfederate', 'saml-single-sign-on-sso-wordpress-using-pingfederate?utm_source=saml_plugin&utm_medium=pingfederate_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Shibboleth 2'         => array( 'shibboleth2', 'saml-single-sign-on-sso-wordpress-using-shibboleth2?utm_source=saml_plugin&utm_medium=shibboleth2_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Shibboleth 3'         => array( 'shibboleth3', 'saml-single-sign-on-sso-wordpress-using-shibboleth-2?utm_source=saml_plugin&utm_medium=Shibboleth3_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'AbsorbLMS'            => array( 'absorb-lms', 'saml-single-sign-on-sso-wordpress-using-absorb-lms?utm_source=saml_plugin&utm_medium=absorb_lms_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Gluu Server'          => array( 'gluu-server', 'saml-single-sign-on-sso-wordpress-using-gluu-server?utm_source=saml_plugin&utm_medium=gluu_server_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Dynamic CRM'          => array( 'dynamic-crm', 'saml-single-sign-on-wordpress-using-dynamics-365-crm?utm_source=saml_plugin&utm_medium=dynamic_365_crm_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Sharepoint'           => array( 'sharepoint', 'saml-single-sign-on-wordpress-using-microsoft-sharepoint?utm_source=saml_plugin&utm_medium=sharepoint_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'JumpCloud'            => array( 'jumpcloud', 'saml-single-sign-on-sso-wordpress-using-jumpcloud?utm_source=saml_plugin&utm_medium=jumpcloud_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'IdentityServer'       => array( 'identityserver4', 'saml-single-sign-on-sso-wordpress-using-identityserver4?utm_source=saml_plugin&utm_medium=identityserver4_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'VMware'               => array( 'vmware', 'saml-single-sign-on-sso-wordpress-using-vmware-identity-manager?utm_source=saml_plugin&utm_medium=vmware_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Degreed'              => array( 'degreed', 'saml-single-sign-on-sso-wordpress-using-degreed?utm_source=saml_plugin&utm_medium=degreed_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'CyberArk'             => array( 'cyberark', 'saml-single-sign-on-sso-for-wordpress-using-cyberark?utm_source=saml_plugin&utm_medium=cyberark_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Duo'                  => array( 'duo', 'saml-single-sign-on-sso-wordpress-using-duo?utm_source=saml_plugin&utm_medium=duo_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'FusionAuth'           => array( 'fusionauth', 'saml-single-sign-on-sso-wordpress-using-fusionauth?utm_source=saml_plugin&utm_medium=fusionauth_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'SiteMinder'           => array( 'siteminder', 'siteminder-saml-single-sign-on-sso-login-wordpress?utm_source=saml_plugin&utm_medium=siteminder_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'SecureAuth'           => array( 'secureauth', 'saml-single-sign-on-sso-wordpress-using-secureauth?utm_source=saml_plugin&utm_medium=secureauth_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'NetIQ'                => array( 'netiq', 'saml-single-sign-on-sso-wordpress-using-netIQ?utm_source=saml_plugin&utm_medium=netIq_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Fonteva'              => array( 'fonteva', 'saml-single-sign-on-sso-wordpress-using-fonteva?utm_source=saml_plugin&utm_medium=fonteva_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'SURFconext'           => array( 'surfconext', 'surfconext-saml-single-sign-on-sso-in-wordpress?utm_source=saml_plugin&utm_medium=surfconext_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'PhenixID'             => array( 'phenixid', 'phenixid-saml-single-sign-on-sso-login-wordpresss?utm_source=saml_plugin&utm_medium=phenixid_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'LastPass'             => array( 'lastpass', 'saml-single-sign-on-sso-wordpress-using-lastpass?utm_source=saml_plugin&utm_medium=lastpass_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Authanvil'            => array( 'authanvil', 'saml-single-sign-on-sso-wordpress-using-authanvil?utm_source=saml_plugin&utm_medium=authanvil_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Bitium'               => array( 'bitium', 'saml-single-sign-on-sso-wordpress-using-bitium?utm_source=saml_plugin&utm_medium=bitium_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'CA Identity'          => array( 'ca-identity', 'saml-single-sign-on-sso-wordpress-using-ca-identity?utm_source=saml_plugin&utm_medium=ca_identity_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'OpenAM'               => array( 'openam', 'saml-single-sign-on-sso-wordpress-using-openam?utm_source=saml_plugin&utm_medium=openam_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'OpenAthens'           => array( 'openathens', 'openathens-saml-single-sign-on-sso-login-wordpress?utm_source=saml_plugin&utm_medium=openathens_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Oracle'               => array( 'oracle-enterprise-manager', 'saml-single-sign-on-sso-wordpress-using-oracle-enterprise-manager?utm_source=saml_plugin&utm_medium=oracle_enterprise_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'PingOne'              => array( 'pingone', 'saml-single-sign-on-sso-wordpress-using-pingone?utm_source=saml_plugin&utm_medium=pingone_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'RSA SecureID'         => array( 'rsa-secureid', 'saml-single-sign-on-sso-wordpress-using-rsa-secureid?utm_source=saml_plugin&utm_medium=rsa_securid_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'SimpleSAMLphp'        => array( 'simplesaml', 'saml-single-sign-on-sso-wordpress-using-simplesaml?utm_source=saml_plugin&utm_medium=simplesaml_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'WSO2'                 => array( 'wso2', 'saml-single-sign-on-sso-wordpress-using-wso2?utm_source=saml_plugin&utm_medium=wso2_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Drupal'               => array( 'drupal', 'wordpress-sso-login-with-drupal-idp?utm_source=saml_plugin&utm_medium=drupal_setup_guide&utm_campaign=saml_plugin_internal' ),
+		'Custom IDP'           => array( 'custom-idp', 'saml-single-sign-on-sso-wordpress-using-custom-idp?utm_source=saml_plugin&utm_medium=custom_idp_setup_guide&utm_campaign=saml_plugin_internal' ),
 
 	);
 }
@@ -468,29 +471,29 @@ class Mo_Saml_Options_Addons extends Mo_SAML_Basic_Enum {
 	 */
 	public static $addons_url = array(
 
-		'salesforce_sync'             => 'https://plugins.miniorange.com/wordpress-object-sync-for-salesforce',
-		'employee_directory'          => 'https://plugins.miniorange.com/employee-directory-and-staff-listing-for-wordpress',
-		'azure_sync'                  => 'https://plugins.miniorange.com/wordpress-azure-office365-integrations',
-		'scim'                        => 'https://plugins.miniorange.com/wordpress-user-provisioning',
-		'page_restriction'            => 'https://plugins.miniorange.com/wordpress-page-restriction',
-		'file_prevention'             => 'https://plugins.miniorange.com/wordpress-media-restriction',
-		'ssologin'                    => 'https://plugins.miniorange.com/wordpress-sso-login-audit',
-		'buddypress'                  => 'https://plugins.miniorange.com/wordpress-buddypress-integrator',
-		'learndash'                   => 'https://plugins.miniorange.com/wordpress-learndash-integrator',
-		'attribute_based_redirection' => 'https://plugins.miniorange.com/wordpress-attribute-based-redirection-restriction',
-		'ssosession'                  => 'https://plugins.miniorange.com/sso-session-management',
-		'fsso'                        => 'https://plugins.miniorange.com/incommon-federation-single-sign-on-sso',
-		'paid_mem_pro'                => 'https://plugins.miniorange.com/paid-membership-pro-integrator',
-		'memberpress'                 => 'https://plugins.miniorange.com/wordpress-memberpress-integrator',
-		'wp_members'                  => 'https://plugins.miniorange.com/wordpress-members-integrator',
-		'woocommerce'                 => 'https://plugins.miniorange.com/wordpress-woocommerce-integrator',
-		'guest_login'                 => 'https://plugins.miniorange.com/guest-user-login',
-		'profile_picture_add_on'      => 'https://plugins.miniorange.com/wordpress-profile-picture-map',
-		'power_bi'                    => 'https://plugins.miniorange.com/microsoft-power-bi-embed-for-wordpress',
-		'sharepoint'                  => 'https://plugins.miniorange.com/microsoft-sharepoint-wordpress-integration',
-		'salesforce_community_addon'  => 'https://plugins.miniorange.com/single-sign-on-sso-login-into-wordpress-for-multiple-salesforce-communities',
-		'ip_whitelisting_addon'       => 'https://plugins.miniorange.com/wordpress-ip-whitelisting',
-		'azure_multi_tenant_addon'    => 'https://plugins.miniorange.com/azure-ad-multi-tenant-single-sign-on-sso-login-wordpress',
+		'salesforce_sync'             => 'https://plugins.miniorange.com/wordpress-object-sync-for-salesforce?utm_source=saml_plugin&utm_medium=salesforce_plugin&utm_campaign=saml_plugin_internal',
+		'employee_directory'          => 'https://plugins.miniorange.com/employee-directory-and-staff-listing-for-wordpress?utm_source=saml_plugin&utm_medium=employee_staff_directory&utm_campaign=saml_plugin_internal',
+		'azure_sync'                  => 'https://plugins.miniorange.com/wordpress-azure-office365-integrations?utm_source=saml_plugin&utm_medium=azure_ad_office_365_integrations&utm_campaign=saml_plugin_internal',
+		'scim'                        => 'https://plugins.miniorange.com/wordpress-user-provisioning?utm_source=saml_plugin&utm_medium=scim_user_provisioning&utm_campaign=saml_plugin_internal',
+		'page_restriction'            => 'https://plugins.miniorange.com/wordpress-page-restriction?utm_source=saml_plugin&utm_medium=page_and_post_restriction&utm_campaign=saml_plugin_internal',
+		'file_prevention'             => 'https://plugins.miniorange.com/wordpress-media-restriction?utm_source=saml_plugin&utm_medium=prevent_file_access&utm_campaign=saml_plugin_internal',
+		'ssologin'                    => 'https://plugins.miniorange.com/wordpress-sso-login-audit?utm_source=saml_plugin&utm_medium=sso_login_audit&utm_campaign=saml_plugin_internal',
+		'buddypress'                  => 'https://plugins.miniorange.com/wordpress-buddypress-integrator?utm_source=saml_plugin&utm_medium=buddy_press_integrator&utm_campaign=saml_plugin_internal',
+		'learndash'                   => 'https://plugins.miniorange.com/wordpress-learndash-integrator?utm_source=saml_plugin&utm_medium=learndash_integrator&utm_campaign=saml_plugin_internal',
+		'attribute_based_redirection' => 'https://plugins.miniorange.com/wordpress-attribute-based-redirection-restriction?utm_source=saml_plugin&utm_medium=attribute_based_redirection&utm_campaign=saml_plugin_internal',
+		'ssosession'                  => 'https://plugins.miniorange.com/sso-session-management?utm_source=saml_plugin&utm_medium=sso_session_management&utm_campaign=saml_plugin_internal',
+		'fsso'                        => 'https://plugins.miniorange.com/incommon-federation-single-sign-on-sso?utm_source=saml_plugin&utm_medium=federation_single_sign_On&utm_campaign=saml_plugin_internal',
+		'paid_mem_pro'                => 'https://plugins.miniorange.com/paid-membership-pro-integrator?utm_source=saml_plugin&utm_medium=paidmembership_pro_integrator&utm_campaign=saml_plugin_internal',
+		'memberpress'                 => 'https://plugins.miniorange.com/wordpress-memberpress-integrator?utm_source=saml_plugin&utm_medium=memberpress_integrator&utm_campaign=saml_plugin_internal',
+		'wp_members'                  => 'https://plugins.miniorange.com/wordpress-members-integrator?utm_source=saml_plugin&utm_medium=wp_members_integrator&utm_campaign=saml_plugin_internal',
+		'woocommerce'                 => 'https://plugins.miniorange.com/wordpress-woocommerce-integrator?utm_source=saml_plugin&utm_medium=woocommerce_integrator&utm_campaign=saml_plugin_internal',
+		'guest_login'                 => 'https://plugins.miniorange.com/guest-user-login?utm_source=saml_plugin&utm_medium=guest_login&utm_campaign=saml_plugin_internal',
+		'profile_picture_add_on'      => 'https://plugins.miniorange.com/wordpress-profile-picture-map?utm_source=saml_plugin&utm_medium=profile_picture_add-on&utm_campaign=saml_plugin_internal',
+		'power_bi'                    => 'https://plugins.miniorange.com/microsoft-power-bi-embed-for-wordpress?utm_source=saml_plugin&utm_medium=powerbi_plugin&utm_campaign=saml_plugin_internal',
+		'sharepoint'                  => 'https://plugins.miniorange.com/microsoft-sharepoint-wordpress-integration?utm_source=saml_plugin&utm_medium=sharepoint_plugin&utm_campaign=saml_plugin_internal',
+		'salesforce_community_addon'  => 'https://plugins.miniorange.com/single-sign-on-sso-login-into-wordpress-for-multiple-salesforce-communities?utm_source=saml_plugin&utm_medium=salesforce_community_add_on&utm_campaign=saml_plugin_internal',
+		'ip_whitelisting_addon'       => 'https://plugins.miniorange.com/wordpress-ip-whitelisting?utm_source=saml_plugin&utm_medium=ip_whitelisting_add_on&utm_campaign=saml_plugin_internal',
+		'azure_multi_tenant_addon'    => 'https://plugins.miniorange.com/azure-ad-multi-tenant-single-sign-on-sso-login-wordpress?utm_source=saml_plugin&utm_medium=azure_multitenant_add_on&utm_campaign=saml_plugin_internal',
 	);
 
 	/**
@@ -1077,9 +1080,11 @@ class Mo_Saml_Messages extends Mo_SAML_Basic_Enum {
 			'SETTINGS_UPDATED'         => __( 'Settings updated successfully.', 'miniorange-saml-20-single-sign-on' ),
 			'CONTACT_EMAIL_EMPTY'      => __( 'Please fill up required fields to submit your query.', 'miniorange-saml-20-single-sign-on' ),
 			'CONTACT_EMAIL_INVALID'    => __( 'Please enter a valid email address.', 'miniorange-saml-20-single-sign-on' ),
-			'CALL_SETUP_DETAILS_EMPTY' => __( 'Please fill up Schedule Call Details to submit your query.', 'miniorange-saml-20-single-sign-on' ),
+			'CALL_SETUP_DETAILS_EMPTY' => __( 'Please fill up your Phone Number to submit your callback request.', 'miniorange-saml-20-single-sign-on' ),
 			'QUERY_NOT_SUBMITTED'      => __( 'Your query could not be submitted. Please try again.', 'miniorange-saml-20-single-sign-on' ),
 			'QUERY_SUBMITTED'          => __( 'Thanks for getting in touch! We will reach out on your email shortly.', 'miniorange-saml-20-single-sign-on' ),
+			'CALL_REQUEST_SUBMIT'      => __( 'Thanks for getting in touch! We will reach out to you shortly.', 'miniorange-saml-20-single-sign-on' ),
+			'CALL_REQUEST_NOT_SUBMIT'  => __( 'Your callback request could not be submitted. Please try again.', 'miniorange-saml-20-single-sign-on' ),
 			'UPDATED_DEFAULT_ROLE'     => __( 'Role Mapping details saved successfully.', 'miniorange-saml-20-single-sign-on' ),
 			'DEMO_REQUEST_FAILED'      => __( 'Something went wrong. Please reach out to us using the Support/Contact Us form to get help with the demo.', 'miniorange-saml-20-single-sign-on' ),
 			'PASSWORD_PATTERN_INVALID' => __( 'Minimum 6 characters should be present. Maximum 15 characters should be present. Only following symbols (!@#.$%^&*-_) are allowed.', 'miniorange-saml-20-single-sign-on' ),

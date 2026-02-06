@@ -40,6 +40,7 @@ class Mo_SAML_Login_Validate {
 	 * @throws Mo_SAML_Cert_Mismatch_Exception For certificate mismatch.
 	 * @throws Mo_SAML_Cert_Mismatch_Encoding_Exception For certificate mismatch due to character encoding.
 	 * @throws Mo_SAML_Invalid_Assertion_Exception For invalid assertion.
+	 * @throws Mo_SAML_Invalid_XML_Exception For invalid XML.
 	 * @return void
 	 */
 	public function mo_saml_login_validate() {
@@ -133,8 +134,12 @@ class Mo_SAML_Login_Validate {
 			//phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- SAML response is base64 encoded.
 			$saml_response = base64_decode( $saml_response );
 
-
 			$document = Mo_SAML_Utilities::mo_saml_safe_load_xml( $saml_response );
+			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- documentElement property is Method of DOMDocument.
+			if ( ! $document instanceof DOMDocument || empty( $document->documentElement ) ) {
+				Mo_SAML_Logger::mo_saml_add_log( 'SAML Response XML did not load correctly. Missing documentElement.', \Mo_SAML_Logger::ERROR );
+				throw new Mo_SAML_Invalid_XML_Exception( 'SAML Response XML did not load correctly. Missing documentElement.' );
+			}
 			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- firstChild property is Method of DOMDocument.
 			$saml_response_xml = $document->firstChild;
 			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- documentElement property is Method of DOMDocument.
@@ -144,7 +149,7 @@ class Mo_SAML_Login_Validate {
 			$xpath->registerNamespace( 'saml', 'urn:oasis:names:tc:SAML:2.0:assertion' );
 
 			$status         = $xpath->query( '/samlp:Response/samlp:Status/samlp:StatusCode', $doc );
-			$status_string  = $status->item( 0 )->getAttribute( 'Value' );
+			$status_string  = ! empty( $status->item( 0 ) ) ? $status->item( 0 )->getAttribute( 'Value' ) : '';
 			$status_message = $xpath->query( '/samlp:Response/samlp:Status/samlp:StatusMessage', $doc )->item( 0 );
 			if ( ! empty( $status_message ) ) {
 				//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- nodeValue property is Method of DOMDocument.
@@ -166,7 +171,21 @@ class Mo_SAML_Login_Validate {
 			$acs_url                  = site_url() . '/';
 			$saml_response            = new Mo_SAML_Response( $saml_response_xml );
 			$response_signature_data  = $saml_response->mo_saml_get_signature_data();
-			$assertion_signature_data = current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_signature_data();
+			$assertions               = $saml_response->mo_saml_get_assertions();
+
+			if ( empty( $assertions ) ) {
+				Mo_SAML_Logger::mo_saml_add_log( 'No assertion found in the SAML Response.', Mo_SAML_Logger::ERROR );
+				$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR003'];
+				if ( 'testValidate' === $relay_state ) {
+					$error_message = 'No assertion found in the SAML Response. The IdP sent a Success status but did not include any assertion with user information.';
+					mo_saml_display_test_config_error_page( $error_code, $error_message );
+					exit;
+				} else {
+					throw new Mo_SAML_Invalid_Assertion_Exception( 'No assertion found in the SAML Response.' );
+				}
+			}
+
+			$assertion_signature_data = current( $assertions )->mo_saml_get_signature_data();
 
 			if ( empty( $assertion_signature_data ) && empty( $response_signature_data ) ) {
 
@@ -255,10 +274,10 @@ class Mo_SAML_Login_Validate {
 			}
 			Mo_SAML_Utilities::mo_saml_validate_issuer_and_audience( $saml_response, $sp_enity_id, $issuer, $relay_state );
 
-			$ssoemail        = current( current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_name_id() );
-			$attrs           = current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_attributes();
+			$ssoemail        = current( current( $assertions )->mo_saml_get_name_id() );
+			$attrs           = current( $assertions )->mo_saml_get_attributes();
 			$attrs['NameID'] = array( '0' => sanitize_text_field( $ssoemail ) );
-			$session_index   = current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_session_index();
+			$session_index   = current( $assertions )->mo_saml_get_session_index();
 			Mo_SAML_Logger::mo_saml_add_log( mo_saml_error_log::mo_saml_write_message( 'ATTRIBUTES_RECEIVED_IN_TEST_CONFIGURATION', array( 'attrs' => $attrs ) ), Mo_SAML_Logger::INFO );
 			$this->mo_saml_check_mapping( $attrs, $relay_state );
 		}
@@ -453,7 +472,12 @@ class Mo_SAML_Login_Validate {
 				type="button" value="' . esc_attr__( 'Configure Attribute/Role Mapping', 'miniorange-saml-20-single-sign-on' ) . '" onClick="close_and_redirect_to_attribute_mapping();"> &nbsp;
 			<input style="padding:1%;width:250px;background: linear-gradient(0deg,rgb(14 42 71) 0,rgb(26 69 138) 100%)!important;cursor: pointer;font-size:15px;border-width: 1px;border-style: solid;border-radius: 3px;white-space: nowrap;box-sizing: border-box;border-color: #0073AA;box-shadow: 0px 1px 0px rgba(120, 200, 230, 0.6) inset;color: #FFF;"
 				type="button" value="' . esc_attr__( 'Configure SSO Settings', 'miniorange-saml-20-single-sign-on' ) . '" onClick="close_and_redirect_to_redir_sso();"></div>
-			
+			<div style="background-color:#e7f3fe;border-left:5px solid #007cba;padding:14px 18px;border-radius:4px;margin:10px 15px 0 15px;">
+    			<p style="margin:0;font-size:18px;color:#1e1e1e;display:flex;align-items:center;">
+        		<span class="dashicons dashicons-info" style="color:#007cba;margin-right:175px;font-size:16px;"></span>
+       			 <strong>Note:</strong> SSO button has been added to login page.</p>
+			</div>
+
 			<script>
 				function close_and_redirect_to_attribute_mapping(){
 					window.opener.redirect_to_attribute_mapping();
@@ -467,8 +491,6 @@ class Mo_SAML_Login_Validate {
 				window.opener.redirect_to_redi_sso_link();
 					self.close();
 				}
-				
-				
 			</script>';
 		exit;
 	}

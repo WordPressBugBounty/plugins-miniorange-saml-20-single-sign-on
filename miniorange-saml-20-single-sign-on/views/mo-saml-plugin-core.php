@@ -16,22 +16,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mo_saml_display_plugin_dependency_warning() {
 	if ( ! Mo_SAML_Utilities::mo_saml_is_curl_installed() ) {
 		?>
-		<p><span style="color: #FF0000; ">(Warning: <a href="http://php.net/manual/en/curl.installation.php" target="_blank" rel="noopener noreferrer">PHP
-					cURL extension</a> is not installed or disabled)</span></p>
+		<p><span style="color: #FF0000; ">(<?php esc_html_e( 'Warning:', 'miniorange-saml-20-single-sign-on' ); ?> <a href="http://php.net/manual/en/curl.installation.php" target="_blank" rel="noopener noreferrer">PHP
+					cURL extension</a> <?php esc_html_e( 'is not installed or disabled', 'miniorange-saml-20-single-sign-on' ); ?>)</span></p>
 		<?php
 	}
 
 	if ( ! Mo_SAML_Utilities::mo_saml_is_openssl_installed() ) {
 		?>
-		<p><span style="color: #FF0000; ">(Warning: <a href="http://php.net/manual/en/openssl.installation.php" target="_blank" rel="noopener noreferrer">PHP
-					openssl extension</a> is not installed or disabled)</span></p>
+		<p><span style="color: #FF0000; ">(<?php esc_html_e( 'Warning:', 'miniorange-saml-20-single-sign-on' ); ?> <a href="http://php.net/manual/en/openssl.installation.php" target="_blank" rel="noopener noreferrer">PHP
+					openssl extension</a> <?php esc_html_e( 'is not installed or disabled', 'miniorange-saml-20-single-sign-on' ); ?>)</span></p>
 		<?php
 	}
 
 	if ( ! Mo_SAML_Utilities::mo_saml_is_dom_installed() ) {
 		?>
-		<p><span style="color: #FF0000; ">(Warning: PHP
-				dom extension is not installed or disabled)</span></p>
+		<p><span style="color: #FF0000; ">(<?php esc_html_e( 'Warning:', 'miniorange-saml-20-single-sign-on' ); ?> PHP
+				dom extension <?php esc_html_e( 'is not installed or disabled', 'miniorange-saml-20-single-sign-on' ); ?>)</span></p>
 		<?php
 	}
 }
@@ -80,7 +80,10 @@ function mo_saml_display_welcome_page() {
 							?>
 							<div class="idp-guides-btns">
 							<?php } ?>
-							<button class="guide-btn" onclick="window.open('<?php echo esc_url( $url_string ); ?>','_blank')"><img class="idp-guides-logo <?php echo esc_attr( $key ); ?>" src="<?php echo esc_url( Mo_SAML_Utilities::mo_saml_get_plugin_dir_url() . 'images/idp-guides-logos/' . $value[0] . '.webp' ); ?>" /><?php echo esc_html( $key ); ?></button>
+							<button class="guide-btn" onclick="window.open('<?php echo esc_url( $url_string ); ?>','_blank')">
+								<img class="idp-guides-logo" src="<?php echo esc_url( Mo_SAML_Utilities::mo_saml_get_plugin_dir_url() . 'images/idp-guides-logos/' . $value[0] . '.webp' ); ?>" />
+								<?php echo esc_html( $key ); ?>
+							</button>
 						<?php
 						if ( 4 === $index % 5 ) {
 							echo '</div>';
@@ -116,32 +119,75 @@ function mo_saml_display_welcome_page() {
 	<?php
 }
 
-/**
- * Renders the Plugin header.
- *
- * @return void
- */
+	/**
+	 * Calculate Plugin rating
+	 *
+	 * @return float
+	 */
+function mo_saml_calculate_rating() {
+
+	$rating       = 4.9;
+	$full_stars   = floor( $rating );
+	$partial_star = $rating - $full_stars;
+	$empty_stars  = 5 - ceil( $rating );
+	?>
+		<div class="mo-saml-stars" >
+		<?php
+		for ( $i = 0; $i < $full_stars; $i++ ) {
+			echo '<span class="mo_saml_star_highlight" >★</span>';
+		}
+		if ( $partial_star > 0 ) {
+			$percentage = $partial_star * 100;
+			echo '<span class="rating_span" >';
+			echo '<span class="mo_saml_rating_star_color">★</span>';
+			echo '<span class="mo_saml_percentage" style="overflow: hidden; width: ' . esc_attr( $percentage ) . '%; color: #ff9800;">★</span>';
+			echo '</span>';
+		}
+		for ( $i = 0; $i < $empty_stars; $i++ ) {
+			echo '<span class="mo_saml_rating_star_color">★</span>';
+		}
+		return $rating;
+}
+
+	/**
+	 * Renders the Plugin header.
+	 *
+	 * @return void
+	 */
 function mo_saml_display_plugin_header() {
 
 	$sandbox_url = 'https://sandbox.miniorange.com/?mo_plugin=mo_saml&referer=' . site_url();
-	$faq_url     = 'https://faq.miniorange.com/kb/saml-single-sign-on/';
+	$faq_url     = Mo_Saml_External_Links::FAQ_PAGE;
 	$version     = 'v' . Mo_Saml_Options_Plugin_Constants::VERSION;
 	?>
-	<div class="wrap shadow-cstm mo-saml-bootstrap-p-3 mo-saml-bootstrap-me-0 mo-saml-bootstrap-mt-0 mo-saml-margin-left">
-		<div class="mo-saml-bootstrap-row align-items-top mo-saml-justify-between">
-			<div class="mo-saml-bootstrap-h3 mo-saml-bootstrap-ps-4 width-max-content">
-				<?php esc_html_e( 'miniOrange SSO using SAML 2.0', 'miniorange-saml-20-single-sign-on' ); ?>
-				<span class="mo_saml_version_display"> <?php echo '[ ' . esc_html( $version ) . ' ]'; ?> </span>
+		<div class="wrap shadow-cstm mo-saml-bootstrap-p-3 mo-saml-bootstrap-me-0 mo-saml-bootstrap-mt-0 mo-saml-margin-left">
+			<div class="mo-saml-bootstrap-row align-items-top mo-saml-justify-between">
+				<div class="mo-saml-bootstrap-ps-4 width-max-content">
+					<div class="mo-saml-bootstrap-h3">
+					<?php esc_html_e( 'miniOrange SSO using SAML 2.0', 'miniorange-saml-20-single-sign-on' ); ?>
+						<span class="mo_saml_version_display"> <?php echo '[ ' . esc_html( $version ) . ' ]'; ?> </span>
+					</div>
+					<div class="mo-saml-rating-section">
+						<?php $rating = mo_saml_calculate_rating(); ?>
+					</div>
+					<span class="mo-saml-rating-number">
+					<?php echo esc_html( number_format( $rating, 1 ) ); ?> ( 330+  )
+					</span>
+					<span class="mo-saml-rating-dot">•</span>
+					<span class="mo-saml-review-count">
+						10K+ installations
+					</span>
+				</div>
 			</div>
-			<div class="mo-saml-bootstrap-col-md-7 mo-saml-bootstrap-d-flex mo-saml-bootstrap-justify-content-end">
+			<div class="mo-saml-bootstrap-col-md-6 mo-saml-bootstrap-d-flex mo-saml-bootstrap-justify-content-end" style="align-items: center;">
 				<a class="mo-saml-bootstrap-text-white btn-prem prem-btn-cstm mo-saml-bootstrap-me-3" target="_blank" href="<?php echo esc_url( $sandbox_url ); ?>">
-					<?php esc_html_e( 'Try Paid Features', 'miniorange-saml-20-single-sign-on' ); ?>
+				<?php esc_html_e( 'Try Live Demo', 'miniorange-saml-20-single-sign-on' ); ?>
 				</a>
 				<a class="mo-saml-bootstrap-text-white btn-prem prem-btn-cstm mo-saml-bootstrap-me-3" target="_blank" href="<?php echo esc_url( $faq_url ); ?>">
-					<?php esc_html_e( 'FAQs', 'miniorange-saml-20-single-sign-on' ); ?>
+				<?php esc_html_e( 'FAQs', 'miniorange-saml-20-single-sign-on' ); ?>
 				</a>
-				<a id="license_upgrade" class="mo-saml-bootstrap-text-white btn-prem prem-btn-cstm" href="<?php echo esc_url( Mo_Saml_External_Links::PRICING_PAGE ); ?>" target="_blank">
-					<?php esc_html_e( 'Upgrade Now', 'miniorange-saml-20-single-sign-on' ); ?>
+				<a id="license_upgrade" class="mo-saml-bootstrap-text-white btn-prem prem-btn-cstm" href="<?php echo esc_url( Mo_Saml_External_Links::LANDING_PAGE . '?utm_source=saml_plugin&utm_medium=upgrade_button&utm_campaign=saml_plugin_internal#pricing' ); ?>" target="_blank">
+				<?php esc_html_e( 'Upgrade Now', 'miniorange-saml-20-single-sign-on' ); ?>
 				</a>
 			</div>
 		</div>
@@ -160,21 +206,21 @@ function mo_saml_display_plugin_tabs( $active_tab ) {
 	<div class="bg-main-cstm mo-saml-bootstrap-pb-4 mo-saml-margin-left" id="container">
 		<span id="mo-saml-message"></span>
 		<div id="mo-saml-tabs" class="mo-saml-tabs mo-saml-bootstrap-d-flex mo-saml-bootstrap-text-center mo-saml-bootstrap-pt-3 mo-saml-bootstrap-border-bottom mo_saml_padding_left_2">
-			<a id="sp-setup-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( ( 'save' === $active_tab ? 'mo-saml-nav-tab-active' : '' ) ); ?>" href="<?php echo isset( $_SERVER['REQUEST_URI'] ) ? esc_url( add_query_arg( array( 'tab' => 'save' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) : ''; ?>"><?php esc_html_e( 'Service Provider Setup', 'miniorange-saml-20-single-sign-on' ); ?></a>
 			<a id="sp-meta-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( ( 'config' === $active_tab ? 'mo-saml-nav-tab-active' : '' ) ); ?>" href="<?php echo isset( $_SERVER['REQUEST_URI'] ) ? esc_url( add_query_arg( array( 'tab' => 'config' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) : ''; ?>"><?php esc_html_e( 'Service Provider Metadata', 'miniorange-saml-20-single-sign-on' ); ?></a>
-			<a id="attr-role-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( ( 'opt' === $active_tab ? 'mo-saml-nav-tab-active' : '' ) ); ?>" href="<?php echo isset( $_SERVER['REQUEST_URI'] ) ? esc_url( add_query_arg( array( 'tab' => 'opt' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) : ''; ?>"><?php esc_html_e( 'Attribute/Role Mapping', 'miniorange-saml-20-single-sign-on' ); ?></a>
-			<a id="redir-sso-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( ( 'general' === $active_tab ? 'mo-saml-nav-tab-active' : '' ) ); ?>" href="<?php echo isset( $_SERVER['REQUEST_URI'] ) ? esc_url( add_query_arg( array( 'tab' => 'general' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) : ''; ?>"><?php esc_html_e( 'Redirection & SSO Links', 'miniorange-saml-20-single-sign-on' ); ?></a>
+			<a id="sp-setup-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( ( 'save' === $active_tab ? 'mo-saml-nav-tab-active' : '' ) ); ?>" href="<?php echo isset( $_SERVER['REQUEST_URI'] ) ? esc_url( add_query_arg( array( 'tab' => 'save' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) : ''; ?>"><?php esc_html_e( 'IDP Configuration', 'miniorange-saml-20-single-sign-on' ); ?></a>
+			<a id="attr-role-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( ( ( 'role' === $active_tab || 'attribute' === $active_tab ) ? 'mo-saml-nav-tab-active' : '' ) ); ?>" href="<?php echo isset( $_SERVER['REQUEST_URI'] ) ? esc_url( add_query_arg( array( 'tab' => 'role' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) : ''; ?>"><?php esc_html_e( 'Attribute/Role Mapping', 'miniorange-saml-20-single-sign-on' ); ?></a>
+			<a id="redir-sso-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( ( ( 'sso-links' === $active_tab || 'redirection' === $active_tab ) ? 'mo-saml-nav-tab-active' : '' ) ); ?>" href="<?php echo isset( $_SERVER['REQUEST_URI'] ) ? esc_url( add_query_arg( array( 'tab' => 'sso-links' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) : ''; ?>"><?php esc_html_e( 'Redirection & SSO Links', 'miniorange-saml-20-single-sign-on' ); ?></a>
 			<a id="addon-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( ( 'addons' === $active_tab ? 'mo-saml-nav-tab-active' : '' ) ); ?>" href="<?php echo isset( $_SERVER['REQUEST_URI'] ) ? esc_url( add_query_arg( array( 'tab' => 'addons' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) : ''; ?>"><?php esc_html_e( 'Add-Ons', 'miniorange-saml-20-single-sign-on' ); ?></a>
 			<a id="acc-tab" class="mo-saml-nav-tab-cstm <?php echo esc_html( ( 'account-setup' === $active_tab ? 'mo-saml-nav-tab-active' : '' ) ); ?>" href="<?php echo isset( $_SERVER['REQUEST_URI'] ) ? esc_url( add_query_arg( array( 'tab' => 'account-setup' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) : ''; ?>"><?php esc_html_e( 'Account Setup', 'miniorange-saml-20-single-sign-on' ); ?></a>
 		</div>
 		<?php
 		if ( 'save' === $active_tab ) {
 			mo_saml_apps_config_saml();
-		} elseif ( 'opt' === $active_tab ) {
+		} elseif ( 'attribute' === $active_tab || 'role' === $active_tab ) {
 			mo_saml_save_optional_config();
 		} elseif ( 'config' === $active_tab ) {
 			mo_saml_configuration_steps();
-		} elseif ( 'general' === $active_tab ) {
+		} elseif ( 'sso-links' === $active_tab || 'redirection' === $active_tab ) {
 			mo_saml_general_login_page();
 		} elseif ( 'addons' === $active_tab ) {
 			mo_saml_show_addons_page();
@@ -199,24 +245,6 @@ function mo_saml_display_plugin_tabs( $active_tab ) {
 	<?php
 }
 
-/**
- * Displays the troubleshoot section.
- *
- * @return void
- */
-function mo_saml_troubleshoot_card() {
-	?>
-	<div class="mo-saml-bootstrap-bg-white mo-saml-bootstrap-text-center shadow-cstm mo-saml-bootstrap-rounded contact-form-cstm mo-saml-bootstrap-mt-4 mo-saml-bootstrap-p-4">
-		<div class="mo-saml-call-setup mo-saml-bootstrap-p-3">
-			<h6><?php esc_html_e( 'Facing issues? Check out the Troubleshooting options available in the plugin', 'miniorange-saml-20-single-sign-on' ); ?></h6>
-			<hr />
-			<div class="mo-saml-bootstrap-row mo-saml-bootstrap-align-items-center mo-saml-bootstrap-mt-3 mo-saml-bootstrap-justify-content-center">
-				<a href="?page=mo_saml_enable_debug_logs&tab=debug-logs" class="mo-saml-bs-btn btn-cstm mo-saml-bootstrap-text-white mo-saml-width-auto"><?php esc_html_e( 'Troubleshoot', 'miniorange-saml-20-single-sign-on' ); ?></a>
-			</div>
-		</div>
-	</div>
-	<?php
-}
 
 /**
  * Displays the Keep Configuration Intact section.
@@ -267,30 +295,4 @@ function mo_saml_display_suggested_idp_integration() {
 		</div>
 	</div>
 	<?php
-}
-
-/**
- * Displays recommended add-ons based on the installed plugins.
- *
- * @return void
- */
-function mo_saml_display_suggested_add_ons() {
-	$suggested_addons = Mo_Saml_Options_Suggested_Add_Ons::mo_saml_get_suggested_addons();
-
-	foreach ( $suggested_addons as $addon ) {
-		?>
-
-		<div class="mo-saml-card-glass mo-saml-bootstrap-mt-4">
-			<div class="mo-saml-ads-text">
-				<h5 class="mo-saml-bootstrap-text-center"><?php echo esc_html( $addon['title'] ); ?></h5>
-				<hr />
-				<ul class="mo-saml-bootstrap-ps-1">
-					<p><?php echo esc_html( $addon['text'] ); ?></p>
-					<a target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $addon['link'] ); ?>" class="mo-saml-bootstrap-text-warning"><?php esc_html_e( 'Download', 'miniorange-saml-20-single-sign-on' ); ?></a>
-					<a target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $addon['knw-link'] ); ?>" class="mo-saml-bootstrap-text-warning mo-saml-bootstrap-float-end"><?php esc_html_e( 'Know More', 'miniorange-saml-20-single-sign-on' ); ?></a>
-				</ul>
-			</div>
-		</div>
-		<?php
-	}
 }

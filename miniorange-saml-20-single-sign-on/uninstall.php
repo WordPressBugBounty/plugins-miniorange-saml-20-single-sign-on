@@ -13,8 +13,8 @@ require_once __DIR__ . '/includes/lib/class-mo-saml-options-enum.php';
 if ( ! ( get_option( 'mo_saml_keep_settings_on_deletion' ) === 'true' ) ) {
 
 	if ( is_multisite() ) {
-		$original_blog_id = get_current_blog_id();
-		switch_to_blog( $original_blog_id );
+		$mo_saml_original_blog_id = get_current_blog_id();
+		switch_to_blog( $mo_saml_original_blog_id );
 	}
 	mo_saml_delete_configuration_array();
 }

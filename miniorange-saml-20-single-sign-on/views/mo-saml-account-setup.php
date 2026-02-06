@@ -46,7 +46,7 @@ function mo_saml_show_customer_details() {
 							</form>
 						</td>
 						<td>
-							<a href="<?php echo esc_url( Mo_Saml_External_Links::PRICING_PAGE ); ?>" target="_blank"><input type="button" class="mo-saml-bs-btn btn-cstm" value="<?php esc_attr_e( 'Check Licensing Plans', 'miniorange-saml-20-single-sign-on' ); ?>" /></a>
+							<a href="<?php echo esc_url( Mo_Saml_External_Links::LANDING_PAGE . '?utm_source=saml_plugin&utm_medium=upgrade_button&utm_campaign=saml_plugin_internal#pricing' ); ?>" target="_blank"><input type="button" class="mo-saml-bs-btn btn-cstm" value="<?php esc_attr_e( 'Check Licensing Plans', 'miniorange-saml-20-single-sign-on' ); ?>" /></a>
 						</td>
 					</tr>
 				</table>
