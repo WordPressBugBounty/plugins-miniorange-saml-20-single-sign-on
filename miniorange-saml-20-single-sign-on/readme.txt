@@ -14,7 +14,7 @@ SAML SSO (Single Sign On) for WordPress Login with Okta, Entra ID, Azure AD/B2C,
 == Description ==
 **Simplify WordPress Login Experience With Our SAML Single Sign On (SSO) Plugin**
 
-With the <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=saml_lp&utm_campaign=wp_saml_sso" target="_blank">**miniOrange WordPress SAML SSO plugin**</a>, you can enable Single Sign On (SSO) for your WordPress site. This means users can sign in with their existing accounts from Identity Providers (IDPs) like <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-azure-ad?utm_source=readme&utm_medium=azure_guide&utm_campaign=microsoft_azure" target="_blank">**Microsoft Azure AD/ Entra ID**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-google-apps?utm_source=readme&utm_medium=g_suite_guide&utm_campaign=google_workspace" target="_blank">**Google Workspace**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-okta?utm_source=readme&utm_medium=okta_guide&utm_campaign=okta" target="_blank">**Okta**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-salesforce?utm_source=readme&utm_medium=salesforce_guide&utm_campaign=salesforce" target="_blank">**Salesforce**</a>, <a href="https://plugins.miniorange.com/keycloak-single-sign-on-wordpress-sso-saml?utm_source=readme&utm_medium=keycloak_guide&utm_campaign=keycloak" target="_blank">**Keycloak**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-shibboleth-2?utm_source=readme&utm_medium=shibboleth2_guide&utm_campaign=shibboleth" target="_blank">**Shibboleth**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-onelogin?utm_source=readme&utm_medium=onelogin_guide&utm_campaign=onelogin" target="_blank">**OneLogin**</a>, ADFS, and others without creating separate WordPress usernames and passwords.
+With the <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=saml_lp&utm_campaign=wp_saml_sso" target="_blank">**miniOrange WordPress SAML SSO plugin**</a>, you can enable Single Sign On (SSO) for your WordPress site. This means users can sign in with their existing accounts from Identity Providers (IDPs) like <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-azure-ad?utm_source=readme&utm_medium=azure_guide&utm_campaign=microsoft_azure" target="_blank">**Microsoft Azure AD/ Entra ID**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-google-apps?utm_source=readme&utm_medium=g_suite_guide&utm_campaign=google_workspace" target="_blank">**Google Apps Login (Gsuite Login)**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-okta?utm_source=readme&utm_medium=okta_guide&utm_campaign=okta" target="_blank">**Okta**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-salesforce?utm_source=readme&utm_medium=salesforce_guide&utm_campaign=salesforce" target="_blank">**Salesforce Login**</a>, <a href="https://plugins.miniorange.com/keycloak-single-sign-on-wordpress-sso-saml?utm_source=readme&utm_medium=keycloak_guide&utm_campaign=keycloak" target="_blank">**Keycloak**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-shibboleth-2?utm_source=readme&utm_medium=shibboleth2_guide&utm_campaign=shibboleth" target="_blank">**Shibboleth**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-onelogin?utm_source=readme&utm_medium=onelogin_guide&utm_campaign=onelogin" target="_blank">**OneLogin**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-adfs?utm_source=readme&utm_medium=supported_idps&utm_campaign=adfs" target="_blank">**ADFS**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-auth0?utm_source=readme&utm_medium=supported_idps&utm_campaign=auth0" target="_blank">**Auth0 Login**</a>, <a href="https://plugins.miniorange.com/wordpress-office-365-single-sign-on-sso-login?utm_source=readme&utm_medium=supported_idps&utm_campaign=office365" target="_blank">**Office 365 Login**</a>,  and others without creating separate WordPress usernames and passwords.
 
 The SAML plugin makes your WordPress site function as a SAML-compliant Service Provider (SP) by using the SAML 2.0 protocol to securely exchange authentication data with your chosen Identity Provider (IDP). Once users are authenticated by the IDP, they automatically gain access to your WordPress site and its resources. 
 
@@ -24,10 +24,10 @@ The SAML plugin makes your WordPress site function as a SAML-compliant Service P
 Users access WordPress immediately using their existing Identity Provider (IDP) credentials without managing WordPress-specific passwords.
 
 * **Centralized Access Management**
-Control everyone’s WordPress access through your Identity Provider (IDP) security policies.
+Control everyone’s WordPress access through your SAML Identity Provider (IDP) security policies.
 
 * **Organization-Only Access**
-Restrict WordPress access exclusively to verified employees through Identity Provider (IDP) authentication and MFA.
+Restrict WordPress access exclusively to verified employees through SAML Identity Provider (IDP) authentication and MFA.
 
 * **Smart User Provisioning**
 Automatically create WordPress accounts and assign roles based on Identity Provider (IDP) groups and user data.
@@ -36,7 +36,7 @@ Automatically create WordPress accounts and assign roles based on Identity Provi
 Eliminate manual user creation, password resets, role assignments, and access management tasks.
 
 * **Flexibility Across Different Identity Providers (IDP)**
-Our plugin works with 50+ IDPs. Enterprises can set up Azure AD login into WordPress for employees, while universities use WordPress Okta SSO, Google Apps SSO (G-suite), Salesforce SSO, Shibboleth SSO, OneLogin SSO, ADFS SSO, Keycloak SSO, Auth0 SSO or any other SAML IDPs of their choice.
+Our SAML plugin works with 50+ IDPs. Enterprises can set up Azure AD login into WordPress for employees, while universities use WordPress Okta SSO, Google Apps SSO (Gsuite Login), Salesforce SSO, Shibboleth SSO, OneLogin SSO, ADFS SSO, Keycloak SSO, Office 365 Login,  Auth0 SSO, Azure B2C SSO or any other SAML IDPs of their choice.
 
 
 **Quick Links:** <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=saml_lp&utm_campaign=official_website" target="_blank">🌐Official Website</a> | <a href="https://plugins.miniorange.com/wordpress-saml-guides?utm_source=readme&utm_medium=all_guides&utm_campaign=setup_guide" target="_blank">🛠️Setup Guide</a> | <a href="https://sandbox.miniorange.com/?utm_source=readme&utm_medium=sandbox&utm_campaign=free_trial" target="_blank">🎁Free Full-Feature Trial</a> | <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=pricing_lp&utm_campaign=pricing_section#pricing" target="_blank"> 💎Pricing Plans</a> | <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso-integrations?utm_source=readme&utm_medium=wp_integrations_lp&utm_campaign=integrations_addon" target="_blank">🧩Integrations & Addons</a> | <a href="https://plugins.miniorange.com/wordpress-azure-office365-integrations?utm_source=readme&utm_medium=azure_365_lp&utm_campaign=office_365_integrations" target="_blank">📧 Office 365 Integrations</a> | <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=contact_us&utm_campaign=support#contact-us" target="_blank">🤝Support</a>
@@ -51,8 +51,8 @@ https://youtu.be/Lk6KEKcPTWk?si=eNIt5xW4R-HvSDcn
 * <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-salesforce?utm_source=readme&utm_medium=supported_idps&utm_campaign=salesforce" target="_blank">Salesforce SSO</a>
 * <a href="https://plugins.miniorange.com/keycloak-single-sign-on-wordpress-sso-saml?utm_source=readme&utm_medium=supported_idps&utm_campaign=keycloak" target="_blank">Keycloak SSO</a>
 * <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-adfs?utm_source=readme&utm_medium=supported_idps&utm_campaign=adfs" target="_blank">ADFS</a>
-* <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-azure-b2c?utm_source=readme&utm_medium=supported_idps&utm_campaign=azure_ad_b2c" target="_blank">Azure AD B2C SSO</a>
-* <a href="https://plugins.miniorange.com/wordpress-office-365-single-sign-on-sso-login?utm_source=readme&utm_medium=supported_idps&utm_campaign=office365" target="_blank">Office 365</a>
+* <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-azure-b2c?utm_source=readme&utm_medium=supported_idps&utm_campaign=azure_ad_b2c" target="_blank">Login With Azure AD B2C SSO</a>
+* <a href="https://plugins.miniorange.com/wordpress-office-365-single-sign-on-sso-login?utm_source=readme&utm_medium=supported_idps&utm_campaign=office365" target="_blank">Office 365 Login</a>
 * <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-onelogin?utm_source=readme&utm_medium=supported_idps&utm_campaign=onelogin" target="_blank">OneLogin SSO</a>
 * <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-auth0?utm_source=readme&utm_medium=supported_idps&utm_campaign=auth0" target="_blank">Auth0 SSO</a>
 * <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-pingone?utm_source=readme&utm_medium=supported_idps&utm_campaign=pingone" target="_blank">PingOne</a>
@@ -83,7 +83,7 @@ Next, upload the IDP’s metadata URL or file to your WordPress site in the plug
 
 That's it! Your WordPress site is now secured with enterprise-grade Single Sign On (SSO) authentication. You can verify the connection by using the **Test Configuration button** in the SAML plugin.
 
-== Watch Our Complete Step-by-Step Installation Video for WordPress SSO Login ==
+== Watch Our Complete Step-by-Step Installation Video for WordPress SSO SAML Login ==
 
 Follow along with our detailed video walkthrough to see exactly how each step works and ensure your SAML SSO login is configured correctly from start to finish.
 
@@ -95,39 +95,39 @@ Whether you have questions about setup, pricing, or how the WordPress SSO SAML p
 == Features of Our WordPress SAML Single Sign On (SSO) Plugin ==
 **Unlimited User Authentications:** Allows an unlimited number of users to log in through SAML SSO with your IDP authentication while maintaining optimal site performance during peak traffic.
 
-**Auto Login:** Automatically logs users into WordPress if they have an active IDP session, without requiring them to re-enter the IDP credentials.
+**Auto Login:** Automatically logs users into WordPress if they have an active SAML IDP session, without requiring them to re-enter the IDP credentials.
 
-**Force Authentication:** Ensures that users authenticate through the IDP each time they log in to the WordPress site, regardless of any active IDP session.
+**Force Authentication:** Ensures that users authenticate via SAML IDP each time they log in to the WordPress site, regardless of any active IDP session.
 
-**Complete Site Protection:** Secures your site's frontend pages/posts and backend WP-Admin pages behind Single Sign On by redirecting all users to IDP if an active session is not found on the IDP. You can add another security layer using Media Restriction and REST API authentication.
+**Complete Site Protection:** Secures your site's frontend pages/posts and backend WP-Admin pages behind SAML SSO (Single Sign On) by redirecting all users to IDP if an active session is not found on the IDP. You can add another security layer using Media Restriction and REST API authentication.
 
 **Automatic User Creation:** Creates new WordPress user accounts automatically on the user’s first Single Sign On login if no account exists by syncing their profile details from the IDP.
 
-**Account Linking:** Enables users to log into their existing WordPress accounts via their IDP credentials by matching their username or email in WordPress and IDP. This ensures no duplicate accounts are created. 
+**Account Linking:** Enables users to log into their existing WordPress accounts via their IDP credentials by matching their username or email in WordPress and SAML IDP. This ensures no duplicate accounts are created. 
 
-**Just-in-Time (JIT) Profile Updation:** Updates WordPress user accounts at each Single Sign On login by syncing data from IDP. It maps basic attributes (username, email, first name, last name, etc.) and advanced/custom attributes (department, phone, job title, employee ID, etc.) to maintain accurate user profiles.
+**Just-in-Time (JIT) Profile Updation:** Updates WordPress user accounts at each SAML SSO login (Single Sign On) by syncing data from IDP. It maps basic attributes (username, email, first name, last name, etc.) and advanced/custom attributes (department, phone, job title, employee ID, etc.) to maintain accurate user profiles.
 
 **Role-based Access:** Assigns WordPress roles such as Administrator, Editor, Author, Contributor, or Subscriber to users during WP SSO login. The role assignment is based on the group information provided by the IDP.
 
-**Custom Login Buttons and Shortcodes:** Adds SSO login buttons to the WordPress login page or any page on the site using widgets and shortcodes. You can change the text, font, color, and size of these buttons to match your site’s design.
+**Custom Login Buttons and Shortcodes:** Adds SAML SSO login buttons to the WordPress login page or any page on the site using widgets and shortcodes. You can change the text, font, color, and size of these buttons to match your site’s design.
 
 **Single Logout (SLO):** Terminates a user's session on the WordPress site and the IDP simultaneously when logging out of either of them.
 
-**Login Using Multiple IDPs:** Allows users to authenticate with different Identity Providers (IDPs) when logging into WordPress. You can also set up email domain mapping so users are automatically directed to the right IDP. For example, an organization can easily set up Azure AD SSO, Okta SSO, or any other IDP for employees, and use Google Workspace SSO for partners or vendors.
+**Login Using Multiple IDPs:** Allows users to authenticate with different Identity Providers (IDPs) when logging into WordPress. You can also set up email domain mapping so users are automatically directed to the right IDP. For example, an organization can easily set up Azure AD SSO, Azure B2C SSO, Okta SSO, or any other IDP for employees, and use Gsuite SSO (Gsuite Login) for partners or vendors.
 
-**Certificate Sync and Multiple Certificates:** Automatically syncs X.509 certificates from the Identity Provider (IDP), managing rollover, replacement, and addition without disrupting the SSO connection. It also supports multiple active certificates from the same IDP, allowing WordPress to work with custom setups or environments where more than one certificate is in use.
+**Certificate Sync and Multiple Certificates:** Automatically syncs X.509 certificates from the SAML Identity Provider (IDP), managing rollover, replacement, and addition without disrupting the SSO connection. It also supports multiple active certificates from the same IDP, allowing WordPress to work with custom setups or environments where more than one certificate is in use.
 
 **WordPress SSO on Multisite Networks:** Applies one SSO configuration to all subsites in a WordPress multisite network. This centralizes SSO management, so you do not need to configure each subsite individually.
 
-**Single & Multi‑Tenant Azure AD Login:** Connects both single-tenant (one directory) and multi-tenant (multiple directories) Azure AD or Office 365 to WordPress. Users from different tenants can log in to WordPress through Azure AD SSO using their existing accounts.
+**Single & Multi‑Tenant Azure AD Login:** Connects both single-tenant (one directory) and multi-tenant (multiple directories) Azure AD(Login with Azure AD) or Office 365 Login to WordPress. Users from different tenants can log in to WordPress through Azure AD SSO using their existing accounts.
 
 **Cross-Environment Deployment:** Supports multiple environments such as Development, Test, and Production, allowing IT teams to configure WordPress SSO once and maintain consistent settings across all instances.
 
-**WP‑CLI Support:** Provides WP‑CLI commands for activating licenses, configuring WP SSO settings, importing or exporting configurations, and updating the plugin. All key SSO functions can be managed from the command line without using the WordPress dashboard.
+**WP‑CLI Support:** Provides WP‑CLI commands for activating licenses, configuring WP SSO settings, importing or exporting configurations, and updating the plugin. All key SAML SSO functions can be managed from the command line without using the WordPress dashboard.
 
 == Extend Your Single Sign On Experience With Our Addons ==  
 
-<a href="https://plugins.miniorange.com/wordpress-user-provisioning?utm_source=readme&utm_medium=addons&utm_campaign=user_provisioning" target="_blank">**Real-time SCIM User Provisioning:**</a> Syncs user records between the IDP and WordPress in real time when the user is created, updated, or removed to maintain accurate data and strengthen security and efficiency.
+<a href="https://plugins.miniorange.com/wordpress-user-provisioning?utm_source=readme&utm_medium=addons&utm_campaign=user_provisioning" target="_blank">**Real-time SCIM User Provisioning:**</a> Syncs user records between the SAML IDP and WordPress in real time when the user is created, updated, or removed to maintain accurate data and strengthen security and efficiency.
 
 <a href="https://plugins.miniorange.com/wordpress-page-restriction?utm_source=readme&utm_medium=addons&utm_campaign=page_restriction" target="_blank">**Page and Post Restriction:**</a> Controls access to your content by restricting pages and posts to specific user roles or login status (whether a user is logged in). If an unauthorized person attempts to view protected content, they can be automatically redirected to authenticate via a SAML Identity Provider (IDP), the WordPress login page, or any custom URL you specify.
 
@@ -147,13 +147,13 @@ Whether you have questions about setup, pricing, or how the WordPress SSO SAML p
 
 <a href="https://plugins.miniorange.com/wordpress-federation-single-sign-on?utm_source=readme&utm_medium=addons&utm_campaign=federation_sso" target="_blank">**Federation SSO:**</a> Supports logins from multiple federated organizations, such as universities or research consortia, by leveraging standard IDP federation protocols to unify access.
 
-Our WordPress Single Sign On plugin also integrates with third-party applications such as <a href="https://plugins.miniorange.com/wordpress-learndash-integrator?utm_source=readme&utm_medium=addons&utm_campaign=learndash" target="_blank">**LearnDash**</a>, <a href="https://plugins.miniorange.com/wordpress-woocommerce-integrator?utm_source=readme&utm_medium=addons&utm_campaign=woocommerce" target="_blank">**WooCommerce**</a>, <a href="https://plugins.miniorange.com/wordpress-buddypress-integrator?utm_source=readme&utm_medium=addons&utm_campaign=buddypress" target="_blank">**BuddyPress**</a>, <a href="https://plugins.miniorange.com/wordpress-memberpress-integrator?utm_source=readme&utm_medium=addons&utm_campaign=memberpress" target="_blank">**MemberPress**</a>, <a href="https://plugins.miniorange.com/paid-membership-pro-integrator?utm_source=readme&utm_medium=addons&utm_campaign=membership_pro" target="_blank">**Paid Memberships Pro**</a>, and <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso-integrations?utm_source=readme&utm_medium=addons&utm_campaign=more" target="_blank">**more**</a>, providing a simple SAML Single Sign On (SSO) experience that lets users access courses, online stores, community forums, membership content, and other protected resources with a single login.
+Our WordPress Single Sign On SAML plugin also integrates with third-party applications such as <a href="https://plugins.miniorange.com/wordpress-learndash-integrator?utm_source=readme&utm_medium=addons&utm_campaign=learndash" target="_blank">**LearnDash**</a>, <a href="https://plugins.miniorange.com/wordpress-woocommerce-integrator?utm_source=readme&utm_medium=addons&utm_campaign=woocommerce" target="_blank">**WooCommerce**</a>, <a href="https://plugins.miniorange.com/wordpress-buddypress-integrator?utm_source=readme&utm_medium=addons&utm_campaign=buddypress" target="_blank">**BuddyPress**</a>, <a href="https://plugins.miniorange.com/wordpress-memberpress-integrator?utm_source=readme&utm_medium=addons&utm_campaign=memberpress" target="_blank">**MemberPress**</a>, <a href="https://plugins.miniorange.com/paid-membership-pro-integrator?utm_source=readme&utm_medium=addons&utm_campaign=membership_pro" target="_blank">**Paid Memberships Pro**</a>, and <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso-integrations?utm_source=readme&utm_medium=addons&utm_campaign=more" target="_blank">**more**</a>, providing a simple SAML Single Sign On (SSO) experience that lets users access courses, online stores, community forums, membership content, and other protected resources with a single login.
 
 == Top Use Cases of Our WordPress SAML Single Sign On (SSO) Plugin ==
 
 **Education: SSO for Schools, Universities, and Federated Institutions**
 
-Our WordPress SAML SSO plugin helps <a href="https://plugins.miniorange.com/single-sign-on-sso-for-education-and-universities-in-wordpress?utm_source=readme&utm_medium=education_sso&utm_campaign=educational_institutions" target="_blank">**educational institutions**</a> simplify secure access across their WordPress sites. Faculty and staff can log in through Azure SSO, while external collaborators or research partners authenticate using WordPress Okta SSO, Shibboleth SSO, G Suite / Google Apps SSO, and other IDPs. This flexibility ensures universities can accommodate multiple identity providers without creating separate WordPress accounts for every user.
+Our WordPress SAML SSO plugin helps <a href="https://plugins.miniorange.com/single-sign-on-sso-for-education-and-universities-in-wordpress?utm_source=readme&utm_medium=education_sso&utm_campaign=educational_institutions" target="_blank">**educational institutions**</a> simplify secure access across their WordPress sites. Faculty and staff can log in through Azure SSO, while external collaborators or research partners authenticate using WordPress Okta SSO, Shibboleth SSO, GSuite SSO/ Google Apps SSO, and other IDPs. This flexibility ensures universities can accommodate multiple identity providers without creating separate WordPress accounts for every user.
 
 Along with multiple IDPs, the WordPress SAML plugin also supports academic federations such as InCommon, HAKA, HKAF, etc. These federations connect entire networks of trusted institutions and allow users to authenticate with their home institution credentials, enabling students, faculty, and researchers from partner universities or organizations to access WordPress resources directly.
 
@@ -247,7 +247,7 @@ Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecur
 4. Upload IDP metadata as a file or URL for WordPress Single Sign On.
 5. Use metadata URL in the plugin to configure your Identity Provider for SAML Single Sign On.
 6. Use WordPress endpoints mentioned in the plugin settings to configure your IDP.
-7. Update user profile using Attribute Mapping for WordPress users after SSO.
+7. Update user profile using Attribute Mapping for WordPress users after SAML SSO.
 8. Configure a default role for WordPress users after SSO.
 9. Add a Single Sign On button on the default WordPress login page.
 10. Set SSO auto-redirection from complete site or from WordPress login page.
