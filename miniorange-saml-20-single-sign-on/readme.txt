@@ -5,7 +5,7 @@ Tags: SSO, SAML, Single Sign On, Azure AD, Okta Login
 Requires at least: 3.7
 Tested up to: 6.9
 Requires PHP: 5.6
-Stable tag: 5.4.0
+Stable tag: 5.4.1
 License: Expat
 License URI: https://plugins.miniorange.com/mit-license
 
@@ -256,6 +256,11 @@ Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecur
 
 == Changelog ==
 
+= 5.4.1 =
+* Feature: Added SAML SSO abilities support for the new WordPress Abilities API
+* Feature: Registered plugin commands in Command Palette
+* Improvement: Modified the Debug Log file name
+
 = 5.4.0 =
 * Improvement: Minor UI Improvements
 
@@ -374,6 +379,11 @@ Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecur
 For older changelog entries, please see the [additional changelog.txt file](https://plugins.svn.wordpress.org/miniorange-saml-20-single-sign-on/trunk/changelog.txt) provided with the plugin.
 
 == Upgrade Notice ==
+
+= 5.4.1 =
+* Feature: Added SAML SSO abilities support for the new WordPress Abilities API
+* Feature: Registered plugin commands in Command Palette
+* Improvement: Modified the Debug Log file name
 
 = 5.4.0 =
 * Improvement: Minor UI Improvements

@@ -14,7 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function mo_saml_display_log_page() {
-	$debugging_enabled = Mo_SAML_Logger::mo_saml_is_debugging_enabled();
+	$debug_log_enabled = Mo_SAML_Logger::mo_saml_is_debugging_enabled() ? 'checked' : '';
+	$disabled          = ! Mo_SAML_Logger::mo_saml_is_debugging_enabled() ? 'disabled' : '';
+	$delete_disabled   = Mo_SAML_Logger::mo_saml_is_debugging_enabled() ? 'disabled' : '';
 	mo_saml_display_plugin_header();
 	?>  
 	<?php
@@ -31,7 +33,7 @@ function mo_saml_display_log_page() {
 							<input type="hidden" name="option" value="mo_saml_logger" />
 							<div class="mo-saml-bootstrap-row">
 								<div class="mo-saml-bootstrap-col-md-6">
-									<h4><?php esc_html_e( 'SAML Debug Tools', 'miniorange-saml-20-single-sign-on' ); ?></h4>
+									<h4><?php esc_html_e( 'Debug Logger Tools', 'miniorange-saml-20-single-sign-on' ); ?></h4>
 								</div>
 								<div class="mo-saml-bootstrap-col-md-6 mo-saml-bootstrap-text-end">
 									<?php
@@ -41,64 +43,55 @@ function mo_saml_display_log_page() {
 									}
 									?>
 									<a href="<?php echo esc_url( mo_saml_add_query_arg( array( 'tab' => 'save' ), $server_uri ) ); ?>" class="mo-saml-bootstrap-btn btn-cstm mo-saml-bootstrap-ms-3"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-											<path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
-										</svg>&nbsp;<?php esc_html_e( 'Back To Plugin Configuration', 'miniorange-saml-20-single-sign-on' ); ?></a>
+												<path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+											</svg>&nbsp;<?php esc_html_e( 'Back To Plugin Configuration', 'miniorange-saml-20-single-sign-on' ); ?></a>
 								</div>
 							</div>
 							<div class="form-head"></div>
-							<h5 class="mo-saml-bootstrap-mt-4"><?php esc_html_e( 'If you are facing any issues with the SSO, please follow these steps for easier debugging', 'miniorange-saml-20-single-sign-on' ); ?></h5>
+							<h5 class="mo-saml-bootstrap-mt-4"><b><?php esc_html_e( 'If you are facing any issues with the SSO, please follow these steps for easier debugging:', 'miniorange-saml-20-single-sign-on' ); ?></b></h5>
 
-							<h6 class="mo-saml-bootstrap-mt-4"><b><?php esc_html_e( 'Step 1:', 'miniorange-saml-20-single-sign-on' ); ?></b><?php esc_html_e( ' Enable the Debug Logs option below and reproduce', 'miniorange-saml-20-single-sign-on' ); ?></h6>
+							<h6 class="mo-saml-bootstrap-mt-4"><b><?php esc_html_e( 'Step 1:', 'miniorange-saml-20-single-sign-on' ); ?></b><?php esc_html_e( ' Enable the Debug Logs option below and reproduce the issue.', 'miniorange-saml-20-single-sign-on' ); ?></h6>
 							<div class="mo-saml-bootstrap-row mo-saml-bootstrap-align-items-top mo-saml-bootstrap-mt-4">
 								<div class="mo-saml-bootstrap-col-md-7">
-									<h6 class="text-secondary"><?php esc_html_e( 'Enable miniOrange SAML Debug Logs', 'miniorange-saml-20-single-sign-on' ); ?></h6>
+									<h6 class="text-secondary"><b><?php esc_html_e( 'miniOrange Debug Logs', 'miniorange-saml-20-single-sign-on' ); ?></b></h6>
 								</div>
 								<div class="mo-saml-bootstrap-col-md-3 mo-saml-bootstrap-ps-0">
-									<input type="checkbox" id="mo_saml_enable_debug_logs" name="mo_saml_enable_debug_logs" class="mo-saml-switch" value="true" onchange="submit();" 
-									<?php
-									if ( $debugging_enabled ) {
-										echo ' checked ';}
-									?>
-									/>
+									<input type="checkbox" id="mo_saml_enable_debug_logs" name="mo_saml_enable_debug_logs" class="mo-saml-switch" value="checked" onchange="submit();" <?php echo esc_attr( $debug_log_enabled ); ?> />
 									<label class="mo-saml-switch-label" for="mo_saml_enable_debug_logs"></label>
 								</div>
 							</div>
 
 							<div class="mo-saml-bootstrap-text-center">
-								<input type="submit" class="mo-saml-bootstrap-btn btn-cstm mo-saml-bootstrap-mt-4" name="clear" value="<?php esc_attr_e( 'Clear Log Files', 'miniorange-saml-20-single-sign-on' ); ?>" 
-								<?php
-								if ( ! $debugging_enabled ) {
-									echo ' title="' . esc_attr__( 'Enable debug logs first', 'miniorange-saml-20-single-sign-on' ) . '" disabled ';}
-								?>
-								>
+								<input type="submit" class="mo-saml-bootstrap-btn btn-cstm mo-saml-bootstrap-mt-4" name="mo_saml_clear_debug_logs" value="<?php esc_attr_e( 'Clear Debug Logs', 'miniorange-saml-20-single-sign-on' ); ?>" title="<?php esc_attr_e( 'Enable debug logs first', 'miniorange-saml-20-single-sign-on' ); ?>" <?php echo esc_attr( $disabled ); ?>>
 							</div>
 							<div class="call-setup-div mo-saml-bootstrap-mt-4">
 								<h6 class="call-setup-heading"><strong>
 										<span class="mo-saml-bootstrap-text-danger"><?php esc_html_e( 'Note: ', 'miniorange-saml-20-single-sign-on' ); ?></span><u><?php esc_html_e( 'If your wp-config.php is not writable', 'miniorange-saml-20-single-sign-on' ); ?></u>, <?php esc_html_e( 'follow the steps below to Enable debug logs Manually', 'miniorange-saml-20-single-sign-on' ); ?>
 									</strong></h6>
 
-								<h6 class="mo-saml-bootstrap-mt-3">
-									<?php esc_html_e( 'Copy this code', 'miniorange-saml-20-single-sign-on' ); ?> <code>define('MO_SAML_LOGGING', true);</code>
-									<?php esc_html_e( 'and paste it in the', 'miniorange-saml-20-single-sign-on' ); ?> <a href="https://wordpress.org/support/article/editing-wp-config-php/" target="_blank">wp-config.php</a>
+								<ul class="mo-saml-bootstrap-mt-3" style="list-style-type: disc; padding-left: 20px;">
+									<li><?php esc_html_e( 'Copy this code', 'miniorange-saml-20-single-sign-on' ); ?> <code>define('<?php echo esc_attr( Mo_SAML_Logger::DEBUG_LOG_CONSTANT ); ?>', true);</code></li>
+									<li><?php esc_html_e( 'Paste it in the', 'miniorange-saml-20-single-sign-on' ); ?> <a href="https://wordpress.org/support/article/editing-wp-config-php/" target="_blank">wp-config.php</a>
 									<?php esc_html_e( 'file before the line', 'miniorange-saml-20-single-sign-on' ); ?>
-									<br> <code>/* That's all, stop editing! Happy publishing. */</code> <?php esc_html_e( 'to enable the miniOrange SAML logs.', 'miniorange-saml-20-single-sign-on' ); ?>
-								</h6>
+									<code>/* That's all, stop editing! Happy publishing. */</code> <?php esc_html_e( 'to enable the miniOrange debug logs.', 'miniorange-saml-20-single-sign-on' ); ?></li>
+								</ul>
 
 							</div>
 
-							<h6 class="mo-saml-bootstrap-mt-4"><b><?php esc_html_e( 'Step 2:', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( ' Download the Debug Log File and Plugin Configurations', 'miniorange-saml-20-single-sign-on' ); ?></h6>
+							<h6 class="mo-saml-bootstrap-mt-4"><b><?php esc_html_e( 'Step 2:', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( ' Download the Debug Log File and Plugin Configurations.', 'miniorange-saml-20-single-sign-on' ); ?></h6>
 
 							<div class="mo-saml-bootstrap-text-center mo-saml-bootstrap-mt-4">
-								<input type="submit" class="mo-saml-bootstrap-btn btn-cstm mt-4" name="download" value="<?php esc_attr_e( 'Download Debug Logs', 'miniorange-saml-20-single-sign-on' ); ?>" 
-								<?php
-								if ( ! $debugging_enabled ) {
-									echo ' title="' . esc_attr__( 'Enable debug logs first', 'miniorange-saml-20-single-sign-on' ) . '" disabled ';
-								}
-								?>
-								>
+								<input type="submit" class="mo-saml-bootstrap-btn btn-cstm mo-saml-bootstrap-mt-4" name="mo_saml_download_debug_logs" value="<?php esc_attr_e( 'Download Debug Logs', 'miniorange-saml-20-single-sign-on' ); ?>" title="<?php esc_attr_e( 'Enable debug logs first', 'miniorange-saml-20-single-sign-on' ); ?>" <?php echo esc_attr( $disabled ); ?>>
+							</div>
+
+							<h6 class="mo-saml-bootstrap-mt-4"><b><?php esc_html_e( 'Step 3:', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( ' Send the Debug Log File and Plugin Configurations to us at', 'miniorange-saml-20-single-sign-on' ); ?> <a class="mo-saml-bootstrap-text-danger" href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a>.</h6>
+
+							<h6 class="mo-saml-bootstrap-mt-4"><b><?php esc_html_e( 'Step 4:', 'miniorange-saml-20-single-sign-on' ); ?></b> <?php esc_html_e( ' Issue Resolved? Then you can disable the debug logs and delete the Debug Log Files.', 'miniorange-saml-20-single-sign-on' ); ?></h6>
+
+							<div class="mo-saml-bootstrap-text-center mo-saml-bootstrap-mt-4">
+								<input type="submit" class="mo-saml-bootstrap-btn btn-cstm mo-saml-bootstrap-mt-4" name="mo_saml_delete_debug_log_files" value="<?php esc_attr_e( 'Delete Debug Log Files', 'miniorange-saml-20-single-sign-on' ); ?>" title="<?php esc_attr_e( 'Disable debug logs first', 'miniorange-saml-20-single-sign-on' ); ?>" <?php echo esc_attr( $delete_disabled ); ?>>
 							</div>
 						</form>
-					<h6 class="mo-saml-bootstrap-mt-4"><?php esc_html_e( 'Send this file to us at', 'miniorange-saml-20-single-sign-on' ); ?> <a class="mo-saml-bootstrap-text-danger" href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a></h6>
 					</div>
 				</div>
 				<?php mo_saml_display_support_form(); ?>

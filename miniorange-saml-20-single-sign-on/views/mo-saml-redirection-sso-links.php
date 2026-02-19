@@ -595,8 +595,15 @@ function mo_saml_display_relaystate_config() {
 					<input style="width: 100%;" type="url"  disabled placeholder="<?php esc_url( site_url() ); ?>" /><label class=" cursor-disabled" for="switch"></label>
 				</div>
 			</div>
-			<p style="padding-left: 10px;" class="prem-note"><i><?php esc_html_e( 'Users will always be redirected to this URL after SSO.
-			When left blank, the users will be redirected to the same page from where the SSO was initiated.	', 'miniorange-saml-20-single-sign-on' ); ?></i></p>
+			<p style="padding-left: 10px;" class="prem-note"><i>
+			<?php
+			esc_html_e(
+				'Users will always be redirected to this URL after SSO.
+			When left blank, the users will be redirected to the same page from where the SSO was initiated.	',
+				'miniorange-saml-20-single-sign-on'
+			);
+			?>
+																</i></p>
 		</div>
 	</div>
 	<?php

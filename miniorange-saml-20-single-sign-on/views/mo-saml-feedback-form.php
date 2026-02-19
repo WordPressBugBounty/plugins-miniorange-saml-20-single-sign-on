@@ -6,6 +6,10 @@
  * @package miniorange-saml-20-single-sign-on\views
  */
 
+ if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+ }
+
 /**
  * Displays the feedback form upon plugin deactivation.
  *

@@ -8,6 +8,10 @@
  * @link       https://miniorange.com
  */
 
+ if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+ }
+
 /**
  * Adds Black Friday Sale Admin Notice for miniOrange SAML SSO Plugins
  */

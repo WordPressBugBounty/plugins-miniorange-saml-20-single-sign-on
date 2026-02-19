@@ -38,6 +38,7 @@ class Mo_Saml_Plugin_Pages extends Mo_SAML_Basic_Enum {
 	const PLUGIN_PAGES = array(
 		'mo_saml_settings',
 		'mo_saml_enable_debug_logs',
+		'mo_saml_abilities_api',
 	);
 }
 
@@ -47,6 +48,7 @@ class Mo_Saml_Plugin_Pages extends Mo_SAML_Basic_Enum {
 class Mo_Saml_Options_Enum_Sso_Login extends Mo_SAML_Basic_Enum {
 	const SSO_BUTTON                     = 'mo_saml_add_sso_button_wp';
 	const MO_SAML_KEEP_SETTINGS_DELETION = 'mo_saml_keep_settings_on_deletion';
+	const MO_SAML_ENABLE_ABILITIES_API   = 'mo_saml_enable_abilities_api';
 }
 
 /**
@@ -216,7 +218,7 @@ class Mo_Saml_Options_Plugin_Constants extends Mo_SAML_Basic_Enum {
 	const CMS_NAME         = 'WP';
 	const APPLICATION_NAME = 'WP miniOrange SAML 2.0 SSO Plugin';
 	const APPLICATION_TYPE = 'SAML';
-	const VERSION          = '5.4.0';
+	const VERSION          = '5.4.1';
 	const HOSTNAME         = 'https://login.xecurify.com';
 	const WP_VERSION       = '6.9';
 	const PLUGIN_FILE      = 'miniorange-saml-20-single-sign-on/login.php';
@@ -1064,41 +1066,46 @@ class Mo_Saml_Messages extends Mo_SAML_Basic_Enum {
 	public static function mo_saml_translate( $message_key ) {
 
 		$messages = array(
-			'IDP_DETAILS_SUCCESS'      => __( 'Identity Provider details saved successfully.', 'miniorange-saml-20-single-sign-on' ),
-			'INVALID_CERT'             => __( 'Invalid certificate: Please provide a valid X.509 certificate.', 'miniorange-saml-20-single-sign-on' ),
-			'FIELDS_EMPTY'             => __( 'All the fields are required. Please enter valid entries.', 'miniorange-saml-20-single-sign-on' ),
-			'INVALID_FORMAT'           => __( 'Please match the requested format for Identity Provider Name. Only alphabets, numbers and underscore is allowed.', 'miniorange-saml-20-single-sign-on' ),
-			'METADATA_EMPTY'           => __( 'Please upload a valid metadata file or a valid metadata URL.', 'miniorange-saml-20-single-sign-on' ),
-			'IDP_NAME_EMPTY'           => __( 'IDP Name cannot be empty. Please enter a valid Identity Provider Name.', 'miniorange-saml-20-single-sign-on' ),
-			'METADATA_NAME_EMPTY'      => __( 'Error uploading metadata. Please upload a valid metadata file.', 'miniorange-saml-20-single-sign-on' ),
-			'INVALID_IDP_NAME_FORMAT'  => __( 'Please match the requested format for Identity Provider Name. Only alphabets, numbers and underscore is allowed.', 'miniorange-saml-20-single-sign-on' ),
-			'INVALID_METADATA_FILE'    => __( 'Please provide a valid metadata file.', 'miniorange-saml-20-single-sign-on' ),
-			'INVALID_XML_FILE'         => __( 'Invalid file. Please upload a valid XML file.', 'miniorange-saml-20-single-sign-on' ),
-			'INVALID_METADATA_URL'     => __( 'Please provide a valid metadata URL.', 'miniorange-saml-20-single-sign-on' ),
-			'INVALID_METADATA_CONFIG'  => __( 'Unable to fetch Metadata. Please check your metadata again.', 'miniorange-saml-20-single-sign-on' ),
-			'METADATA_UPLOAD_SUCCESS'  => __( 'Identity Provider details saved successfully.', 'miniorange-saml-20-single-sign-on' ),
-			'SETTINGS_UPDATED'         => __( 'Settings updated successfully.', 'miniorange-saml-20-single-sign-on' ),
-			'CONTACT_EMAIL_EMPTY'      => __( 'Please fill up required fields to submit your query.', 'miniorange-saml-20-single-sign-on' ),
-			'CONTACT_EMAIL_INVALID'    => __( 'Please enter a valid email address.', 'miniorange-saml-20-single-sign-on' ),
-			'CALL_SETUP_DETAILS_EMPTY' => __( 'Please fill up your Phone Number to submit your callback request.', 'miniorange-saml-20-single-sign-on' ),
-			'QUERY_NOT_SUBMITTED'      => __( 'Your query could not be submitted. Please try again.', 'miniorange-saml-20-single-sign-on' ),
-			'QUERY_SUBMITTED'          => __( 'Thanks for getting in touch! We will reach out on your email shortly.', 'miniorange-saml-20-single-sign-on' ),
-			'CALL_REQUEST_SUBMIT'      => __( 'Thanks for getting in touch! We will reach out to you shortly.', 'miniorange-saml-20-single-sign-on' ),
-			'CALL_REQUEST_NOT_SUBMIT'  => __( 'Your callback request could not be submitted. Please try again.', 'miniorange-saml-20-single-sign-on' ),
-			'UPDATED_DEFAULT_ROLE'     => __( 'Role Mapping details saved successfully.', 'miniorange-saml-20-single-sign-on' ),
-			'DEMO_REQUEST_FAILED'      => __( 'Something went wrong. Please reach out to us using the Support/Contact Us form to get help with the demo.', 'miniorange-saml-20-single-sign-on' ),
-			'PASSWORD_PATTERN_INVALID' => __( 'Minimum 6 characters should be present. Maximum 15 characters should be present. Only following symbols (!@#.$%^&*-_) are allowed.', 'miniorange-saml-20-single-sign-on' ),
-			'PASSWORD_MISMATCH'        => __( 'Passwords do not match.', 'miniorange-saml-20-single-sign-on' ),
-			'ACCOUNT_EXISTS'           => __( 'You already have an account with miniOrange. Please enter a valid password.', 'miniorange-saml-20-single-sign-on' ),
-			'INVALID_CREDENTIALS'      => __( 'Invalid username or password. Please try again.', 'miniorange-saml-20-single-sign-on' ),
-			'REGISTER_SUCCESS'         => __( 'Thank you for registering with miniOrange.', 'miniorange-saml-20-single-sign-on' ),
-			'CUSTOMER_FOUND'           => __( 'Customer retrieved successfully.', 'miniorange-saml-20-single-sign-on' ),
-			'ATTRIBUTES_CLEARED'       => __( 'List of attributes cleared.', 'miniorange-saml-20-single-sign-on' ),
-			'LOG_FILE_NOT_FOUND'       => __( 'Log file doesn\'t exist.', 'miniorange-saml-20-single-sign-on' ),
-			'LOG_FILE_CLEARED'         => __( 'Successfully cleared log files.', 'miniorange-saml-20-single-sign-on' ),
-			'WPCONFIG_ERROR'           => __( 'WP-config.php is not writable, please follow the manual steps to enable/disable the debug logs.', 'miniorange-saml-20-single-sign-on' ),
-			'PLUGIN_DEACTIVATED'       => __( 'Plugin deactivated successfully.', 'miniorange-saml-20-single-sign-on' ),
-			'FEEDBACK_SUCCESS'         => __( 'Thank you for the feedback.', 'miniorange-saml-20-single-sign-on' ),
+			'IDP_DETAILS_SUCCESS'         => __( 'Identity Provider details saved successfully.', 'miniorange-saml-20-single-sign-on' ),
+			'INVALID_CERT'                => __( 'Invalid certificate: Please provide a valid X.509 certificate.', 'miniorange-saml-20-single-sign-on' ),
+			'FIELDS_EMPTY'                => __( 'All the fields are required. Please enter valid entries.', 'miniorange-saml-20-single-sign-on' ),
+			'INVALID_FORMAT'              => __( 'Please match the requested format for Identity Provider Name. Only alphabets, numbers and underscore is allowed.', 'miniorange-saml-20-single-sign-on' ),
+			'METADATA_EMPTY'              => __( 'Please upload a valid metadata file or a valid metadata URL.', 'miniorange-saml-20-single-sign-on' ),
+			'IDP_NAME_EMPTY'              => __( 'IDP Name cannot be empty. Please enter a valid Identity Provider Name.', 'miniorange-saml-20-single-sign-on' ),
+			'METADATA_NAME_EMPTY'         => __( 'Error uploading metadata. Please upload a valid metadata file.', 'miniorange-saml-20-single-sign-on' ),
+			'INVALID_IDP_NAME_FORMAT'     => __( 'Please match the requested format for Identity Provider Name. Only alphabets, numbers and underscore is allowed.', 'miniorange-saml-20-single-sign-on' ),
+			'INVALID_METADATA_FILE'       => __( 'Please provide a valid metadata file.', 'miniorange-saml-20-single-sign-on' ),
+			'INVALID_XML_FILE'            => __( 'Invalid file. Please upload a valid XML file.', 'miniorange-saml-20-single-sign-on' ),
+			'INVALID_METADATA_URL'        => __( 'Please provide a valid metadata URL.', 'miniorange-saml-20-single-sign-on' ),
+			'INVALID_METADATA_CONFIG'     => __( 'Unable to fetch Metadata. Please check your metadata again.', 'miniorange-saml-20-single-sign-on' ),
+			'METADATA_UPLOAD_SUCCESS'     => __( 'Identity Provider details saved successfully.', 'miniorange-saml-20-single-sign-on' ),
+			'SETTINGS_UPDATED'            => __( 'Settings updated successfully.', 'miniorange-saml-20-single-sign-on' ),
+			'CONTACT_EMAIL_EMPTY'         => __( 'Please fill up required fields to submit your query.', 'miniorange-saml-20-single-sign-on' ),
+			'CONTACT_EMAIL_INVALID'       => __( 'Please enter a valid email address.', 'miniorange-saml-20-single-sign-on' ),
+			'CALL_SETUP_DETAILS_EMPTY'    => __( 'Please fill up your Phone Number to submit your callback request.', 'miniorange-saml-20-single-sign-on' ),
+			'QUERY_NOT_SUBMITTED'         => __( 'Your query could not be submitted. Please try again.', 'miniorange-saml-20-single-sign-on' ),
+			'QUERY_SUBMITTED'             => __( 'Thanks for getting in touch! We will reach out on your email shortly.', 'miniorange-saml-20-single-sign-on' ),
+			'CALL_REQUEST_SUBMIT'         => __( 'Thanks for getting in touch! We will reach out to you shortly.', 'miniorange-saml-20-single-sign-on' ),
+			'CALL_REQUEST_NOT_SUBMIT'     => __( 'Your callback request could not be submitted. Please try again.', 'miniorange-saml-20-single-sign-on' ),
+			'UPDATED_DEFAULT_ROLE'        => __( 'Role Mapping details saved successfully.', 'miniorange-saml-20-single-sign-on' ),
+			'DEMO_REQUEST_FAILED'         => __( 'Something went wrong. Please reach out to us using the Support/Contact Us form to get help with the demo.', 'miniorange-saml-20-single-sign-on' ),
+			'PASSWORD_PATTERN_INVALID'    => __( 'Minimum 6 characters should be present. Maximum 15 characters should be present. Only following symbols (!@#.$%^&*-_) are allowed.', 'miniorange-saml-20-single-sign-on' ),
+			'PASSWORD_MISMATCH'           => __( 'Passwords do not match.', 'miniorange-saml-20-single-sign-on' ),
+			'ACCOUNT_EXISTS'              => __( 'You already have an account with miniOrange. Please enter a valid password.', 'miniorange-saml-20-single-sign-on' ),
+			'INVALID_CREDENTIALS'         => __( 'Invalid username or password. Please try again.', 'miniorange-saml-20-single-sign-on' ),
+			'REGISTER_SUCCESS'            => __( 'Thank you for registering with miniOrange.', 'miniorange-saml-20-single-sign-on' ),
+			'CUSTOMER_FOUND'              => __( 'Customer retrieved successfully.', 'miniorange-saml-20-single-sign-on' ),
+			'ATTRIBUTES_CLEARED'          => __( 'List of attributes cleared.', 'miniorange-saml-20-single-sign-on' ),
+			'LOG_FILE_NOT_FOUND'          => __( 'Log file doesn\'t exist.', 'miniorange-saml-20-single-sign-on' ),
+			'LOG_FILE_CLEARED'            => __( 'Successfully cleared log files.', 'miniorange-saml-20-single-sign-on' ),
+			'LOG_FILES_DELETED'           => __( 'Successfully deleted log files.', 'miniorange-saml-20-single-sign-on' ),
+			'DISABLE_DEBUG_LOGS_FIRST'    => __( 'Please disable debug logs first before deleting log files.', 'miniorange-saml-20-single-sign-on' ),
+			'WPCONFIG_ERROR'              => __( 'WP-config.php is not writable, please follow the manual steps to enable/disable the debug logs.', 'miniorange-saml-20-single-sign-on' ),
+			'PLUGIN_DEACTIVATED'          => __( 'Plugin deactivated successfully.', 'miniorange-saml-20-single-sign-on' ),
+			'FEEDBACK_SUCCESS'            => __( 'Thank you for the feedback.', 'miniorange-saml-20-single-sign-on' ),
+			'ABILITIES_API_NOT_SUPPORTED' => __( 'Abilities API is not supported on WordPress 6.8 or lower. Please follow the pre-requisites to enable the Abilities API.', 'miniorange-saml-20-single-sign-on' ),
+			'ABILITIES_API_ENABLED'       => __( 'Abilities API enabled successfully. Abilities are now publicly accessible via MCP.', 'miniorange-saml-20-single-sign-on' ),
+			'ABILITIES_API_DISABLED'      => __( 'Abilities API disabled successfully. Abilities are no longer publicly accessible via MCP.', 'miniorange-saml-20-single-sign-on' ),
 		);
 
 		if ( isset( $messages[ $message_key ] ) ) {

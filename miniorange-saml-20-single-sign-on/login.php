@@ -3,7 +3,7 @@
  * Plugin Name: SAML Single Sign On – SSO Login
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 5.4.0
+ * Version: 5.4.1
  * Author: miniOrange
  * Author URI: https://miniorange.com/
  * License: Expat
@@ -30,7 +30,7 @@ require_once 'class-mo-saml-utilities.php';
 require_once 'class-mo-saml-wp-config-editor.php';
 require_once 'handlers/class-mo-saml-user-login-handler.php';
 require_once 'notices/class-mo-saml-black-friday-sale.php';
-
+require_once 'handlers/class-mo-saml-register-abilities.php';
 /**
  * The Main class of the miniOrange SAML SSO Plugin.
  */
@@ -60,14 +60,22 @@ class Mo_SAML_Login {
 		remove_action( 'admin_notices', array( Mo_SAML_Utilities::class, 'mo_saml_error_message' ) );
 		remove_action( 'admin_notices', array( Mo_SAML_Utilities::class, 'mo_saml_success_message' ) );
 		add_action( 'init', array( Mo_Saml_User_Login_Handler::class, 'mo_saml_handle_login_validate' ) );
-		add_action( 'admin_head', function() {
-			$screen = get_current_screen();
+		add_action(
+			'admin_head',
+			function () {
+				$screen = get_current_screen();
 
-			if ( $screen && $screen->id === 'toplevel_page_mo_saml_settings' ) {
-				add_action( 'admin_notices', array( $this, 'mo_saml_show_multisite_upgrade_notice' ) );
+				if ( $screen && 'toplevel_page_mo_saml_settings' === $screen->id ) {
+					add_action( 'admin_notices', array( $this, 'mo_saml_show_multisite_upgrade_notice' ) );
+				}
 			}
-		});
+		);
 		add_action( 'wp_ajax_mo_saml_dismiss_notice', array( $this, 'mo_saml_dismiss_notice' ) );
+		add_action( 'wp_ajax_mo_saml_toggle_sso_button', array( $this, 'mo_saml_toggle_sso_button' ) );
+		add_action( 'wp_ajax_mo_saml_get_toggle_sso_nonce', array( $this, 'mo_saml_get_toggle_sso_nonce' ) );
+
+		add_action( 'wp_abilities_api_categories_init', array( Mo_SAML_Register_Abilities::class, 'mo_saml_register_ability_category' ) );
+		add_action( 'wp_abilities_api_init', array( Mo_SAML_Register_Abilities::class, 'mo_saml_register_all_abilities' ) );
 	}
 
 	/**
@@ -120,7 +128,7 @@ class Mo_SAML_Login {
 				fetch(ajaxurl, {
 					method: "POST",
 					headers: {"Content-Type": "application/x-www-form-urlencoded"},
-					body: "action=mo_saml_dismiss_notice&nonce=<?php echo esc_js( wp_create_nonce('mo_saml_dismiss_nonce') ); ?>"
+					body: "action=mo_saml_dismiss_notice&nonce=<?php echo esc_js( wp_create_nonce( 'mo_saml_dismiss_nonce' ) ); ?>"
 				});
 			});
 		</script>
@@ -132,8 +140,54 @@ class Mo_SAML_Login {
 	 */
 	public function mo_saml_dismiss_notice() {
 		check_ajax_referer( 'mo_saml_dismiss_nonce', 'nonce' );
-    	update_site_option( 'mo_saml_multisite_notice_dismissed_time', time() );
+		update_site_option( 'mo_saml_multisite_notice_dismissed_time', time() );
 		wp_send_json_success();
+	}
+
+	/**
+	 * Toggle SSO button on WordPress login page via AJAX.
+	 */
+	public function mo_saml_toggle_sso_button() {
+		// Check user capabilities.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'miniorange-saml-20-single-sign-on' ) ) );
+		}
+
+		// Verify nonce.
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'mo_saml_toggle_sso_button' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid nonce', 'miniorange-saml-20-single-sign-on' ) ) );
+		}
+
+		$action = isset( $_POST['action_type'] ) ? sanitize_text_field( wp_unslash( $_POST['action_type'] ) ) : '';
+
+		if ( ! in_array( $action, array( 'enable', 'disable' ), true ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid action', 'miniorange-saml-20-single-sign-on' ) ) );
+		}
+
+		if ( ! Mo_SAML_Utilities::mo_saml_is_sp_configured() ) {
+			wp_send_json_error( array( 'message' => __( 'Please complete Service Provider Configuration first.', 'miniorange-saml-20-single-sign-on' ) ) );
+		}
+
+		$sso_button_value = ( 'enable' === $action ) ? 'true' : 'false';
+		update_option( Mo_Saml_Options_Enum_Sso_Login::SSO_BUTTON, $sso_button_value );
+
+		$message = ( 'enable' === $action )
+			? __( 'SSO button enabled on WordPress login page.', 'miniorange-saml-20-single-sign-on' )
+			: __( 'SSO button disabled on WordPress login page.', 'miniorange-saml-20-single-sign-on' );
+
+		wp_send_json_success(
+			array(
+				'message' => $message,
+				'status'  => $sso_button_value,
+			)
+		);
+	}
+
+	/**
+	 * Get nonce for SSO button toggle action.
+	 */
+	public function mo_saml_get_toggle_sso_nonce() {
+		wp_send_json_success( array( 'nonce' => wp_create_nonce( 'mo_saml_toggle_sso_button' ) ) );
 	}
 
 	/**
@@ -209,8 +263,8 @@ class Mo_SAML_Login {
                     <span class="mo-saml-warning-text">
                         <span class="mo-saml-warning-title">' . esc_html__( 'Warning:', 'miniorange-saml-20-single-sign-on' ) . '</span> ' . sprintf(
 							/* translators: %s: List of PHP extension names */
-					esc_html__( 'Following PHP extensions (%s) are disabled which are important for SSO configuration. Please enable these extensions to continue using SSO on your site.', 'miniorange-saml-20-single-sign-on' ), 
-					'<i class="mo-saml-extension-list">' . esc_html( $extension_display_line ) . '</i>' 
+						esc_html__( 'Following PHP extensions (%s) are disabled which are important for SSO configuration. Please enable these extensions to continue using SSO on your site.', 'miniorange-saml-20-single-sign-on' ),
+						'<i class="mo-saml-extension-list">' . esc_html( $extension_display_line ) . '</i>'
 					) . '
                     </span>
                 </div>
@@ -269,7 +323,7 @@ class Mo_SAML_Login {
 	public function plugin_settings_style( $page ) {
 		wp_enqueue_style( 'mo_saml_notice_style', plugins_url( 'includes/css/notice.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
 		wp_enqueue_style( 'mo_saml_black_friday_sale_style', plugins_url( 'includes/css/black-friday-sale-banner.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
-		if ( 'toplevel_page_mo_saml_settings' !== $page && 'miniorange-saml-2-0-sso_page_mo_saml_enable_debug_logs' !== $page ) {
+		if ( 'toplevel_page_mo_saml_settings' !== $page && 'miniorange-saml-2-0-sso_page_mo_saml_enable_debug_logs' !== $page && 'miniorange-saml-2-0-sso_page_mo_saml_abilities_api' !== $page ) {
 			return;
 		} else {
 			wp_enqueue_style( 'mo_saml_bootstrap_css', plugins_url( 'includes/css/bootstrap/mo-saml-bootstrap.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
@@ -288,7 +342,23 @@ class Mo_SAML_Login {
 	 * @return void
 	 */
 	public function plugin_settings_script( $page ) {
-		if ( 'toplevel_page_mo_saml_settings' === $page || 'miniorange-saml-2-0-sso_page_mo_saml_enable_debug_logs' === $page ) {
+		global $wp_version;
+		if ( version_compare( $wp_version, '6.3', '>=' ) ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+			wp_enqueue_script( 'mo_saml_command_palette', plugins_url( 'includes/js/command-palette.js', __FILE__ ), array( 'wp-data', 'wp-i18n' ), Mo_Saml_Options_Plugin_Constants::VERSION, true );
+			wp_localize_script(
+				'mo_saml_command_palette',
+				'moSamlCommandPalette',
+				array(
+					'adminUrl' => admin_url(),
+					'siteUrl'  => site_url(),
+					'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+				)
+			);
+		}
+		if ( 'toplevel_page_mo_saml_settings' === $page || 'miniorange-saml-2-0-sso_page_mo_saml_enable_debug_logs' === $page || 'miniorange-saml-2-0-sso_page_mo_saml_abilities_api' === $page ) {
 			wp_enqueue_script( 'jquery-ui-core' );
 			wp_enqueue_script( 'jquery-ui-autocomplete' );
 			wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -347,7 +417,8 @@ class Mo_SAML_Login {
 			update_option( Mo_Saml_Sso_Constants::MO_SAML_EXPIRE_NOTICE, $mo_date_expire_notice );
 			update_option( Mo_Saml_Sso_Constants::MO_SAML_CLOSE_NOTICE, 1 );
 		}
-		$mo_saml_identity_provider_identifier_name = get_option( Mo_Saml_Options_Enum_Service_Provider::IDENTITY_PROVIDER_NAME );?>
+		$mo_saml_identity_provider_identifier_name = get_option( Mo_Saml_Options_Enum_Service_Provider::IDENTITY_PROVIDER_NAME );
+		?>
 		<input type="hidden" name="mo_saml_identity_provider_identifier" id="mo_saml_identity_provider_identifier" value="<?php echo esc_attr( $mo_saml_identity_provider_identifier_name ); ?>" />
 		<input type="hidden" name="idp_specific" id="idp_specific" value='<?php echo esc_attr( wp_json_encode( Mo_Saml_Options_Plugin_Idp::$idp_list ) ); ?>' />
 		<?php
@@ -415,6 +486,14 @@ class Mo_SAML_Login {
 			'manage_options',
 			'mo_saml_enable_debug_logs',
 			array( 'Mo_SAML_Logger', 'mo_saml_log_page' )
+		);
+		add_submenu_page(
+			$slug,
+			'miniOrange SAML 2.0 SSO',
+			'<div id="mo_saml_abilities_api">' . __( 'Abilities API', 'miniorange-saml-20-single-sign-on' ) . ' <span class="mo-saml-new-badge">NEW</span></div>',
+			'manage_options',
+			'mo_saml_abilities_api',
+			array( 'Mo_SAML_Register_Abilities', 'mo_saml_abilities_api_page' )
 		);
 	}
 

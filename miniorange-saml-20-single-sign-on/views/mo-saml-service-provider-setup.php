@@ -6,6 +6,10 @@
  * @package miniorange-saml-20-single-sign-on/views
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Display tooltip with message
  *

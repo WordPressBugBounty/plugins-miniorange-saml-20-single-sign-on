@@ -168,10 +168,10 @@ class Mo_SAML_Login_Validate {
 
 			$cert_from_plugin = maybe_unserialize( get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) );
 
-			$acs_url                  = site_url() . '/';
-			$saml_response            = new Mo_SAML_Response( $saml_response_xml );
-			$response_signature_data  = $saml_response->mo_saml_get_signature_data();
-			$assertions               = $saml_response->mo_saml_get_assertions();
+			$acs_url                 = site_url() . '/';
+			$saml_response           = new Mo_SAML_Response( $saml_response_xml );
+			$response_signature_data = $saml_response->mo_saml_get_signature_data();
+			$assertions              = $saml_response->mo_saml_get_assertions();
 
 			if ( empty( $assertions ) ) {
 				Mo_SAML_Logger::mo_saml_add_log( 'No assertion found in the SAML Response.', Mo_SAML_Logger::ERROR );

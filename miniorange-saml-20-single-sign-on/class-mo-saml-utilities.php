@@ -1060,4 +1060,21 @@ class Mo_SAML_Utilities {
 		Mo_SAML_Logger::mo_saml_add_log( 'Invalid XML Detected.', \Mo_SAML_Logger::ERROR );
 		throw new Mo_SAML_Invalid_XML_Exception( 'Invalid XML Detected.' );
 	}
+
+	/**
+	 * Delete the abilities API array.
+	 *
+	 * @return void
+	 */
+	public static function mo_saml_unregister_abilities_api_array() {
+		wp_unregister_ability( 'mo-saml/get-idp-name' );
+		wp_unregister_ability( 'mo-saml/fix-certificate-mismatch' );
+		wp_unregister_ability( 'mo-saml/fix-entity-id' );
+		wp_unregister_ability( 'mo-saml/fix-iconv-cert' );
+		wp_unregister_ability( 'mo-saml/update-default-role' );
+		wp_unregister_ability( 'mo-saml/show-sso-configurations' );
+		wp_unregister_ability( 'mo-saml/get-idp-guide-links' );
+		wp_unregister_ability( 'mo-saml/enable-sso-button' );
+		wp_unregister_ability( 'mo-saml/disable-sso-button' );
+	}
 }

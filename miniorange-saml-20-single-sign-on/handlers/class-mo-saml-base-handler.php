@@ -102,6 +102,9 @@ class Mo_SAML_Base_Handler {
 			case 'mo_saml_welcome_form':
 				Mo_Saml_Welcome_Modal_Handler::mo_saml_dismiss_modal();
 				break;
+			case 'mo_saml_abilities_api':
+				Mo_SAML_Register_Abilities::mo_saml_process_abilities_api_toggle( $post_array );
+				break;
 		}
 	}
 
