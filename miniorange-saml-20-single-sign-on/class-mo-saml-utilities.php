@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once 'mo-saml-xmlseclibs.php';
+require_once MO_SAML_PLUGIN_DIR . 'mo-saml-xmlseclibs.php';
 use RobRichards\XMLSecLibs\Mo_SAML_XML_Security_Key;
 use RobRichards\XMLSecLibs\Mo_SAML_XML_Security_DSig;
 use RobRichards\XMLSecLibs\Mo_SAML_XML_Sec_Enc;
@@ -967,9 +967,13 @@ class Mo_SAML_Utilities {
 	public static function mo_saml_sanitize_post_array( $array_option ) {
 		foreach ( $array_option as $key => $value ) {
 			if ( 'saml_x509_certificate' === $key ) {
-				$array_option[ $key ] = $value;
+				$array_option[ $key ] = ( null === $value || '' === $value ) ? '' : $value;
+			} elseif ( is_array( $value ) ) {
+				$array_option[ $key ] = empty( $value )
+					? array()
+					: array_map( 'sanitize_text_field', wp_unslash( $value ) );
 			} else {
-				$array_option[ $key ] = sanitize_text_field( $value );
+				$array_option[ $key ] = sanitize_text_field( wp_unslash( null === $value ? '' : $value ) );
 			}
 		}
 		return $array_option;
@@ -1076,5 +1080,58 @@ class Mo_SAML_Utilities {
 		wp_unregister_ability( 'mo-saml/get-idp-guide-links' );
 		wp_unregister_ability( 'mo-saml/enable-sso-button' );
 		wp_unregister_ability( 'mo-saml/disable-sso-button' );
+	}
+
+	/**
+	 * Whether stored plan details are already correct: version matches Mo_Saml_Options_Plugin_Constants::VERSION
+	 * and other fields match the free-plugin defaults. If this is true, update_option() is skipped.
+	 *
+	 * @param mixed $stored Value from get_option.
+	 * @param bool  $is_multisite Current site multisite flag (pass from caller to avoid repeated is_multisite()).
+	 * @return bool
+	 */
+	private static function mo_saml_plan_details_stored_matches_expected( $stored, $is_multisite ) {
+		if ( ! is_array( $stored ) ) {
+			return false;
+		}
+		if ( ! isset( $stored['version'] ) || Mo_Saml_Options_Plugin_Constants::VERSION !== $stored['version'] ) {
+			return false;
+		}
+		if ( ! isset( $stored['plan_name'] ) || Mo_Saml_Options_Plugin_Constants::LICENSE_PLAN_NAME !== $stored['plan_name'] ) {
+			return false;
+		}
+		if ( ! isset( $stored['version_hierarchy'] ) || (string) Mo_Saml_Options_Plugin_Constants::PLUGIN_VERSION_HIERARCHY !== (string) $stored['version_hierarchy'] ) {
+			return false;
+		}
+		if ( ! isset( $stored['is_multisite'] ) || $is_multisite !== $stored['is_multisite'] ) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Persists free-plugin plan metadata (version, plan, hierarchy, multisite flag) in the options table.
+	 * Writes only when missing, incomplete, or out of date. To disable, remove the init action in login.php.
+	 *
+	 * @return void
+	 */
+	public static function mo_saml_sync_plugin_plan_details() {
+		$option_key   = Mo_Saml_Options_Enum::PLUGIN_PLAN_DETAILS_OPTION;
+		$stored       = get_option( $option_key );
+		$is_multisite = is_multisite();
+
+		if ( self::mo_saml_plan_details_stored_matches_expected( $stored, $is_multisite ) ) {
+			return;
+		}
+
+		update_option(
+			$option_key,
+			array(
+				'version'           => Mo_Saml_Options_Plugin_Constants::VERSION,
+				'plan_name'         => Mo_Saml_Options_Plugin_Constants::LICENSE_PLAN_NAME,
+				'version_hierarchy' => Mo_Saml_Options_Plugin_Constants::PLUGIN_VERSION_HIERARCHY,
+				'is_multisite'      => $is_multisite,
+			)
+		);
 	}
 }

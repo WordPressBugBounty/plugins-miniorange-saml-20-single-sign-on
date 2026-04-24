@@ -245,7 +245,7 @@ class Mo_SAML_Customer {
 
 		$user = wp_get_current_user();
 
-		$query = '[WordPress SAML SSO 2.0 Plugin: ]: ' . $message;
+		$query = '[WordPress SAML SSO 2.0 Plugin: v' . Mo_Saml_Options_Plugin_Constants::VERSION . ']: ' . $message;
 
 		if ( isset( $_SERVER['SERVER_NAME'] ) ) {
 			$server_name = sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) );
@@ -253,7 +253,13 @@ class Mo_SAML_Customer {
 			$server_name = '';
 		}
 
-		$content = '<div>Hello, <br><br>First Name :' . esc_html( $user->user_firstname ) . '<br><br>Last  Name :' . esc_html( $user->user_lastname ) . '   <br><br>Company :<a href="' . esc_html( $server_name ) . '" target="_blank" >' . esc_html( $server_name ) . '</a><br><br>Phone Number :' . esc_html( $phone ) . '<br><br>Email :<a href="mailto:' . esc_attr( $email ) . '" target="_blank">' . esc_html( $email ) . '</a><br><br>Query :' . wp_kses( $query, array( 'br' => array() ) ) . '</div>';
+		$content = '<div>Hello, <br><br>First Name :' . esc_html( $user->user_firstname ) . '<br><br>Last  Name :' . esc_html( $user->user_lastname ) . '   <br><br>Company :<a href="' . esc_html( $server_name ) . '" target="_blank" >' . esc_html( $server_name ) . '</a><br><br>Phone Number :' . esc_html( $phone ) . '<br><br>Email :<a href="mailto:' . esc_attr( $email ) . '" target="_blank">' . esc_html( $email ) . '</a><br><br>Query :' . wp_kses(
+			$query,
+			array(
+				'br' => array(),
+				'b'  => array(),
+			)
+		) . '</div>';
 
 		$fields       = array(
 			'customerKey' => $customer_key,

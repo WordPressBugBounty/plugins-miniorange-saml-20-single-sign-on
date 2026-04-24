@@ -38,6 +38,9 @@ function mo_saml_delete_configuration_array() {
 	foreach ( $tab_class_names_array as $class_name ) {
 		$class_object = call_user_func( $class_name . '::get_constants' );
 		foreach ( $class_object as $key => $value ) {
+			if ( ! is_string( $value ) ) {
+				continue;
+			}
 			delete_option( $value );
 		}
 	}

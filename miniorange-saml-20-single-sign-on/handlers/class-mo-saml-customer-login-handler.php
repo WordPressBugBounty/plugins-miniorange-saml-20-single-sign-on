@@ -56,21 +56,11 @@ class Mo_SAML_Customer_Login_Handler {
 	 */
 	public static function mo_saml_change_account() {
 		$class_object = call_user_func( 'Mo_Saml_Customer_Constants::get_constants' );
-		if ( ! is_multisite() ) {
-			// delete all customer related key-value pairs.
-			foreach ( $class_object as $key => $value ) {
-				delete_option( $value );
-			}
-			delete_option( Mo_Saml_Options_Enum::SAML_MESSAGE );
-
-		} else {
-			$original_blog_id = get_current_blog_id();
-			switch_to_blog( $original_blog_id );
-			foreach ( $class_object as $key => $value ) {
-				delete_option( $value );
-			}
-			delete_option( Mo_Saml_Options_Enum::SAML_MESSAGE );
+		// delete all customer related key-value pairs for the current site.
+		foreach ( $class_object as $key => $value ) {
+			delete_option( $value );
 		}
+		delete_option( Mo_Saml_Options_Enum::SAML_MESSAGE );
 	}
 
 	/**
@@ -165,6 +155,7 @@ class Mo_SAML_Customer_Login_Handler {
 		$content = $customer->mo_saml_get_customer_key();
 
 		if ( ! is_null( $content ) ) {
+			$response     = array();
 			$customer_key = json_decode( $content, true );
 
 			if ( json_last_error() !== JSON_ERROR_NONE ) {

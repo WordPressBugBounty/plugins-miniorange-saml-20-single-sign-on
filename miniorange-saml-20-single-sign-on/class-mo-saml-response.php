@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require 'class-mo-saml-assertion.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-assertion.php';
 
 /**
  * Class for SAML2 Response messages.

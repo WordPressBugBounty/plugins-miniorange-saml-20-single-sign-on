@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once 'mo-saml-import-export.php';
-require_once 'class-mo-saml-logger.php';
-require_once 'class-mo-saml-utilities.php';
+require_once MO_SAML_PLUGIN_DIR . 'mo-saml-import-export.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-logger.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-utilities.php';
 
 foreach ( glob( plugin_dir_path( __FILE__ ) . 'views' . DIRECTORY_SEPARATOR . '*.php' ) as $mo_saml_view_file ) {
 	include_once $mo_saml_view_file;

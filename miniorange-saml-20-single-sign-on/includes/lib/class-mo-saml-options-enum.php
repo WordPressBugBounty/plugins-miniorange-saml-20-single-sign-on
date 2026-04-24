@@ -9,15 +9,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 // phpcs:disable Generic.Files.OneObjectStructurePerFile.MultipleFound -- Disabling this to define multiple constant classes in the same file.
-require_once 'class-mo-saml-basic-enum.php';
+require_once plugin_dir_path( __FILE__ ) . 'class-mo-saml-basic-enum.php';
 
 /**
  * Defines constants for options used throughout the plugin.
  */
 class Mo_Saml_Options_Enum extends Mo_SAML_Basic_Enum {
-	const SAML_MESSAGE         = 'mo_saml_message';
-	const NEW_USER             = 'mo_is_new_user';
-	const PLUGIN_DO_ACTIVATION = 'mo_plugin_do_activation_redirect';
+	const SAML_MESSAGE               = 'mo_saml_message';
+	const NEW_USER                   = 'mo_is_new_user';
+	const PLUGIN_DO_ACTIVATION       = 'mo_plugin_do_activation_redirect';
+	const PLUGIN_PLAN_DETAILS_OPTION = 'mosaml_plugin_plan_details';
 }
 
 /**
@@ -218,10 +219,12 @@ class Mo_Saml_Options_Plugin_Constants extends Mo_SAML_Basic_Enum {
 	const CMS_NAME         = 'WP';
 	const APPLICATION_NAME = 'WP miniOrange SAML 2.0 SSO Plugin';
 	const APPLICATION_TYPE = 'SAML';
-	const VERSION          = '5.4.1';
+	const VERSION          = '5.4.2';
 	const HOSTNAME         = 'https://login.xecurify.com';
 	const WP_VERSION       = '6.9';
-	const PLUGIN_FILE      = 'miniorange-saml-20-single-sign-on/login.php';
+	const PLUGIN_FILE       = 'miniorange-saml-20-single-sign-on/login.php';
+	const LICENSE_PLAN_NAME = 'wp_saml_sso_free';
+	const PLUGIN_VERSION_HIERARCHY = '1';
 }
 
 /**
@@ -1084,6 +1087,7 @@ class Mo_Saml_Messages extends Mo_SAML_Basic_Enum {
 			'CONTACT_EMAIL_INVALID'       => __( 'Please enter a valid email address.', 'miniorange-saml-20-single-sign-on' ),
 			'CALL_SETUP_DETAILS_EMPTY'    => __( 'Please fill up your Phone Number to submit your callback request.', 'miniorange-saml-20-single-sign-on' ),
 			'QUERY_NOT_SUBMITTED'         => __( 'Your query could not be submitted. Please try again.', 'miniorange-saml-20-single-sign-on' ),
+			'FEEDBACK_REASON_REQUIRED'    => __( 'Please select at least one reason before submitting your feedback.', 'miniorange-saml-20-single-sign-on' ),
 			'QUERY_SUBMITTED'             => __( 'Thanks for getting in touch! We will reach out on your email shortly.', 'miniorange-saml-20-single-sign-on' ),
 			'CALL_REQUEST_SUBMIT'         => __( 'Thanks for getting in touch! We will reach out to you shortly.', 'miniorange-saml-20-single-sign-on' ),
 			'CALL_REQUEST_NOT_SUBMIT'     => __( 'Your callback request could not be submitted. Please try again.', 'miniorange-saml-20-single-sign-on' ),

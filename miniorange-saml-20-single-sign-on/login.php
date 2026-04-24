@@ -3,7 +3,7 @@
  * Plugin Name: SAML Single Sign On – SSO Login
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 5.4.1
+ * Version: 5.4.2
  * Author: miniOrange
  * Author URI: https://miniorange.com/
  * License: Expat
@@ -18,19 +18,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'MO_SAML_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-require_once 'handlers/class-mo-saml-base-handler.php';
-require_once 'handlers/class-mo-saml-test-config-error-handler.php';
-require_once 'class-mo-saml-idp-metadata-reader.php';
-require_once 'class-mo-saml-login-widget.php';
-require_once 'class-mo-saml-login-validate.php';
-require_once 'class-mo-saml-customer.php';
-require_once 'class-mo-saml-logger.php';
-require_once 'mo-saml-settings-page.php';
-require_once 'class-mo-saml-utilities.php';
-require_once 'class-mo-saml-wp-config-editor.php';
-require_once 'handlers/class-mo-saml-user-login-handler.php';
-require_once 'notices/class-mo-saml-black-friday-sale.php';
-require_once 'handlers/class-mo-saml-register-abilities.php';
+require_once MO_SAML_PLUGIN_DIR . 'handlers/class-mo-saml-base-handler.php';
+require_once MO_SAML_PLUGIN_DIR . 'handlers/class-mo-saml-test-config-error-handler.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-idp-metadata-reader.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-login-widget.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-login-validate.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-customer.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-logger.php';
+require_once MO_SAML_PLUGIN_DIR . 'mo-saml-settings-page.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-utilities.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-wp-config-editor.php';
+require_once MO_SAML_PLUGIN_DIR . 'handlers/class-mo-saml-user-login-handler.php';
+require_once MO_SAML_PLUGIN_DIR . 'notices/class-mo-saml-black-friday-sale.php';
+require_once MO_SAML_PLUGIN_DIR . 'handlers/class-mo-saml-register-abilities.php';
 /**
  * The Main class of the miniOrange SAML SSO Plugin.
  */
@@ -47,6 +47,7 @@ class Mo_SAML_Login {
 		add_action( 'admin_init', array( Mo_SAML_Base_Handler::class, 'mo_saml_handle_save_settings' ) );
 		add_action( 'admin_init', array( 'Mo_SAML_Logger', 'mo_saml_admin_notices' ) );
 		add_action( 'init', array( 'Mo_SAML_Logger', 'mo_saml_force_update_htaccess' ) );
+		add_action( 'init', array( 'Mo_SAML_Utilities', 'mo_saml_sync_plugin_plan_details' ), 5 );
 		add_action( 'admin_init', array( $this, 'mo_saml_do_plugin_extension_checks' ) );
 		add_action( 'admin_footer', array( $this, 'feedback_request' ) );
 		add_action( 'admin_menu', array( $this, 'miniorange_sso_menu' ) );
@@ -323,6 +324,9 @@ class Mo_SAML_Login {
 	public function plugin_settings_style( $page ) {
 		wp_enqueue_style( 'mo_saml_notice_style', plugins_url( 'includes/css/notice.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
 		wp_enqueue_style( 'mo_saml_black_friday_sale_style', plugins_url( 'includes/css/black-friday-sale-banner.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
+		if ( 'plugins.php' === $page ) {
+			wp_enqueue_style( 'mo_saml_feedback_plugins_page_style', plugins_url( 'includes/css/style_settings.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
+		}
 		if ( 'toplevel_page_mo_saml_settings' !== $page && 'miniorange-saml-2-0-sso_page_mo_saml_enable_debug_logs' !== $page && 'miniorange-saml-2-0-sso_page_mo_saml_abilities_api' !== $page ) {
 			return;
 		} else {
@@ -343,11 +347,20 @@ class Mo_SAML_Login {
 	 */
 	public function plugin_settings_script( $page ) {
 		global $wp_version;
+		if ( 'plugins.php' === $page ) {
+			wp_enqueue_script( 'jquery' );
+			$mo_saml_feedback_js_path = MO_SAML_PLUGIN_DIR . 'includes/js/mo-saml-feedback-form.min.js';
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local plugin asset read for inline output only.
+			$mo_saml_feedback_inline_js = is_readable( $mo_saml_feedback_js_path ) ? file_get_contents( $mo_saml_feedback_js_path ) : '';
+			if ( '' !== $mo_saml_feedback_inline_js ) {
+				wp_add_inline_script( 'jquery', $mo_saml_feedback_inline_js, 'after' );
+			}
+		}
 		if ( version_compare( $wp_version, '6.3', '>=' ) ) {
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
 			}
-			wp_enqueue_script( 'mo_saml_command_palette', plugins_url( 'includes/js/command-palette.js', __FILE__ ), array( 'wp-data', 'wp-i18n' ), Mo_Saml_Options_Plugin_Constants::VERSION, true );
+			wp_enqueue_script( 'mo_saml_command_palette', plugins_url( 'includes/js/command-palette.min.js', __FILE__ ), array( 'wp-data', 'wp-i18n' ), Mo_Saml_Options_Plugin_Constants::VERSION, true );
 			wp_localize_script(
 				'mo_saml_command_palette',
 				'moSamlCommandPalette',

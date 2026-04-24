@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/includes/lib/class-mo-saml-options-enum.php';
-require_once 'class-mo-saml-logger.php';
+require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-logger.php';
 add_action( 'admin_init', 'mo_saml_miniorange_import_export' );
 
 $mo_saml_tab_class_names_array = array(

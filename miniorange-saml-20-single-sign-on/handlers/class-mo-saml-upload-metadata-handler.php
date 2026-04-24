@@ -9,10 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require 'class-mo-saml-post-save-handler.php';
-require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-metadata-reader-exception.php';
-require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-invalid-xml-exception.php';
-require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-dom-extension-disabled-exception.php';
+require_once MO_SAML_PLUGIN_DIR . 'handlers/class-mo-saml-post-save-handler.php';
+require_once MO_SAML_PLUGIN_DIR . 'exceptions/class-mo-saml-metadata-reader-exception.php';
+require_once MO_SAML_PLUGIN_DIR . 'exceptions/class-mo-saml-invalid-xml-exception.php';
+require_once MO_SAML_PLUGIN_DIR . 'exceptions/class-mo-saml-dom-extension-disabled-exception.php';
 
 /**
  * Mo_SAML_Upload_Metadata_Handler Class to upload metadata file and getting IdP Metadata.

@@ -29,6 +29,7 @@ class Mo_SAML_SSO_Settings_Handler {
 			}
 			$post_save = new Mo_SAML_Post_Save_Handler( Mo_Saml_Save_Status_Constants::ERROR, 'Please complete ' . $add_link . ' Configuration in Service Provider Setup tab first.', 'SERVICE_PROVIDER_NOT_FOUND' );
 		} else {
+			$save_array = array();
 			$save_array[ Mo_Saml_Options_Enum_Sso_Login::SSO_BUTTON ] = ! empty( $post_array[ Mo_Saml_Options_Enum_Sso_Login::SSO_BUTTON ] ) ? sanitize_text_field( $post_array[ Mo_Saml_Options_Enum_Sso_Login::SSO_BUTTON ] ) : 'false';
 			$db_handler->mo_saml_save_options( $save_array );
 

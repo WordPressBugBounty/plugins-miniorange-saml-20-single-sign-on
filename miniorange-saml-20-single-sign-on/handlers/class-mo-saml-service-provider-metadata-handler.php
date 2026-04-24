@@ -70,6 +70,7 @@ class Mo_SAML_Service_Provider_Metadata_Handler {
 	public static function update_sp_endpoints( $post_array, $db_handler ) {
 
 		if ( isset( $post_array[ Mo_Saml_Options_Enum_Identity_Provider::SP_ENTITY_ID ] ) ) {
+			$save_array = array();
 			$save_array[ Mo_Saml_Options_Enum_Identity_Provider::SP_ENTITY_ID ] = sanitize_text_field( $post_array[ Mo_Saml_Options_Enum_Identity_Provider::SP_ENTITY_ID ] );
 			$db_handler->mo_saml_save_options( $save_array );
 

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once 'class-mo-saml-basic-enum.php';
+require_once MO_SAML_PLUGIN_DIR . 'includes/lib/class-mo-saml-basic-enum.php';
 
 /**
  * This contains a list of error codes along with their cause and fix.
