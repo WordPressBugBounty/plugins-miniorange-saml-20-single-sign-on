@@ -133,7 +133,7 @@ function mo_saml_display_abilities_api_page() {
 							</h6>
 							<div class="mo-saml-bootstrap-row mo-saml-bootstrap-g-3 mo-saml-bootstrap-mt-2">
 								<div class="mo-saml-bootstrap-col-md-4">
-									<a href="https://developer.wordpress.org/news/2026/02/from-abilities-to-ai-agents-introducing-the-wordpress-mcp-adapter/#claude-desktop" target="_blank" rel="noopener noreferrer" class="mo-saml-guide-link mo-saml-bootstrap-d-block mo-saml-bootstrap-p-3 mo-saml-bootstrap-border mo-saml-bootstrap-rounded mo-saml-bootstrap-text-decoration-none mo-saml-bootstrap-text-dark" style="border-color: #ddd !important; transition: border-color 0.2s, box-shadow 0.2s;">
+									<a href="https://plugins.miniorange.com/connect-wordpress-with-claude-mcp-guide" target="_blank" rel="noopener noreferrer" class="mo-saml-guide-link mo-saml-bootstrap-d-block mo-saml-bootstrap-p-3 mo-saml-bootstrap-border mo-saml-bootstrap-rounded mo-saml-bootstrap-text-decoration-none mo-saml-bootstrap-text-dark" style="border-color: #ddd !important; transition: border-color 0.2s, box-shadow 0.2s;">
 										<span class="mo-saml-bootstrap-d-flex mo-saml-bootstrap-align-items-center mo-saml-bootstrap-mb-2">
 											<img src="<?php echo esc_url( Mo_SAML_Utilities::mo_saml_get_plugin_dir_url() . 'images/claude-ai-icon.svg' ); ?>" alt="<?php esc_attr_e( 'Claude', 'miniorange-saml-20-single-sign-on' ); ?>" width="20" height="20" class="mo-saml-bootstrap-me-2" />
 											<strong><?php esc_html_e( 'Claude Desktop', 'miniorange-saml-20-single-sign-on' ); ?></strong>
@@ -143,7 +143,7 @@ function mo_saml_display_abilities_api_page() {
 									</a>
 								</div>
 								<div class="mo-saml-bootstrap-col-md-4">
-									<a href="https://developer.wordpress.org/news/2026/02/from-abilities-to-ai-agents-introducing-the-wordpress-mcp-adapter/#cursor" target="_blank" rel="noopener noreferrer" class="mo-saml-guide-link mo-saml-bootstrap-d-block mo-saml-bootstrap-p-3 mo-saml-bootstrap-border mo-saml-bootstrap-rounded mo-saml-bootstrap-text-decoration-none mo-saml-bootstrap-text-dark" style="border-color: #ddd !important; transition: border-color 0.2s, box-shadow 0.2s;">
+									<a href="https://plugins.miniorange.com/connect-wordpress-with-cursor-mcp-guide" target="_blank" rel="noopener noreferrer" class="mo-saml-guide-link mo-saml-bootstrap-d-block mo-saml-bootstrap-p-3 mo-saml-bootstrap-border mo-saml-bootstrap-rounded mo-saml-bootstrap-text-decoration-none mo-saml-bootstrap-text-dark" style="border-color: #ddd !important; transition: border-color 0.2s, box-shadow 0.2s;">
 										<span class="mo-saml-bootstrap-d-flex mo-saml-bootstrap-align-items-center mo-saml-bootstrap-mb-2">
 											<img src="<?php echo esc_url( Mo_SAML_Utilities::mo_saml_get_plugin_dir_url() . 'images/cursor-ai-code-icon.svg' ); ?>" alt="<?php esc_attr_e( 'Cursor', 'miniorange-saml-20-single-sign-on' ); ?>" width="20" height="20" class="mo-saml-bootstrap-me-2" />
 											<strong><?php esc_html_e( 'Cursor', 'miniorange-saml-20-single-sign-on' ); ?></strong>

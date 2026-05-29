@@ -3,9 +3,9 @@ Contributors: miniOrange
 Donate link: https://plugins.miniorange.com
 Tags: SAML, SSO, SAML, Single Sign On, Azure AD, Okta 
 Requires at least: 3.7
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 5.4.2
+Stable tag: 5.4.3
 License: Expat
 License URI: https://plugins.miniorange.com/mit-license
 
@@ -15,6 +15,8 @@ SAML SSO (Single Sign On) for WordPress Login with Okta, Entra ID, Azure AD/B2C,
 == SAML Single Sign On (SSO) Plugin to Simplify WordPress Login Experience ==
 
 With the <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=saml_lp&utm_campaign=wp_saml_sso" target="_blank">**miniOrange WordPress SAML SSO plugin**</a>, you can enable Single Sign On (SSO) for your WordPress site. This means users can sign in with their existing accounts from Identity Providers (IDPs) like <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-azure-ad?utm_source=readme&utm_medium=azure_guide&utm_campaign=microsoft_azure" target="_blank">**Microsoft Azure AD/ Entra ID**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-google-apps?utm_source=readme&utm_medium=g_suite_guide&utm_campaign=google_workspace" target="_blank">**Google Apps Login (Gsuite Login)**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-okta?utm_source=readme&utm_medium=okta_guide&utm_campaign=okta" target="_blank">**Okta**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-salesforce?utm_source=readme&utm_medium=salesforce_guide&utm_campaign=salesforce" target="_blank">**Salesforce Login**</a>, <a href="https://plugins.miniorange.com/keycloak-single-sign-on-wordpress-sso-saml?utm_source=readme&utm_medium=keycloak_guide&utm_campaign=keycloak" target="_blank">**Keycloak**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-shibboleth-2?utm_source=readme&utm_medium=shibboleth2_guide&utm_campaign=shibboleth" target="_blank">**Shibboleth**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-onelogin?utm_source=readme&utm_medium=onelogin_guide&utm_campaign=onelogin" target="_blank">**OneLogin**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-adfs?utm_source=readme&utm_medium=supported_idps&utm_campaign=adfs" target="_blank">**ADFS**</a>, <a href="https://plugins.miniorange.com/saml-single-sign-on-sso-wordpress-using-auth0?utm_source=readme&utm_medium=supported_idps&utm_campaign=auth0" target="_blank">**Auth0 Login**</a>, <a href="https://plugins.miniorange.com/wordpress-office-365-single-sign-on-sso-login?utm_source=readme&utm_medium=supported_idps&utm_campaign=office365" target="_blank">**Office 365 Login**</a>,  and others without creating separate WordPress usernames and passwords.
+
+The SAML plugin also offers **AI-assisted plugin configuration, troubleshooting,** and **LLM-readable error logs** to quickly resolve SAML SSO login issues.
 
 The SAML plugin makes your WordPress site function as a SAML-compliant Service Provider (SP) by using the SAML 2.0 protocol to securely exchange authentication data with your chosen Identity Provider (IDP). Once users are authenticated by the IDP, they automatically gain access to your WordPress site and its resources. 
 
@@ -29,6 +31,9 @@ Control everyone’s WordPress access through your SAML Identity Provider (IDP) 
 * **Organization-Only Access**
 Restrict WordPress access exclusively to verified employees through SAML Identity Provider (IDP) authentication and MFA.
 
+* **AI-Powered SSO Configuration & Troubleshooting**
+Use AI Abilities to configure WordPress SAML SSO, manage role mapping and user provisioning, and quickly fix supported SAML errors using AI tools like <a href="https://plugins.miniorange.com/setup-chatgpt-to-wordpress-abilities-api-using-mcp" target="_blank">ChatGPT</a>, <a href="https://plugins.miniorange.com/connect-wordpress-with-claude-mcp-guide" target="_blank">Claude</a>, <a href="https://plugins.miniorange.com/connect-wordpress-with-cursor-mcp-guide" target="_blank">Cursor</a>, or Perplexity. Simplify setup, reduce troubleshooting time, and manage SSO workflows using natural language.
+
 * **Smart User Provisioning**
 Automatically create WordPress accounts and assign roles based on Identity Provider (IDP) groups and user data.
 
@@ -36,11 +41,11 @@ Automatically create WordPress accounts and assign roles based on Identity Provi
 Eliminate manual user creation, password resets, role assignments, and access management tasks.
 
 * **Flexibility Across Different Identity Providers (IDP)**
-Our <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso" target="_blank">SAML</a> plugin works with 50+ IDPs. Enterprises can set up Azure AD login into WordPress for employees, while universities use WordPress Okta SSO, Google Apps SSO (Gsuite Login), Salesforce SSO, Shibboleth SSO, OneLogin SSO, ADFS SSO, Keycloak SSO, Office 365 Login,  Auth0 SSO, Azure B2C SSO (Azure AD B2C login) or any other SAML IDPs of their choice.
+Our <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso" target="_blank">SAML</a> plugin works with 100+ IDPs. Enterprises can set up Azure AD login into WordPress for employees, while universities use WordPress Okta SSO, Google Apps SSO (Gsuite Login), Salesforce SSO, Shibboleth SSO, OneLogin SSO, ADFS SSO, Keycloak SSO, Office 365 Login,  Auth0 SSO, Azure B2C SSO (Azure AD B2C login) or any other SAML IDPs of their choice.
 
 
 == Quick Links ==
-<a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=saml_lp&utm_campaign=official_website" target="_blank">🌐Official Website</a> | <a href="https://plugins.miniorange.com/wordpress-saml-guides?utm_source=readme&utm_medium=all_guides&utm_campaign=setup_guide" target="_blank">🛠️Setup Guide</a> | <a href="https://sandbox.miniorange.com/?utm_source=readme&utm_medium=sandbox&utm_campaign=free_trial" target="_blank">🎁Free Full-Feature Trial</a> | <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=pricing_lp&utm_campaign=pricing_section#pricing" target="_blank"> 💎Pricing Plans</a> | <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso-integrations?utm_source=readme&utm_medium=wp_integrations_lp&utm_campaign=integrations_addon" target="_blank">🧩Integrations & Addons</a> | <a href="https://plugins.miniorange.com/wordpress-azure-office365-integrations?utm_source=readme&utm_medium=azure_365_lp&utm_campaign=office_365_integrations" target="_blank">📧 Office 365 Integrations</a> | <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=contact_us&utm_campaign=support#contact-us" target="_blank">🤝Support</a>
+<a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=saml_lp&utm_campaign=official_website" target="_blank">🌐Official Website</a> | <a href="https://plugins.miniorange.com/wordpress-saml-guides?utm_source=readme&utm_medium=all_guides&utm_campaign=setup_guide" target="_blank">🛠️Setup Guide</a> | <a href="https://sandbox.miniorange.com/?utm_source=readme&utm_medium=sandbox&utm_campaign=free_trial" target="_blank">🎁Free Full-Feature Trial</a> | <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=pricing_lp&utm_campaign=pricing_section#pricing" target="_blank"> 💎Pricing Plans</a> | <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso-integrations?utm_source=readme&utm_medium=wp_integrations_lp&utm_campaign=integrations_addon" target="_blank">🧩Integrations & Addons</a> | <a href="https://plugins.miniorange.com/wordpress-azure-office365-integrations?utm_source=readme&utm_medium=azure_365_lp&utm_campaign=office_365_integrations" target="_blank">📧 Office 365 Integrations</a> | <a href="https://plugins.miniorange.com/wordpress-single-sign-on-sso?utm_source=readme&utm_medium=contact_us&utm_campaign=support#contact-us" target="_blank">🤝Support</a> | <a href="https://plugins.miniorange.com/how-to-use-wordpress-saml-sso-plugin-abilities-api?utm_source=readme&utm_medium=sso_abilities_lp&utm_campaign=saml_sso_abilities" target="_blank">SAML SSO Abilities</a>
 
 == WordPress SAML SSO Login Explained in Minutes ==
 https://youtu.be/Lk6KEKcPTWk?si=eNIt5xW4R-HvSDcn 
@@ -194,6 +199,10 @@ For added reliability, the SAML plugin includes **Automatic Certificate Synchron
 
 The WordPress SAML plugin also extends beyond authentication by connecting WordPress with core Microsoft applications, including <a href="https://plugins.miniorange.com/microsoft-sharepoint-wordpress-integration?utm_source=readme&utm_medium=wp_sharepoint_lp&utm_campaign=sharepoint" target="_blank">**SharePoint**</a>, <a href="https://plugins.miniorange.com/microsoft-power-bi-embed-for-wordpress?utm_source=readme&utm_medium=wp_powerbi_lp&utm_campaign=powerbi" target="_blank">**Power BI**</a>, <a href="https://plugins.miniorange.com/wordpress-integration-with-dynamics-crm-365-apps?utm_source=readme&utm_medium=wp_dynamic_lp&utm_campaign=dynamic_crm" target="_blank">**Dynamics CRM**</a>, <a href="https://plugins.miniorange.com/wordpress-outlook-calendar-events-integration?utm_source=readme&utm_medium=wp_outlook_lp&utm_campaign=outlook" target="_blank">**Outlook**</a>, and <a href="https://plugins.miniorange.com/wordpress-azure-ad-b2c-office-365-integrations?utm_source=readme&utm_medium=azure_b2c_lp&utm_campaign=more" target="_blank">**more**</a>, making it easy to embed files, display dashboards, and synchronize data within WordPress.
 
+===AI-Powered SSO Audit Intelligence for WordPress===
+Enterprises use the **miniOrange WordPress SAML SSO** plugin along with our <a href="https://plugins.miniorange.com/wordpress-sso-login-audit" target="_blank">**SSO Login Audit**</a> **add-on** to monitor authentication activity across multiple WordPress sites. By integrating the plugin with AI abilities through the MCP adapter, administrators can query login activity, suspicious authentication attempts, user registrations, failed SSO attempts, and access trends using natural language instead of manually reviewing audit logs. The AI can generate instant summaries such as unusual login patterns, repeated failed authentications from IP addresses, inactive users, or high-risk login behavior based on the collected SSO audit data. This enables security and IT teams to proactively monitor identity activity, accelerate investigations, and simplify access governance across the WordPress environment.
+
+
 
 == Feedback and Support ==
 We’re committed to ensuring you have a smooth experience with our **WordPress SAML Single Sign On (SSO) plugin**. If you have any questions, need customizations, or would like to request additional features, feel free to contact us at <a href=”mailto:samlsupport@xecurify.com” target=”_blank”>samlsupport@xecurify.com</a>.
@@ -208,7 +217,14 @@ We’re committed to ensuring you have a smooth experience with our **WordPress 
 = From WordPress.org =
 1. Download SAML SP Single Sign On – SSO login plugin.
 2. Unzip and upload the `miniorange-saml-20-single-sign-on` directory to your `/wp-content/plugins/` directory.
-3. Activate miniOrange SSO using SAML 2.0 from your Plugins page.
+
+= Activate the Plugin =
+1. Go to your WordPress dashboard → Plugins → Installed Plugins and activate the miniOrange SSO using SAML 2.0 plugin
+2. Select your Identity Provider (IDP) from our <a href="https://plugins.miniorange.com/wordpress-saml-guides" target="_blank">**SAML Setup Guide Library**</a> and follow the step-by-step instructions to configure the connection and complete the SSO setup.
+
+= Abilities API Setting =
+1. Connect AI agents like ChatGPT, Claude, Gemini, and Cursor to your WordPress site using our plugin. If your WordPress version is below 7.0, please install the WordPress MCP Adapter before starting the integration.
+2. In your WordPress dashboard, navigate to miniOrange SAML 2.0 SSO → Abilities API Settings and enable the Abilities API (MCP Public) option to allow AI agents to access your WordPress site.
 
 
 == Frequently Asked Questions ==
@@ -225,7 +241,7 @@ Please email us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurif
 The WordPress SAML Single Sign On plugin can be configured with any SAML compliant Identity Provider simply by exchanging the SAML metadata between the plugin and your SAML IDP.
 If you need any help in configuring the plugin, please email us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a>.
 
-= Can the plugin be configured to support multiple Identity Providers? =
+= Can the SAML SP plugin be configured to support multiple Identity Providers? =
 You can configure multiple SAML Identity Providers like Azure AD, Azure B2C, Okta, ADFS, Keycloak, Ping, etc in the plugin and provide different Single Sign On SSO login flow to the users.
 
 = Is the WP SAML plugin compatible with hosting providers like WP Engine, Pantheon, WordPress VIP, etc? =
@@ -237,6 +253,9 @@ With our WordPress Single Sign On SSO plugin, you can set Relay State URL's to r
 = I need integration with different third party plugins like Learndash, BuddyPress, WooCommerce, Memberpress, etc installed on my WordPress site =
 We already provide support for most of the third party plugins. Please email us at <a href="mailto:info@xecurify.com">info@xecurify.com</a> or <a href="https://miniorange.com/contact">Contact us</a>
 and we will assist you with the integration.
+
+= How does AI-assisted troubleshooting work? =
+AI when enabled, the plugin logs SAML errors in a structured format that can be interpreted by AI tools like ChatGPT, Claude, or Perplexity. You can paste error messages into these tools to quickly identify and resolve configuration issues.
 
 = For any query/problem/request =
 Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecurify.com">info@xecurify.com</a> or <a href="https://miniorange.com/contact">Contact us</a>. You can also submit your query from plugin's configuration page.
@@ -256,6 +275,10 @@ Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecur
 
 
 == Changelog ==
+
+= 5.4.3 =
+Added compatibility with WordPress 7.0
+Changed the guide links of Claude and Cursor Integrations
 
 = 5.4.2 =
 * Improvement: Modified the feedback form
@@ -383,6 +406,10 @@ Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecur
 For older changelog entries, please see the [additional changelog.txt file](https://plugins.svn.wordpress.org/miniorange-saml-20-single-sign-on/trunk/changelog.txt) provided with the plugin.
 
 == Upgrade Notice ==
+
+= 5.4.3 =
+Added compatibility with WordPress 7.0
+Changed the guide links of Claude and Cursor Integrations
 
 = 5.4.2 =
 * Improvement: Modified the feedback form
