@@ -1,11 +1,11 @@
 ﻿=== SAML Single Sign On – SSO Login ===
 Contributors: miniOrange
 Donate link: https://plugins.miniorange.com
-Tags: SAML, SSO, SAML, Single Sign On, Azure AD, Okta 
+Tags: SAML, SSO, Single Sign On, Azure AD, Okta 
 Requires at least: 3.7
 Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 5.4.3
+Stable tag: 5.4.4
 License: Expat
 License URI: https://plugins.miniorange.com/mit-license
 
@@ -31,7 +31,7 @@ Control everyone’s WordPress access through your SAML Identity Provider (IDP) 
 * **Organization-Only Access**
 Restrict WordPress access exclusively to verified employees through SAML Identity Provider (IDP) authentication and MFA.
 
-* **AI-Powered SSO Configuration & Troubleshooting**
+* **AI-Powered SSO SAML Configuration & Troubleshooting**
 Use AI Abilities to configure WordPress SAML SSO, manage role mapping and user provisioning, and quickly fix supported SAML errors using AI tools like <a href="https://plugins.miniorange.com/setup-chatgpt-to-wordpress-abilities-api-using-mcp" target="_blank">ChatGPT</a>, <a href="https://plugins.miniorange.com/connect-wordpress-with-claude-mcp-guide" target="_blank">Claude</a>, <a href="https://plugins.miniorange.com/connect-wordpress-with-cursor-mcp-guide" target="_blank">Cursor</a>, or Perplexity. Simplify setup, reduce troubleshooting time, and manage SSO workflows using natural language.
 
 * **Smart User Provisioning**
@@ -87,7 +87,7 @@ Provide the **Service Provider (SP)**, i.e., your WordPress site’s metadata UR
 **Step 3: Import Your Identity Provider’s (IDP) Metadata into the SAML SSO Plugin**
 Next, upload the IDP’s metadata URL or file to your WordPress site in the plugin settings to enable secure SAML authentication.
 
-That's it! Your WordPress site is now secured with enterprise-grade Single Sign On (SSO) authentication. You can verify the connection by using the **Test Configuration button** in the SAML plugin.
+That's it! Your WordPress site is now secured with enterprise-grade Single Sign On (SSO) SAML authentication. You can verify the connection by using the **Test Configuration button** in the SAML plugin.
 
 == Watch Our Complete Step-by-Step Installation Video for WordPress SSO SAML Login ==
 
@@ -123,7 +123,7 @@ Whether you have questions about setup, pricing, or how the WordPress SSO SAML p
 
 **Certificate Sync and Multiple Certificates:** Automatically syncs X.509 certificates from the SAML Identity Provider (IDP), managing rollover, replacement, and addition without disrupting the SSO connection. It also supports multiple active certificates from the same IDP, allowing WordPress to work with custom setups or environments where more than one certificate is in use.
 
-**WordPress SSO on Multisite Networks:** Applies one SSO configuration to all subsites in a WordPress multisite network. This centralizes SSO management, so you do not need to configure each subsite individually.
+**WordPress SSO on Multisite Networks:** Applies one SSO SAML configuration to all subsites in a WordPress multisite network. This centralizes SSO management, so you do not need to configure each subsite individually.
 
 **Single & Multi‑Tenant Azure AD Login:** Connects both single-tenant (one directory) and multi-tenant (multiple directories) Azure AD(Login with Azure AD) or Office 365 Login to WordPress. Users from different tenants can log in to WordPress through Azure AD SSO using their existing accounts.
 
@@ -212,34 +212,33 @@ We’re committed to ensuring you have a smooth experience with our **WordPress 
 = From your WordPress dashboard =
 1. Visit `Plugins > Add New`.
 2. Search for `SAML SP Single Sign On`. Find and Install `SAML SP Single Sign On – SSO login`.
-3. Activate the plugin from your Plugins page.
+3. Activate the SAML plugin from your Plugins page.
 
 = From WordPress.org =
 1. Download SAML SP Single Sign On – SSO login plugin.
 2. Unzip and upload the `miniorange-saml-20-single-sign-on` directory to your `/wp-content/plugins/` directory.
 
-= Activate the Plugin =
+= Activate the SAML Plugin =
 1. Go to your WordPress dashboard → Plugins → Installed Plugins and activate the miniOrange SSO using SAML 2.0 plugin
-2. Select your Identity Provider (IDP) from our <a href="https://plugins.miniorange.com/wordpress-saml-guides" target="_blank">**SAML Setup Guide Library**</a> and follow the step-by-step instructions to configure the connection and complete the SSO setup.
+2. Select your Identity Provider (IDP) from our <a href="https://plugins.miniorange.com/wordpress-saml-guides" target="_blank">**SAML Setup Guide Library**</a> and follow the step-by-step instructions to configure the connection and complete the SAML SSO setup.
 
 = Abilities API Setting =
-1. Connect AI agents like ChatGPT, Claude, Gemini, and Cursor to your WordPress site using our plugin. If your WordPress version is below 7.0, please install the WordPress MCP Adapter before starting the integration.
+1. Connect AI agents like <a href="https://plugins.miniorange.com/setup-chatgpt-to-wordpress-abilities-api-using-mcp" target="_blank">Chatgpt</a>, <a href="https://plugins.miniorange.com/connect-wordpress-with-claude-mcp-guide" target="_blank">Claude</a>, Gemini, and <a href="https://plugins.miniorange.com/connect-wordpress-with-cursor-mcp-guide" target="_blank">Cursor</a> to your WordPress site using our SAML plugin. If your WordPress version is below 7.0, please install the WordPress MCP Adapter before starting the integration.
 2. In your WordPress dashboard, navigate to miniOrange SAML 2.0 SSO → Abilities API Settings and enable the Abilities API (MCP Public) option to allow AI agents to access your WordPress site.
-
 
 == Frequently Asked Questions ==
 
 = How to configure WordPress SSO (SAML)? =
 * Download and install <a href=”https://wordpress.org/plugins/miniorange-saml-20-single-sign-on/” target=”_blank”>WordPress SAML 2.0 SSO plugin</a>.
 * Add your WordPress site metadata details from the WordPress SAML Single Sign On plugin, into your Identity Provider (IDP), and generate the IDP metadata.
-* Upload the IDP metadata file/URL in the WP SSO Plugin on your WordPress site for a successful WordPress SSO connection.
+* Upload the IDP metadata file/URL in the WP SAML SSO Plugin on your WordPress site for a successful WordPress SAML SSO connection.
 
 = I am not able to configure the Identity Provider with the provided settings =
-Please email us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a> or <a href="https://miniorange.com/contact" >Contact us</a>. You can also submit your app request from plugin's configuration page.
+Please email us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a> or <a href="https://miniorange.com/contact" >Contact us</a>. You can also submit your app request from the SAML plugin's configuration page.
 
 = My SAML Identity Provider is not listed in the plugin or guides. How can I configure the plugin with my SAML IDP? =
 The WordPress SAML Single Sign On plugin can be configured with any SAML compliant Identity Provider simply by exchanging the SAML metadata between the plugin and your SAML IDP.
-If you need any help in configuring the plugin, please email us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a>.
+If you need any help in configuring the SAML plugin, please email us at <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a>.
 
 = Can the SAML SP plugin be configured to support multiple Identity Providers? =
 You can configure multiple SAML Identity Providers like Azure AD, Azure B2C, Okta, ADFS, Keycloak, Ping, etc in the plugin and provide different Single Sign On SSO login flow to the users.
@@ -248,7 +247,7 @@ You can configure multiple SAML Identity Providers like Azure AD, Azure B2C, Okt
 The Enterprise and All-Inclusive plans of our WordPress Single Sign On SSO SAML plugin are best suitable for multiple environments in a hosting provider.
 
 = Is it possible to redirect users to a particular URL after login or logout =
-With our WordPress Single Sign On SSO plugin, you can set Relay State URL's to redirect users after login as well as after logout.
+With our WordPress Single Sign On SSO SAML plugin, you can set Relay State URL's to redirect users after login as well as after logout.
 
 = I need integration with different third party plugins like Learndash, BuddyPress, WooCommerce, Memberpress, etc installed on my WordPress site =
 We already provide support for most of the third party plugins. Please email us at <a href="mailto:info@xecurify.com">info@xecurify.com</a> or <a href="https://miniorange.com/contact">Contact us</a>
@@ -258,58 +257,63 @@ and we will assist you with the integration.
 AI when enabled, the plugin logs SAML errors in a structured format that can be interpreted by AI tools like ChatGPT, Claude, or Perplexity. You can paste error messages into these tools to quickly identify and resolve configuration issues.
 
 = For any query/problem/request =
-Visit Help & FAQ section in the plugin OR email us at <a href="mailto:info@xecurify.com">info@xecurify.com</a> or <a href="https://miniorange.com/contact">Contact us</a>. You can also submit your query from plugin's configuration page.
+Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@xecurify.com">info@xecurify.com</a> or <a href="https://miniorange.com/contact">Contact us</a>. You can also submit your query from plugin's configuration page.
 
 == Screenshots ==
 1. Connect with any SAML supported IDPs for WordPress SSO.
 2. Select your IDP and configure your WordPress site as SAML service provider.
-3. Enter IDP metadata manually for WordPress SSO (Single Sign On).
-4. Upload IDP metadata as a file or URL for WordPress Single Sign On.
+3. Enter IDP metadata manually for WordPress SAML SSO (Single Sign On).
+4. Upload IDP metadata as a file or URL for WordPress Single Sign On (SAML).
 5. Use metadata URL in the SAML plugin to configure your Identity Provider for SAML Single Sign On.
 6. Use WordPress endpoints mentioned in the SAML SSO plugin settings to configure your IDP.
 7. Update user profile using Attribute Mapping for WordPress users after SAML SSO.
 8. Configure a default role for WordPress users after SSO.
 9. Add a Single Sign On button on the default WordPress login page.
 10. Set SSO auto-redirection from complete site or from WordPress login page.
-11. Check Out all our third-party integrations to extend WordPress SSO functionality.
+11. Check Out all our third-party integrations to extend WordPress SAML SSO functionality.
 
 
 == Changelog ==
 
+= 5.4.4 = 
+* Removed support of insecure signature algorithms
+
 = 5.4.3 =
-Added compatibility with WordPress 7.0
-Changed the guide links of Claude and Cursor Integrations
+* Added compatibility with WordPress 7.0
+* Changed the guide links of Claude and Cursor Integrations In the SAML plugin
 
 = 5.4.2 =
-* Improvement: Modified the feedback form
+* Improvement: Modified the feedback form in the SAML plugin
+
 
 = 5.4.1 =
 * Feature: Added SAML SSO abilities support for the new WordPress Abilities API
 * Feature: Registered plugin commands in Command Palette
-* Improvement: Modified the Debug Log file name
+* Improvement: Modified the Debug Log file name in the SAML plugin
+
 
 = 5.4.0 =
-* Improvement: Minor UI Improvements
+* Improvement: Minor UI Improvements in the SAML plugin
 
 = 5.3.9 =
 * Improvement: Compatibility with WordPress 6.9
 * Fix: Handled warnings in case of Invalid SAML Response
-* Improvement: Usability Fixes
+* Improvement: Usability Fixes in the SAML Plugin
 
 = 5.3.8 =
 * Fix: Fixed console warnings due to notice.
 
 = 5.3.7 =
-* Improvement: Usability Improvements
+* Improvement: Usability Improvements in the SAML Plugin
 
 = 5.3.6 =
-* Improvement: Minor UI Improvements
+* Improvement: Minor UI Improvements in the SAML Plugin
 
 = 5.3.5 =
-* Fix: Fixed the documentation links that are not accessible
+* Fix: Fixed the documentation links that are not accessible in the SAML plugin
 
 = 5.3.4 =
-* Feature: Added SSO Links with redirect option to use on your pages.
+* Feature: Added SAML SSO Links with redirect option to use on your pages.
 * Improvement: Renamed Service Provider Setup tab to IDP Configuration.
 * Improvement: Updated Support form for call requests and improved overall UI.
 
@@ -327,7 +331,7 @@ Changed the guide links of Claude and Cursor Integrations
 * Updated the pot files for German and Japanese Languages
 
 = 5.2.9 =
-* Minor fixes
+* Minor fixes in the SAML plugin
 
 = 5.2.8 =
 * Compatibility with WordPress 6.8
@@ -335,12 +339,12 @@ Changed the guide links of Claude and Cursor Integrations
 
 = 5.2.7 =
 * Added compatibility with PHP 8.4
-* Updated the Test Configuration window and included FAQs to help troubleshoot errors
-* Usability Fixes
+* Updated the Test Configuration window and included FAQs to help troubleshoot errors in the SAML plugin
+* Usability Fixes in the SAML Plugin
 * Removed POT files
 
 = 5.2.6 =
-* Removed Unused Code
+* Removed Unused Code in the SAML Plugin
 
 = 5.2.5 =
 * Improved Exception Handling
@@ -349,50 +353,50 @@ Changed the guide links of Claude and Cursor Integrations
 * Fixed console warnings when the notice gets dismissed
 
 = 5.2.3 =
-* Security fixes
-* UI Improvements
+* Security fixes in the SAML Plugin
+* UI Improvements in the SAML Plugin
 
 = 5.2.2 =
 * Compatibility fixes for PHP 5.6
-* Improvements to the Test Configuration Window
+* Improvements to the Test Configuration Window in the SAML plugin
 
 = 5.2.1 =
 * Compatibility with WordPress 6.7
-* Usability Improvement
+* Usability Improvement in the SAML Plugin
 
 = 5.2.0 =
 * Added the pot files for French, Spanish, German and Japanese Languages
-* UI Improvements
+* UI Improvements in the SAML Plugin
 
 = 5.1.9 =
 * Improvements to the SSO button on the Wordpress login page
-* UI Improvements
+* UI Improvements in the SAML Plugin
 
 = 5.1.8 =
 * Handled Fatal Errors when PHP extensions (CURL, DOM, OPENSSL) are disabled
 * Clarified error codes on the Test Configuration tab for easier troubleshooting
 * Fixed console warnings during registration and login in the Account Setup Tab
-* UI Improvements
+* UI Improvements in the SAML Plugin
 
 = 5.1.7 =
 * Compatibility with WordPress 6.6
-* Added translation support
+* Added translation support in the SAML plugin
 * Added additional checks around the wp-config.php access flow
-* UI improvements
+* UI improvements in the SAML Plugin
 
 = 5.1.6 =
-* Fix for wp-config.php file read flow
+* Fix for wp-config.php file read flow in the SAML plugin
 
 = 5.1.5 =
-* Added PHPCS Fixes
-* Fix for the warning while editing the Theme
-* Performance Fixes
+* Added PHPCS Fixes in the SAML plugin
+* Fix for the warning while editing the Theme 
+* Performance Fixes in the SAML plugin
 
 = 5.1.4 =
 * Compatibility Fixes with WordPress 6.5
 
 = 5.1.3 =
-* Updating pricing links for WordPress SSO Plugin
+* Updating pricing links for WordPress SAML SSO Plugin
 
 = 5.1.2 = 
 * Added free trial for SAML SSO
@@ -401,18 +405,21 @@ Changed the guide links of Claude and Cursor Integrations
 * Updates in SAML SSO Plans UI
 
 = 5.1.0 =
-* SSO button Fix on update
+* SSO button Fix on update in the SAML plugin
 
-For older changelog entries, please see the [additional changelog.txt file](https://plugins.svn.wordpress.org/miniorange-saml-20-single-sign-on/trunk/changelog.txt) provided with the plugin.
+For older changelog entries, please see the [additional changelog.txt file](https://plugins.svn.wordpress.org/miniorange-saml-20-single-sign-on/trunk/changelog.txt) provided with the SAML plugin.
 
 == Upgrade Notice ==
 
+= 5.4.4 = 
+* Removed support of insecure signature algorithms
+
 = 5.4.3 =
 Added compatibility with WordPress 7.0
-Changed the guide links of Claude and Cursor Integrations
+Changed the guide links of Claude and Cursor Integrations in SAML plugin
 
 = 5.4.2 =
-* Improvement: Modified the feedback form
+* Improvement: Modified the feedback form in the SAML plugin
 
 = 5.4.1 =
 * Feature: Added SAML SSO abilities support for the new WordPress Abilities API
@@ -420,32 +427,32 @@ Changed the guide links of Claude and Cursor Integrations
 * Improvement: Modified the Debug Log file name
 
 = 5.4.0 =
-* Improvement: Minor UI Improvements
+* Improvement: Minor UI Improvements in the SAML Plugin
 
 = 5.3.9 =
 * Improvement: Compatibility with WordPress 6.9
 * Fix: Handled warnings in case of Invalid SAML Response
-* Improvement: Usability Fixes
+* Improvement: Usability Fixes in the SAML Plugin
 
 = 5.3.8 =
 * Fix: Fixed console warnings due to notice.
 
 = 5.3.7 =
-* Improvement: Usability Improvements
+* Improvement: Usability Improvements in the SAML Plugin
 
 = 5.3.6 =
-* Improvement: Minor UI Improvements
+* Improvement: Minor UI Improvements in the SAML Plugin
 
 = 5.3.5 =
-* Fix: Fixed the documentation links that are not accessible
+* Fix: Fixed the documentation links that are not accessible in the SAML plugin
 
 = 5.3.4 =
-* Feature: Added SSO Links with redirect option to use on your pages.
-* Improvement: Renamed Service Provider Setup tab to IDP Configuration.
-* Improvement: Updated Support form for call requests and improved overall UI.
+* Feature: Added SAML SSO Links with redirect option to use on your pages.
+* Improvement: Renamed Service Provider Setup tab to IDP Configuration in the SAML Plugin
+* Improvement: Updated Support form for call requests and improved overall UI in the SAML Plugin
 
 = 5.3.3 =
-* Improvement: Handling SAML Destination with null safety and sanitization
+* Improvement: Handling SAML Destination with null safety and sanitization in the SAML plugin
 
 = 5.3.2 =
 * Fix: Added check for handling invalid SAML Response XML and Empty DOMDocument
@@ -455,10 +462,10 @@ Changed the guide links of Claude and Cursor Integrations
 * Fix: Updated htaccess rules to restrict direct URL access to SAML debug logs
 
 = 5.3.0 =
-* Updated the pot files for German and Japanese Languages
+* Updated the pot files for German and Japanese Languages in the SAML plugin
 
 = 5.2.9 =
-* Minor fixes
+* Minor fixes in the SAML Plugin
 
 = 5.2.8 =
 * Compatibility with WordPress 6.8
@@ -467,21 +474,21 @@ Changed the guide links of Claude and Cursor Integrations
 = 5.2.7 =
 * Added compatibility with PHP 8.4
 * Updated the Test Configuration window and included FAQs to help troubleshoot errors
-* Usability Fixes
-* Removed POT files
+* Usability Fixes in the SAML plugin
+* Removed POT files in the SAML plugin
 
 = 5.2.6 =
-* Removed Unused Code
+* Removed Unused Code in the SAML Plugin
 
 = 5.2.5 =
-* Improved Exception Handling
+* Improved Exception Handling in the SAML plugin
 
 = 5.2.4 =
 * Fixed console warnings when the notice gets dismissed
 
 = 5.2.3 =
-* Security fixes
-* UI Improvements
+* Security fixes in the SAML Plugin
+* UI Improvements in the SAML Plugin
 
 = 5.2.2 =
 * Compatibility fixes for PHP 5.6
@@ -489,41 +496,41 @@ Changed the guide links of Claude and Cursor Integrations
 
 = 5.2.1 =
 * Compatibility with WordPress 6.7
-* Usability Improvement
+* Usability Improvement in the SAML Plugin
 
 = 5.2.0 =
 * Added the pot files for French, Spanish, German and Japanese Languages
-* UI Improvements
+* UI Improvements in the SAML Plugin
 
 = 5.1.9 =
-* Improvements to the SSO button on the Wordpress login page
-* UI Improvements
+* Improvements to the SSO button on the Wordpress login page in the SAML plugin
+* UI Improvements in the SAML Plugin
 
 = 5.1.8 =
 * Handled Fatal Errors when PHP extensions (CURL, DOM, OPENSSL) are disabled
 * Clarified error codes on the Test Configuration tab for easier troubleshooting
 * Fixed console warnings during registration and login in the Account Setup Tab
-* UI Improvements
+* UI Improvements in the SAML Plugin
 
 = 5.1.7 =
 * Compatibility with WordPress 6.6
-* Added translation support
-* Added additional checks around the wp-config.php access flow
-* UI improvements
+* Added translation support in the SAML plugin
+* Added additional checks around the wp-config.php access flow in the SAML plugin
+* UI improvements in the SAML Plugin
 
 = 5.1.6 =
-* Fix for wp-config.php file read flow
+* Fix for wp-config.php file read flow in the SAML plugin
 
 = 5.1.5 =
 * Added PHPCS Fixes
 * Fix for the warning while editing the Theme
-* Performance Fixes
+* Performance Fixes in the SAML Plugin
 
 = 5.1.4 =
 * Compatibility Fixes with WordPress 6.5
 
 = 5.1.3 =
-* Updating pricing links for WordPress SSO Plugin
+* Updating pricing links for WordPress SSO SAML Plugin
 
 = 5.1.2 = 
 * Added free trial for SAML SSO
@@ -532,38 +539,39 @@ Changed the guide links of Claude and Cursor Integrations
 * Updates in SAML SSO Plans UI
 
 = 5.1.0 =
-* SSO button Fix on update
+* SSO button Fix on update in the SAML Plugin
 
 = 5.0.9 =
-* Fix for iconv() warning in linux environment
+* Fix for iconv() warning in linux environment in the SAML plugin
 * Fix for upgrade to premium versions
-* Minor UI improvements
+* Minor UI improvements in the SAML Plugin
 
 = 5.0.8 =
-* WP 6.4 Compatibility
-* Compatibility fix with Themify Plugin
+* WP 6.4 Compatibility in the SAML plugin
+* Compatibility fix with Themify SAML Plugin
 * UI fixes
 
 = 5.0.7 =
-* WP 6.3 Compatibility
+* WP 6.3 Compatibility in the SAML plugin
 * Added proper error message when wp-config.php is not writable for enabling debug logs
 * Fix for warning in the list of IDP logos 
 
 = 5.0.6 =
-* Fix for NetIQ SAML IDP Logo
+* Fix for NetIQ SAML IDP Logo in the SAML plugin
 * Fix for x509 certificate in SAML SSO Configurations
 
 = 5.0.5 =
-* Vulnerability fix for Broken Access Control in SSO Settings
+* Vulnerability fix for Broken Access Control in SAML SSO Settings in the SAML plugin
 
 = 5.0.4 =
 * Added additional exception handling checks to enhance the validation of SAML Response
-* Added Steps to download the paid plugin
-* Minor Bug Fixes
+* Added Steps to download the paid SAML plugin
+* Minor Bug Fixes in the SAML Plugin
 
 = 5.0.3 =
-* Added new IDPs like Siteminder, VMWare, OpenAthens
-* Minor Bug Fixes
+* Added new IDPs like Siteminder, VMWare, OpenAthens in the SAML plugin
+
+* Minor Bug Fixes in the SAML Plugin
 
 = 5.0.2 =
 * Added new IDPs like Sharepoint, Dynamic CRM, LastPass, Drupal
@@ -573,14 +581,14 @@ Changed the guide links of Claude and Cursor Integrations
 * Added iconv encoding issue flow 
 * Fixed plugin update using FTP replace
 * Fixed SSO widget title issue
-* Fixed plugin deactivation issue
+* Fixed SAML plugin deactivation issue
 * Fixes in debug log functionality
 
 = 5.0.0 =
-* Added PHPCS fixes
+* Added PHPCS fixes in the SAML plugin
 
 = 4.9.32 =
-* Security fix for Open Redirect Vulnerability
+* Security fix for Open Redirect Vulnerability in the SAML plugin
 
 = 4.9.31 =
 * Fixes in logger functionality
@@ -590,17 +598,17 @@ Changed the guide links of Claude and Cursor Integrations
 * Added custom Bootstrap CSS and JS
 * Updated images to webp format
 * Added Azure AD Integrations
-* Cross browser UI fixes
+* Cross browser UI fixes in the SAML plugin
 
 = 4.9.29 =
 * Compatibility with WordPress 6.1
 * Fixes for PHP 8.1
 
 = 4.9.28 =
-* Fixed console warning
+* Fixed console warning in the SAML plugin
 
 = 4.9.27 =
-* Plugin delete fix
+* SAML Plugin delete fix
 
 = 4.9.26 =
 * Modified code flow for form save
@@ -626,17 +634,17 @@ Changed the guide links of Claude and Cursor Integrations
 
 = 4.9.21 =
 * Sanitization and Escaping fixes
-* Role Mapping fix
+* Role Mapping fix in the SAML plugin
 
 = 4.9.20 =
-* Introduced Error Codes
-* Removed some obsolete functions
+* Introduced Error Codes in the SAML plugin
+* Removed some obsolete functions in the SAML plugin
 
 = 4.9.19 =
-* Fixed UI compatibility with all themes
+* Fixed UI compatibility with all themes in the SAML plugin
 
 = 4.9.18 =
-* Minor UI fixes
+* Minor UI fixes in the SAML plugin
 
 = 4.9.17 =
 * Fixed Login button positioning
@@ -647,14 +655,14 @@ Changed the guide links of Claude and Cursor Integrations
 
 = 4.9.15 =
 * Compatibility with WordPress 5.9
-* Added Support for NameID Policy in SAML Request
+* Added Support for NameID Policy in SAML Request in the SAML plugin
 
 = 4.9.14 =
-* Removed end of year sale
-* Readme updates
+* Removed end of year sale 
+* Readme updates in the SAML plugin
 
 = 4.9.13 =
-* License Banner fixes
+* License Banner fixes in the  SAML plugin
 
 = 4.9.12 =
 * Added discounted pricing for WordPress SSO plans
@@ -662,10 +670,10 @@ Changed the guide links of Claude and Cursor Integrations
 = 4.9.11 =
 * Updated licensing plans for SAML SSO
 * Fixed bugs for Debug Framework
-* Other UI fixes
+* Other UI fixes in the SAML plugin
 
 = 4.9.10 =
-* Fixed an issue with broken plugin links
+* Fixed an issue with broken SAML plugin links
 
 = 4.9.09 = 
 * Added Debug Logs Framework
@@ -673,27 +681,27 @@ Changed the guide links of Claude and Cursor Integrations
 * WordPress 5.8 Compatibility
 
 = 4.9.08 =
-* Demo request improvements
+* Demo request improvements in the SAML Plugin
 
 = 4.9.07 =
 * Licensing Update for WordPress SSO plans
 
 = 4.9.06 =
-* UI improvements and fixes
-* Readme changes
+* UI improvements and fixes in the SAML Plugin
+* Readme changes in the SAML Plugin
 
 = 4.9.05 =
-* UI changes and fixes
+* UI changes and fixes in the SAML plugin
 * WordPress 5.7 Compatibility
 
 = 4.9.04 =
-* Licensing Update for WordPress SSO plans
+* Licensing Update for WordPress SAML SSO plans
 
 = 4.9.03 =
 * Added video plugin guides for WordPress SSO
 
 = 4.9.02 =
-* Welcome page fixes
+* Welcome page fixes in the SAML plugin
 
 = 4.9.01 =
 * Added support of Localization
@@ -709,18 +717,18 @@ Changed the guide links of Claude and Cursor Integrations
 * Added new Add-on description
 
 = 4.8.98 =
-* SP Metadata Update
+* SP Metadata Update in the SAML Plugin
 
 = 4.8.97 =
 * Call setup fixes
-* Added contact phone number
+* Added contact phone number in the SAML plugin
 
 = 4.8.96 =
 * Added new IDP guides: Azure B2C and Gluu server
 * Updated XMLSecLibs
 
 = 4.8.95 =
-* Added Setup call feature
+* Added Setup call feature in the SAML Plugin
 
 = 4.8.94 =
 * Revamped add-ons tab
@@ -735,13 +743,13 @@ Changed the guide links of Claude and Cursor Integrations
 * Added a new licensing plan
 
 = 4.8.90 =
-* Plugin tour fixes
+* Plugin tour fixes in the SAML Plugin
 
 = 4.8.89 =
 * Adding more guides in SAML plugin
 
 = 4.8.88 =
-* Bug fixes
+* Bug fixes in the SAML Plugin
 
 = 4.8.87 =
 * Bug fixes in SAML SSO widget
@@ -763,13 +771,13 @@ Changed the guide links of Claude and Cursor Integrations
 
 = 4.8.82 =
 * Added new SAML-compliant IdP guides
-* Bug fixes
+* Bug fixes in the SAML Plugin
 
 = 4.8.81 =
 * Updated SAML-compliant IdP guides
 
 = 4.8.80 =
-* Bug fixes
+* Bug fixes in the SAML plugin
 
 = 4.8.79 =
 * Added Plugin-wide tour
@@ -784,13 +792,13 @@ Changed the guide links of Claude and Cursor Integrations
 * Security Patches
 
 = 4.8.75 =
-* Visual-tour fixes
+* Visual-tour fixes in the SAML Plugin
 
 = 4.8.74 =
-* Feedback form bug fix
+* Feedback form bug fix in the SAML Plugin
 
 = 4.8.73 =
-* Security patches.
+* Security patches. 
 
 = 4.8.72 =
 * Security patch.
@@ -812,27 +820,27 @@ Changed the guide links of Claude and Cursor Integrations
 * Compatibility with PHP 7.3.
 
 = 4.8.67 =
-* Description changes.
+* Description changes in the SAML Plugin
 
 = 4.8.66 =
 * Tested upto WordPress 5.0.0.
 * Added option to disable character encoding.
 
 = 4.8.65 =
-* Bug Fixes
+* Bug Fixes in the SAML Plugin
 
 = 4.8.64 =
 * Compatibility with PHP version 5.3+ upto latest version of PHP
 * Activation Issue Fixes
 
 = 4.8.63 =
-* Code enhancements.
+* Code enhancements in the SAML Plugin
 
 = 4.8.62 =
 * Fixed issues on SAML SP SSO plugin activation.
 
 = 4.8.61 =
-* Bug fixes.
+* Bug fixes in the SAML Plugin
 
 = 4.8.60 =
 * Updated to latest XMLSeclibs SAML library (version 3.0.1).
@@ -847,10 +855,10 @@ Changed the guide links of Claude and Cursor Integrations
 
 = 4.8.51 =
 * Added support for guest login
-* Added IDP guide links
+* Added IDP guide links in the SAML Plugin
 
 = 4.8.50 =
-* Added feedback form.
+* Added feedback form in the SAML Plugin
 
 = 4.8.44 =
 * Tested upto WordPress 4.9.6
@@ -859,13 +867,13 @@ Changed the guide links of Claude and Cursor Integrations
 * Compatibility issue with PHP 7.2(Removed deprecated asserts )
 
 = 4.8.42 =
-* Input validation fixes.
+* Input validation fixes in the SAML Plugin
 
 = 4.8.41 =
 * Support for PHP version 5.3 and above.
 
 = 4.8.40 =
-* Added feature for Exporting plugin configuration.
+* Added feature for Exporting SAML plugin configuration.
 * Added View SAML Request and Response
 
 = 4.8.35 =
@@ -885,7 +893,7 @@ Changed the guide links of Claude and Cursor Integrations
 * Introducing Standard version of SAML Plugin for small sized customers.Check Licensing Plans for more details.
 
 = 4.8.30 =
-* Fix the CSS and JS inclusion only in the plugin pages, removed it from frontend and backend of wordpress.
+* Fix the CSS and JS inclusion only in the SAML plugin pages, removed it from frontend and backend of wordpress.
 
 = 4.8.28 =
 * Bug fix for PHP 5.4.x version.
@@ -901,71 +909,71 @@ Changed the guide links of Claude and Cursor Integrations
 * Compatibility with WordPress 4.8
 
 = 4.8.25 =
-Updating Licensing Plans
+* Updating Licensing Plans in the SAML plugin
 
 = 4.8.24 =
-Updating Plugin Title
+* Updating SAML Plugin Title
 
 = 3.8.14 =
-Pattern change on OTP Verification page
+* Pattern change on OTP Verification page
 
 = 3.8.12 =
-Major security fixes. It is recommended to update to this version.
+* Major security fixes. It is recommended to update to this version.
 
 = 3.8.7 =
-Fixes for WordPress 4.5
+* Fixes for WordPress 4.5
 
 = 3.8.6 =
-Added features: Support for WordPress Multi-site (Network setup), support for Multiple IDPs and some fixes for WordPress 4.5
+* Added features: Support for WordPress Multi-site (Network setup), support for Multiple IDPs and some fixes for WordPress 4.5
 
 = 3.8.4 =
-Introducing Free Trial for the premium version.
+* Introducing Free Trial for the premium version in the SAML plugin
 
 = 3.8.2 =
-Security fix for preventing non-admin users from changing the settings.
+* Security fix for preventing non-admin users from changing the settings.
 
 = 3.8 =
-Security fix for IDPs that signs only Assertion and not the complete SAML Response XML.
+* Security fix for IDPs that signs only Assertion and not the complete SAML Response XML.
 
 = 3.7 =
-Support for Integrated Windows Authentication – contact <a href="mailto:info@xecurify.com">info@xecurify.com</a> if interested
+* Support for Integrated Windows Authentication – contact <a href="mailto:info@xecurify.com">info@xecurify.com</a> if interested
 
 = 3.5 =
-Decrypt assertion bug fix
+* Decrypt assertion bug fix  in the SAML plugin
 
 = 3.4 =
-Added some requested features and some bug fixes.
+* Added some requested features and some bug fixes in the SAML plugin
 
 = 3.0 =
-Major Update. We have taken ut-most care to make sure that your existing login flow doesn't break. If you have issues after this update then please contact us. We will get back to you very soon.
+* Major Update. We have taken ut-most care to make sure that your existing login flow doesn't break. If you have issues after this update then please contact us. We will get back to you very soon.
 
 = 2.1 =
-Removed unwanted JS files.
+* Removed unwanted JS files.
 
 = 2.0 =
-Added new feature like role mapping and auto redirect user to your IdP.
+* Added new feature like role mapping and auto redirect user to your IdP.
 
 = 1.7 =
-Resolved UI issues for some users
+* Resolved UI issues for some users in the SAML plugin
 
 = 1.6 =
-Added help and troubleshooting guide.
+* Added help and troubleshooting guide in the SAML plugin
 
 = 1.5 =
-Added error messaging.
+* Added error messaging in the SAML plugin
 
 = 1.4 =
-Added fixes.
+* Added fixes in the SAML Plugin
 
 = 1.3 =
-Added validations and fixes.
-UI Improvements.
+* Added validations and fixes in the SAML plugin
+* UI Improvements in the SAML plugin
 
 = 1.2 =
-Some UI improvements.
+* Some UI improvements in the SAML Plugin
 
 = 1.1 =
-Added Attribute mapping / Role mapping and test application.
+* Added Attribute mapping / Role mapping and test application in the SAML plugin
 
 = 1.0 =
-I will update this plugin when ever it is required.
+* I will update this in the SAML plugin whenever it is required.

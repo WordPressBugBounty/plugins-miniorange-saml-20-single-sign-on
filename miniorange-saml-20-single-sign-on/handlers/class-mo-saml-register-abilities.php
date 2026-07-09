@@ -25,7 +25,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the MO SAML SSO ability category.
 	 */
 	public static function mo_saml_register_ability_category() {
-		wp_register_ability_category(
+		Mo_SAML_Utilities::mo_saml_register_ability_category(
 			'mo-saml-sso',
 			array(
 				'label'       => 'SAML SSO',
@@ -62,7 +62,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to get the IDP name.
 	 */
 	public static function mo_saml_get_idp_name() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/get-idp-name',
 			array(
 				'label'               => 'Get IDP Name',
@@ -121,7 +121,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to fix the certificate mismatch.
 	 */
 	public static function mo_saml_fix_certificate_mismatch() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/fix-wpsamlerr004',
 			array(
 				'label'               => 'Fix Certificate Mismatch WPSAMLERR004',
@@ -180,7 +180,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to fix the entity ID.
 	 */
 	public static function mo_saml_fix_entity_id() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/fix-wpsamlerr010',
 			array(
 				'label'               => 'Fix Entity ID WPSAMLERR010',
@@ -230,7 +230,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to fix the iconv certificate.
 	 */
 	public static function mo_saml_fix_iconv_cert() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/fix-wpsamlerr012',
 			array(
 				'label'               => 'Fix Iconv Certificate WPSAMLERR012',
@@ -279,7 +279,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to update the default role.
 	 */
 	public static function mo_saml_update_default_role() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/update-default-role',
 			array(
 				'label'               => 'Update Default Role',
@@ -358,7 +358,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to show the SSO configurations.
 	 */
 	public static function mo_saml_show_sso_configurations() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/show-sso-configurations',
 			array(
 				'label'               => 'Show SSO Configurations',
@@ -448,7 +448,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to get the IDP guide links.
 	 */
 	public static function mo_saml_get_idp_guide_links() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/get-idp-guide-links',
 			array(
 				'label'               => 'Get IDP Guide Links',
@@ -548,7 +548,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to toggle the SSO button.
 	 */
 	public static function mo_saml_enable_sso_button() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/enable-sso-button',
 			array(
 				'label'               => 'Enable SSO Button',
@@ -607,7 +607,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to disable the SSO button.
 	 */
 	public static function mo_saml_disable_sso_button() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/disable-sso-button',
 			array(
 				'label'               => 'Disable SSO Button',
@@ -666,7 +666,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to send support request.
 	 */
 	public static function mo_saml_send_support_request() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/send-support-request',
 			array(
 				'label'               => 'Send Support Request',
@@ -742,7 +742,7 @@ class Mo_SAML_Register_Abilities {
 	 * Register the ability to get the SP metadata.
 	 */
 	public static function mo_saml_get_sp_metadata() {
-		wp_register_ability(
+		Mo_SAML_Utilities::mo_saml_register_ability(
 			'mo-saml/get-sp-metadata',
 			array(
 				'label'               => 'Get SP Metadata',

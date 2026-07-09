@@ -299,9 +299,9 @@ class Mo_SAML_XML_Security_Key {
 				\Mo_SAML_Logger::mo_saml_add_log( 'Certificate "type" (private/public) must be passed via parameters', \Mo_SAML_Logger::ERROR );
 				throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'Certificate "type" (private/public) must be passed via parameters' );
 			case ( self::HMAC_SHA1 ):
-				$this->crypt_params['library'] = $type;
-				$this->crypt_params['method']  = 'http://www.w3.org/2000/09/xmldsig#hmac-sha1';
-				break;
+				// HMAC is symmetric and must never be used for SAML signature processing on the SP side.
+				\Mo_SAML_Logger::mo_saml_add_log( 'HMAC key types are not supported', \Mo_SAML_Logger::ERROR );
+				throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'HMAC key types are not supported' );
 			default:
 				\Mo_SAML_Logger::mo_saml_add_log( 'Invalid Key Type', \Mo_SAML_Logger::ERROR );
 				throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'Invalid Key Type' );
@@ -694,8 +694,6 @@ class Mo_SAML_XML_Security_Key {
 			// phpcs:ignore PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- Show error instead of return.
 			case 'openssl':
 				return $this->mo_saml_sign_open_ssl( $data );
-			case ( self::HMAC_SHA1 ):
-				return hash_hmac( 'sha1', $data, $this->key, true );
 		}
 	}
 
@@ -719,9 +717,6 @@ class Mo_SAML_XML_Security_Key {
 		switch ( $this->crypt_params['library'] ) {
 			case 'openssl':
 				return $this->mo_saml_verify_open_ssl( $data, $signature );
-			case ( self::HMAC_SHA1 ):
-				$expected_signature = hash_hmac( 'sha1', $data, $this->key, true );
-				return strcmp( $signature, $expected_signature ) === 0;
 		}
 	}
 

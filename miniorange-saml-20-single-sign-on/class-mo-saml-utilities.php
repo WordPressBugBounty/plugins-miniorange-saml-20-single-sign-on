@@ -415,6 +415,11 @@ class Mo_SAML_Utilities {
 		}
 		$algo = $sig_method->getAttribute( 'Algorithm' );
 
+		if ( ! in_array( $algo, self::mo_saml_get_allowed_signature_algorithms(), true ) ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'Unsupported SignatureMethod algorithm: ' . $algo, Mo_SAML_Logger::ERROR );
+			throw new Mo_SAML_Invalid_Assertion_Exception( 'Unsupported SignatureMethod algorithm.' );
+		}
+
 		if ( Mo_SAML_XML_Security_Key::RSA_SHA1 === $key->type && $algo !== $key->type ) {
 			$key = self::mo_saml_cast_key( $key, $algo );
 		}
@@ -427,18 +432,42 @@ class Mo_SAML_Utilities {
 	}
 
 	/**
+	 * Returns the signature algorithms an SP may accept on inbound SAML messages.
+	 *
+	 * Only asymmetric (RSA) algorithms are allowed. Symmetric algorithms such as
+	 * HMAC-SHA1 must never be accepted: the verification key is the IdP's public
+	 * certificate, and treating it as an HMAC secret would let anyone forge signatures.
+	 *
+	 * @return string[]
+	 */
+	public static function mo_saml_get_allowed_signature_algorithms() {
+		return array(
+			Mo_SAML_XML_Security_Key::DSA_SHA1,
+			Mo_SAML_XML_Security_Key::RSA_SHA1,
+			Mo_SAML_XML_Security_Key::RSA_SHA256,
+			Mo_SAML_XML_Security_Key::RSA_SHA384,
+			Mo_SAML_XML_Security_Key::RSA_SHA512,
+		);
+	}
+
+	/**
 	 * Return new Key with required algorithm and type, if needed.
 	 *
 	 * @param  Mo_SAML_XML_Security_Key $key Instance of MoXMLSecurityKey.
 	 * @param  string                   $algorithm Contains Algorithm.
 	 * @param  string                   $type Algorithm type.
-	 * @throws Mo_SAML_Invalid_Assertion_Exception For missing key in public key details.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception For disallowed algorithm or missing key in public key details.
 	 * @return Object
 	 */
 	public static function mo_saml_cast_key( Mo_SAML_XML_Security_Key $key, $algorithm, $type = 'public' ) {
 		// do nothing if algorithm is already the type of the key.
 		if ( $key->type === $algorithm ) {
 			return $key;
+		}
+
+		if ( ! in_array( $algorithm, self::mo_saml_get_allowed_signature_algorithms(), true ) ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'Refusing to cast verification key to disallowed algorithm: ' . $algorithm, Mo_SAML_Logger::ERROR );
+			throw new Mo_SAML_Invalid_Assertion_Exception( 'Unsupported SignatureMethod algorithm.' );
 		}
 
 		$key_info = openssl_pkey_get_details( $key->key );
@@ -1066,20 +1095,64 @@ class Mo_SAML_Utilities {
 	}
 
 	/**
+	 * Register an ability category.
+	 *
+	 * @param string $category_name Category slug.
+	 * @param array  $args          Category arguments.
+	 * @return void
+	 */
+	public static function mo_saml_register_ability_category( $category_name, $args ) {
+		if ( version_compare( get_bloginfo( 'version' ), '6.9', '<' ) || ! function_exists( 'wp_register_ability_category' ) ) {
+			return;
+		}
+
+		wp_register_ability_category( $category_name, $args );
+	}
+
+	/**
+	 * Register an ability.
+	 *
+	 * @param string $ability_name Ability slug.
+	 * @param array  $args         Ability arguments.
+	 * @return void
+	 */
+	public static function mo_saml_register_ability( $ability_name, $args ) {
+		if ( version_compare( get_bloginfo( 'version' ), '6.9', '<' ) || ! function_exists( 'wp_register_ability' ) ) {
+			return;
+		}
+
+		wp_register_ability( $ability_name, $args );
+	}
+
+	/**
+	 * Unregister an ability.
+	 *
+	 * @param string $ability_name Ability slug.
+	 * @return void
+	 */
+	public static function mo_saml_unregister_ability( $ability_name ) {
+		if ( version_compare( get_bloginfo( 'version' ), '6.9', '<' ) || ! function_exists( 'wp_unregister_ability' ) ) {
+			return;
+		}
+
+		wp_unregister_ability( $ability_name );
+	}
+
+	/**
 	 * Delete the abilities API array.
 	 *
 	 * @return void
 	 */
 	public static function mo_saml_unregister_abilities_api_array() {
-		wp_unregister_ability( 'mo-saml/get-idp-name' );
-		wp_unregister_ability( 'mo-saml/fix-certificate-mismatch' );
-		wp_unregister_ability( 'mo-saml/fix-entity-id' );
-		wp_unregister_ability( 'mo-saml/fix-iconv-cert' );
-		wp_unregister_ability( 'mo-saml/update-default-role' );
-		wp_unregister_ability( 'mo-saml/show-sso-configurations' );
-		wp_unregister_ability( 'mo-saml/get-idp-guide-links' );
-		wp_unregister_ability( 'mo-saml/enable-sso-button' );
-		wp_unregister_ability( 'mo-saml/disable-sso-button' );
+		self::mo_saml_unregister_ability( 'mo-saml/get-idp-name' );
+		self::mo_saml_unregister_ability( 'mo-saml/fix-certificate-mismatch' );
+		self::mo_saml_unregister_ability( 'mo-saml/fix-entity-id' );
+		self::mo_saml_unregister_ability( 'mo-saml/fix-iconv-cert' );
+		self::mo_saml_unregister_ability( 'mo-saml/update-default-role' );
+		self::mo_saml_unregister_ability( 'mo-saml/show-sso-configurations' );
+		self::mo_saml_unregister_ability( 'mo-saml/get-idp-guide-links' );
+		self::mo_saml_unregister_ability( 'mo-saml/enable-sso-button' );
+		self::mo_saml_unregister_ability( 'mo-saml/disable-sso-button' );
 	}
 
 	/**
