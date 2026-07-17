@@ -3,7 +3,7 @@
  * Plugin Name: SAML Single Sign On – SSO Login
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 5.4.4
+ * Version: 5.4.5
  * Author: miniOrange
  * Author URI: https://miniorange.com/
  * License: Expat

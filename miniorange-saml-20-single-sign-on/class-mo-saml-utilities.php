@@ -424,10 +424,66 @@ class Mo_SAML_Utilities {
 			$key = self::mo_saml_cast_key( $key, $algo );
 		}
 
-		/* Check the signature. */
-		if ( ! $obj_xml_sec_dsig->verify( $key ) ) {
+		/*
+		 * Defence in depth: reject any mismatch between the SignatureMethod
+		 * algorithm family and the actual certificate key type BEFORE invoking
+		 * OpenSSL. An RSA-labelled method (e.g. RSA-SHA256) used against an EC or
+		 * DSA certificate would otherwise reach openssl_verify() and depend on it
+		 * returning a processing error (-1) to be rejected.
+		 */
+		self::mo_saml_assert_key_matches_algorithm( $key, $algo );
+
+		/*
+		 * Check the signature.
+		 *
+		 * verify() returns the raw openssl_verify() result: 1 on success, 0 on a
+		 * failed signature, and -1 on a processing error. Because -1 casts to true
+		 * in a boolean context, the check MUST be strictly against 1 so that both
+		 * failures (0) and processing errors (-1) are rejected.
+		 */
+		if ( 1 !== $obj_xml_sec_dsig->verify( $key ) ) {
 			Mo_SAML_Logger::mo_saml_add_log( 'Unable to validate Signature', Mo_SAML_Logger::ERROR );
 			throw new Mo_SAML_Invalid_Assertion_Exception( 'Unable to validate Signature' );
+		}
+	}
+
+	/**
+	 * Asserts that the verification key's actual type matches the SignatureMethod algorithm family.
+	 *
+	 * RSA-family algorithms require an RSA key; DSA-SHA1 requires a DSA key. Any other
+	 * combination (for example an RSA-labelled method against an EC or DSA certificate)
+	 * is rejected here, before OpenSSL is invoked, so signature validation never has to
+	 * rely on openssl_verify() returning a processing error (-1).
+	 *
+	 * @param  Mo_SAML_XML_Security_Key $key  The verification key.
+	 * @param  string                   $algo The SignatureMethod algorithm URI.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception When the algorithm is unsupported, the key type
+	 *                                             cannot be determined, or the types do not match.
+	 * @return void
+	 */
+	private static function mo_saml_assert_key_matches_algorithm( Mo_SAML_XML_Security_Key $key, $algo ) {
+		$expected_key_types = array(
+			Mo_SAML_XML_Security_Key::RSA_SHA1   => OPENSSL_KEYTYPE_RSA,
+			Mo_SAML_XML_Security_Key::RSA_SHA256 => OPENSSL_KEYTYPE_RSA,
+			Mo_SAML_XML_Security_Key::RSA_SHA384 => OPENSSL_KEYTYPE_RSA,
+			Mo_SAML_XML_Security_Key::RSA_SHA512 => OPENSSL_KEYTYPE_RSA,
+			Mo_SAML_XML_Security_Key::DSA_SHA1   => OPENSSL_KEYTYPE_DSA,
+		);
+
+		if ( ! isset( $expected_key_types[ $algo ] ) ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'Unsupported SignatureMethod algorithm: ' . $algo, Mo_SAML_Logger::ERROR );
+			throw new Mo_SAML_Invalid_Assertion_Exception( 'Unsupported SignatureMethod algorithm.' );
+		}
+
+		$key_details = openssl_pkey_get_details( $key->key );
+		if ( false === $key_details || ! isset( $key_details['type'] ) ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'Unable to determine verification key type', Mo_SAML_Logger::ERROR );
+			throw new Mo_SAML_Invalid_Assertion_Exception( 'Unable to determine verification key type.' );
+		}
+
+		if ( $expected_key_types[ $algo ] !== $key_details['type'] ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'SignatureMethod algorithm does not match the certificate key type.', Mo_SAML_Logger::ERROR );
+			throw new Mo_SAML_Invalid_Assertion_Exception( 'SignatureMethod algorithm does not match the certificate key type.' );
 		}
 	}
 

@@ -5,7 +5,7 @@ Tags: SAML, SSO, Single Sign On, Azure AD, Okta
 Requires at least: 3.7
 Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 5.4.4
+Stable tag: 5.4.5
 License: Expat
 License URI: https://plugins.miniorange.com/mit-license
 
@@ -257,7 +257,7 @@ and we will assist you with the integration.
 AI when enabled, the plugin logs SAML errors in a structured format that can be interpreted by AI tools like ChatGPT, Claude, or Perplexity. You can paste error messages into these tools to quickly identify and resolve configuration issues.
 
 = For any query/problem/request =
-Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@xecurify.com">info@xecurify.com</a> or <a href="https://miniorange.com/contact">Contact us</a>. You can also submit your query from plugin's configuration page.
+Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@xecurify.com">info@xecurify.com</a> or <a href="https://miniorange.com/contact">Contact us</a>. You can also submit your query from plugin's configuration page<a href="https://patchstack.com/database/vdp/47d0cb25-fc4b-42b0-a163-9873f6636db0" target="_blank">.</a>
 
 == Screenshots ==
 1. Connect with any SAML supported IDPs for WordPress SSO.
@@ -274,6 +274,9 @@ Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@
 
 
 == Changelog ==
+
+= 5.4.5 =
+* Bugfix: Fixed unauthorised access issue in SAML SSO
 
 = 5.4.4 = 
 * Removed support of insecure signature algorithms
@@ -410,6 +413,9 @@ Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@
 For older changelog entries, please see the [additional changelog.txt file](https://plugins.svn.wordpress.org/miniorange-saml-20-single-sign-on/trunk/changelog.txt) provided with the SAML plugin.
 
 == Upgrade Notice ==
+
+= 5.4.5 =
+* Bugfix: Fixed unauthorised access issue in SAML SSO
 
 = 5.4.4 = 
 * Removed support of insecure signature algorithms
