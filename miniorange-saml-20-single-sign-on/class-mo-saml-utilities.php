@@ -1120,6 +1120,10 @@ class Mo_SAML_Utilities {
 			Mo_SAML_Logger::mo_saml_add_log( 'DOMDocument Not Installed.', \Mo_SAML_Logger::ERROR );
 			throw new Mo_SAML_DOM_Extension_Disabled_Exception( 'DOMDocument Not Installed.' );
 		}
+		if ( ! is_string( $xml ) || '' === trim( $xml ) ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'Invalid XML Detected.', \Mo_SAML_Logger::ERROR );
+			throw new Mo_SAML_Invalid_XML_Exception( 'Invalid XML Detected.' );
+		}
 		$document = new DOMDocument();
 		libxml_set_external_entity_loader( null );
 		// Loading XML will not expand internal entities. These option don't provide any safety against internal entities expansion or recursive internal expansion. LIBXML_DTDLOAD | LIBXML_DTDVALID | LIBXML_NOENT | LIBXML_DTDATTR

@@ -130,11 +130,11 @@ class Mo_SAML_Login_Validate {
 			}
 
 			Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_RELAYSTATE_RECEIVED', array( 'relayState' => $relay_state ) ), Mo_SAML_Logger::DEBUG );
-			update_option( Mo_Saml_Options_Test_Configuration::SAML_RESPONSE, $saml_response );
+			$raw_saml_response = $saml_response;
 			//phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- SAML response is base64 encoded.
-			$saml_response = base64_decode( $saml_response );
+			$decoded_saml_response = base64_decode( $saml_response, true );
 
-			$document = Mo_SAML_Utilities::mo_saml_safe_load_xml( $saml_response );
+			$document = Mo_SAML_Utilities::mo_saml_safe_load_xml( $decoded_saml_response );
 			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- documentElement property is Method of DOMDocument.
 			if ( ! $document instanceof DOMDocument || empty( $document->documentElement ) ) {
 				Mo_SAML_Logger::mo_saml_add_log( 'SAML Response XML did not load correctly. Missing documentElement.', \Mo_SAML_Logger::ERROR );
@@ -273,6 +273,7 @@ class Mo_SAML_Login_Validate {
 				$sp_enity_id = $sp_base_url . '/wp-content/plugins/miniorange-saml-20-single-sign-on/';
 			}
 			Mo_SAML_Utilities::mo_saml_validate_issuer_and_audience( $saml_response, $sp_enity_id, $issuer, $relay_state );
+			update_option( Mo_Saml_Options_Test_Configuration::SAML_RESPONSE, $raw_saml_response );
 
 			$ssoemail        = current( current( $assertions )->mo_saml_get_name_id() );
 			$attrs           = current( $assertions )->mo_saml_get_attributes();

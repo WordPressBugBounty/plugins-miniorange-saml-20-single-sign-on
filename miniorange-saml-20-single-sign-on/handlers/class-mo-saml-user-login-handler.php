@@ -87,7 +87,7 @@ class Mo_Saml_User_Login_Handler {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
 		} catch ( Mo_Saml_Username_Length_Limit_Exceeded_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
-		} catch ( Exception $ex ) {
+		} catch ( Throwable $ex ) {
 			Mo_SAML_Logger::mo_saml_add_log( $ex->getMessage(), \Mo_SAML_Logger::ERROR );
 			wp_die( 'We could not sign you in. Please contact your administrator.' );
 		}

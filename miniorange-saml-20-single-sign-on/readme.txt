@@ -5,7 +5,7 @@ Tags: SAML, SSO, Single Sign On, Azure AD, Okta
 Requires at least: 3.7
 Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 5.4.5
+Stable tag: 5.4.6
 License: Expat
 License URI: https://plugins.miniorange.com/mit-license
 
@@ -275,6 +275,9 @@ Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@
 
 == Changelog ==
 
+= 5.4.6 =
+* Fix: Improved error handling for the SAML response
+
 = 5.4.5 =
 * Bugfix: Fixed unauthorised access issue in SAML SSO
 
@@ -413,6 +416,9 @@ Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@
 For older changelog entries, please see the [additional changelog.txt file](https://plugins.svn.wordpress.org/miniorange-saml-20-single-sign-on/trunk/changelog.txt) provided with the SAML plugin.
 
 == Upgrade Notice ==
+
+= 5.4.6 =
+* Fix: Improved error handling for the SAML response
 
 = 5.4.5 =
 * Bugfix: Fixed unauthorised access issue in SAML SSO
