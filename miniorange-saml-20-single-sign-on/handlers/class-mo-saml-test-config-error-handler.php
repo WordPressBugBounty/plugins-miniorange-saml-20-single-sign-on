@@ -45,9 +45,6 @@ class Mo_Saml_Test_Config_Error_Handler {
 	public static function mo_saml_test_config_error_display( $error_type ) {
 
 		switch ( $error_type ) {
-			case 'test_config_error_wpsamlerr004':
-				$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR004'];
-				break;
 			case 'test_config_error_wpsamlerr012':
 				$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR012'];
 				break;

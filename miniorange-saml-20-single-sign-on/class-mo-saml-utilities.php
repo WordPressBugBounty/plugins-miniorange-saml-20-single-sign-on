@@ -1205,7 +1205,6 @@ class Mo_SAML_Utilities {
 	 */
 	public static function mo_saml_unregister_abilities_api_array() {
 		self::mo_saml_unregister_ability( 'mo-saml/get-idp-name' );
-		self::mo_saml_unregister_ability( 'mo-saml/fix-certificate-mismatch' );
 		self::mo_saml_unregister_ability( 'mo-saml/fix-entity-id' );
 		self::mo_saml_unregister_ability( 'mo-saml/fix-iconv-cert' );
 		self::mo_saml_unregister_ability( 'mo-saml/update-default-role' );

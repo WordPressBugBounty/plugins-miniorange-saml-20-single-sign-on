@@ -46,7 +46,6 @@ class Mo_SAML_Register_Abilities {
 		}
 
 		self::mo_saml_get_idp_name();
-		self::mo_saml_fix_certificate_mismatch();
 		self::mo_saml_fix_entity_id();
 		self::mo_saml_fix_iconv_cert();
 		self::mo_saml_update_default_role();
@@ -116,65 +115,6 @@ class Mo_SAML_Register_Abilities {
 			)
 		);
 	}
-
-	/**
-	 * Register the ability to fix the certificate mismatch.
-	 */
-	public static function mo_saml_fix_certificate_mismatch() {
-		Mo_SAML_Utilities::mo_saml_register_ability(
-			'mo-saml/fix-wpsamlerr004',
-			array(
-				'label'               => 'Fix Certificate Mismatch WPSAMLERR004',
-				'description'         => 'Fix the certificate mismatch in the plugin',
-				'category'            => 'mo-saml-sso',
-				'input_schema'        => array(
-					'type'                 => 'object',
-					'properties'           => array(),
-					'additionalProperties' => false,
-					'default'              => array(),
-				),
-				'output_schema'       => array(
-					'type'       => 'object',
-					'properties' => array(
-						'success' => array( 'type' => 'boolean' ),
-						'message' => array( 'type' => 'string' ),
-					),
-					'required'   => array( 'success', 'message' ),
-				),
-				'permission_callback' => function () {
-					return current_user_can( 'manage_options' );
-				},
-				'execute_callback'    => function () {
-					$saml_required_certificate = get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_CERTIFICATE );
-					$saml_certificate          = maybe_unserialize( get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) );
-					if ( $saml_required_certificate === $saml_certificate[0] ) {
-						return array(
-							'success' => false,
-							'message' => 'There is no certificate mismatch WPSAMLERR004.',
-						);
-					}
-					$saml_certificate[0] = Mo_SAML_Utilities::mo_saml_sanitize_certificate( $saml_required_certificate );
-					update_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE, $saml_certificate );
-					return array(
-						'success' => true,
-						'message' => 'Certificate mismatch WPSAMLERR004 fixed successfully.',
-					);
-				},
-				'meta'                => array_merge(
-					array(
-						'show_in_rest' => true,
-						'annotations'  => array(
-							'readonly'      => true,
-							'idempotent'    => true,
-							'openWorldHint' => true,
-						),
-					),
-					self::mo_saml_get_mcp_public_setting() ? array( 'mcp' => self::mo_saml_get_mcp_public_setting() ) : array()
-				),
-			)
-		);
-	}
-
 
 	/**
 	 * Register the ability to fix the entity ID.

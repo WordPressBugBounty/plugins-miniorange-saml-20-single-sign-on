@@ -118,8 +118,9 @@ function mo_saml_is_customer_registered_saml() {
  *
  * @param string $error_code error code .
  * @param string $status_message The status sent by Identity Provider.
+ * @param string $received_certificate Raw (unsanitized) X.509 certificate received from the IDP when the error is a certificate mismatch (WPSAMLERR004). Never persisted to the DB - shown to the admin for manual verification only.
  */
-function mo_saml_display_test_config_error_page( $error_code, $status_message = '' ) {
+function mo_saml_display_test_config_error_page( $error_code, $status_message = '', $received_certificate = '' ) {
 	$error_fix     = $error_code['fix'];
 	$error_cause   = $error_code['cause'];
 	$error_faq     = $error_code['faq'];
@@ -134,12 +135,11 @@ function mo_saml_display_test_config_error_page( $error_code, $status_message = 
 	if ( ! empty( $status_message ) ) {
 		echo '<p><strong>' . esc_html__( 'Status Message in the SAML Response:', 'miniorange-saml-20-single-sign-on' ) . '</strong> <br/>' . esc_html( $status_message ) . '</p><br>';
 	}
-	if ( 'WPSAMLERR010' === $error_code['code'] || 'WPSAMLERR004' === $error_code['code'] || 'WPSAMLERR012' === $error_code['code'] ) {
+	if ( 'WPSAMLERR004' === $error_code['code'] && ! empty( $received_certificate ) ) {
+		mo_saml_render_certificate_mismatch_details( $received_certificate, $error_faq );
+	} elseif ( 'WPSAMLERR010' === $error_code['code'] || 'WPSAMLERR012' === $error_code['code'] ) {
 		$option_id = '';
 		switch ( $error_code['code'] ) {
-			case 'WPSAMLERR004':
-				$option_id = 'mo_saml_fix_certificate';
-				break;
 			case 'WPSAMLERR010':
 				$option_id = 'mo_saml_fix_entity_id';
 				break;
@@ -168,6 +168,54 @@ function mo_saml_display_test_config_error_page( $error_code, $status_message = 
 	}
 	mo_saml_download_logs( $error_message, $error_cause );
 	exit;
+}
+
+/**
+ * Renders the certificate received from the IDP alongside its parsed details (CN, issuer, validity, fingerprint)
+ * so the admin can manually verify whether it comes from a trusted authority before deciding to trust it.
+ * The certificate is only ever rendered in this response - it is never written to the options table.
+ *
+ * @param string $received_certificate Raw (unsanitized) X.509 certificate string received from the IDP.
+ * @param string $faq_url URL of the FAQ article for this error, linked below the certificate details.
+ * @return void
+ */
+function mo_saml_render_certificate_mismatch_details( $received_certificate, $faq_url = '' ) {
+	$certificate_pem = Mo_SAML_Utilities::mo_saml_sanitize_certificate( $received_certificate );
+	// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Silenced to avoid warning messages if the IDP sent a malformed certificate.
+	$parsed_cert = @openssl_x509_parse( $certificate_pem );
+
+	echo '<div style="margin:3% 3% 0 3%;text-align:left;background:#f8f8f8;border:1px solid #ddd;padding:15px;border-radius:4px;">
+		<p><strong>' . esc_html__( 'Note:', 'miniorange-saml-20-single-sign-on' ) . '</strong> ' . esc_html__( 'The certificate received in the SAML Response from your Identity Provider does not match the X.509 Certificate configured under the Service Provider Setup tab. Please verify the certificate details below before trusting it and updating your configuration.', 'miniorange-saml-20-single-sign-on' ) . '</p>';
+
+	if ( is_array( $parsed_cert ) ) {
+		$rows = array(
+			__( 'Subject (CN)', 'miniorange-saml-20-single-sign-on' )      => isset( $parsed_cert['subject']['CN'] ) ? $parsed_cert['subject']['CN'] : '',
+			__( 'Organization', 'miniorange-saml-20-single-sign-on' )      => isset( $parsed_cert['subject']['O'] ) ? $parsed_cert['subject']['O'] : '',
+			__( 'Issuer (CN)', 'miniorange-saml-20-single-sign-on' )       => isset( $parsed_cert['issuer']['CN'] ) ? $parsed_cert['issuer']['CN'] : '',
+			__( 'Issuer Organization', 'miniorange-saml-20-single-sign-on' ) => isset( $parsed_cert['issuer']['O'] ) ? $parsed_cert['issuer']['O'] : '',
+			__( 'Valid From', 'miniorange-saml-20-single-sign-on' )        => isset( $parsed_cert['validFrom_time_t'] ) ? gmdate( 'Y-m-d H:i:s', $parsed_cert['validFrom_time_t'] ) . ' GMT' : '',
+			__( 'Valid To', 'miniorange-saml-20-single-sign-on' )          => isset( $parsed_cert['validTo_time_t'] ) ? gmdate( 'Y-m-d H:i:s', $parsed_cert['validTo_time_t'] ) . ' GMT' : '',
+		);
+		echo '<table style="width:100%;border-collapse:collapse;margin-bottom:15px;background:#fff;">';
+		foreach ( $rows as $label => $value ) {
+			if ( '' === $value ) {
+				continue;
+			}
+			echo '<tr><td style="padding:6px 10px;border:1px solid #ddd;font-weight:bold;width:35%;">' . esc_html( $label ) . '</td><td style="padding:6px 10px;border:1px solid #ddd;word-break:break-all;">' . esc_html( $value ) . '</td></tr>';
+		}
+		echo '</table>';
+		echo '<p><strong>' . esc_html__( 'Certificate received from IDP:', 'miniorange-saml-20-single-sign-on' ) . '</strong></p>
+			<textarea readonly="readonly" rows="8" style="width:100%;font-family:monospace;font-size:11px;box-sizing:border-box;" onclick="this.select();">' . esc_textarea( $certificate_pem ) . '</textarea>';
+	}
+
+	if ( ! empty( $faq_url ) ) {
+		echo '<p><strong>' . esc_html__( 'To know more about the issue, please go through the', 'miniorange-saml-20-single-sign-on' ) . ' <a href="' . esc_url( $faq_url ) . '">' . esc_html__( 'FAQ', 'miniorange-saml-20-single-sign-on' ) . '</a></strong></p>';
+	}
+
+	echo '</div>
+	<div style="margin:3%;display:block;text-align:center;">
+		<input style="padding:1%;width:100px;background: #0091CD none repeat scroll 0% 0%;cursor: pointer;font-size:15px;border-width: 1px;border-style: solid;border-radius: 3px;white-space: nowrap;box-sizing: border-box;border-color: #0073AA;box-shadow: 0px 1px 0px rgba(120, 200, 230, 0.6) inset;color: #FFF;"type="button" value="' . esc_attr__( 'Done', 'miniorange-saml-20-single-sign-on' ) . '" onClick="self.close();">
+	</div>';
 }
 /**
  * This function renders the error log download section.

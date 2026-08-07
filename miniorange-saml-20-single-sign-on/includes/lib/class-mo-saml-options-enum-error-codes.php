@@ -49,7 +49,7 @@ class Mo_Saml_Options_Enum_Error_Codes extends Mo_SAML_Basic_Enum {
 		'WPSAMLERR004' => array(
 			'code'           => 'WPSAMLERR004',
 			'description'    => 'This error occurs  when certificate present in SAML Response does not match with the certificate configured in the plugin.',
-			'fix'            => '<ol><li>Copy paste the certificate provided above in X.509 Certificate under Service Provider Setup tab or click on the Fix Issue button below to do the same.</li><li>If issue persists disable <b>Character encoding</b> under Service Provider Setup tab.</li></ol>',
+			'fix'            => '<ol><li>Verify the certificate details (Subject, Issuer, Validity, Fingerprint) against the certificate published by your Identity Provider.</li><li>If, and only if, you have confirmed it is genuinely from your Identity Provider, update the X.509 Certificate field under IDP Configuration tab with it.</li><li>If issue persists disable <b>Character encoding</b> under Service Provider Setup tab.</li></ol>',
 			'cause'          => 'Mismatch in Certificate',
 			'testconfig_msg' => 'X.509 Certificate field in plugin does not match the certificate found in SAML Response.',
 			'faq'            => 'https://faq.miniorange.com/knowledgebase/wpsamlerr004-certificate-mismatch/',

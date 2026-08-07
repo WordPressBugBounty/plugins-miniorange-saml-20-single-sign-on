@@ -233,7 +233,6 @@ class Mo_SAML_Login_Validate {
 			} elseif ( $assertion_signature_data ) {
 				$saml_required_certificate = $assertion_signature_data['Certificates'][0];
 			}
-			update_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_CERTIFICATE, $saml_required_certificate );
 			$saml_is_encoding_enabled = get_option( Mo_Saml_Options_Enum_Service_Provider::IS_ENCODING_ENABLED ) ? get_option( Mo_Saml_Options_Enum_Service_Provider::IS_ENCODING_ENABLED ) : 'checked';
 			if ( ! $valid_signature ) {
 
@@ -242,7 +241,8 @@ class Mo_SAML_Login_Validate {
 					Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_CERT_NOT_MATCHED' ), Mo_SAML_Logger::ERROR );
 					$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR004'];
 					if ( 'testValidate' === $relay_state ) {
-						wp_safe_redirect( admin_url() . '?page=mo_saml_settings&option=test_config_error_wpsamlerr004' );
+						// The certificate received from the IDP did not match the one configured for the SP - it is untrusted, so it is only ever shown to the admin and never persisted to the DB.
+						mo_saml_display_test_config_error_page( $error_code, '', $saml_required_certificate );
 						exit;
 					} else {
 						throw new Mo_SAML_Cert_Mismatch_Exception( 'Certificate mismatch.' );
@@ -287,15 +287,6 @@ class Mo_SAML_Login_Validate {
 			//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Ignore the nonce verification for test config operation.
 			if ( 'export_configuration' === $_REQUEST['option'] ) {
 				mo_saml_miniorange_import_export( true );
-			}
-
-			if ( 'mo_saml_fix_certificate' === $_REQUEST['option'] && check_admin_referer( 'mo_saml_fix_certificate' ) ) {
-				$saml_required_certificate = get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_CERTIFICATE );
-				$saml_certificate          = maybe_unserialize( get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) );
-				$saml_certificate[0]       = Mo_SAML_Utilities::mo_saml_sanitize_certificate( $saml_required_certificate );
-				update_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE, $saml_certificate );
-				wp_safe_redirect( '?option=testConfig' );
-				exit;
 			}
 
 			if ( 'mo_saml_fix_entity_id' === $_REQUEST['option'] && check_admin_referer( 'mo_saml_fix_entity_id' ) ) {
