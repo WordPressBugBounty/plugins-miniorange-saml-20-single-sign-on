@@ -3,13 +3,13 @@ Contributors: miniOrange
 Donate link: https://plugins.miniorange.com
 Tags: SAML, SSO, Single Sign On, Azure AD, Okta 
 Requires at least: 3.7
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 5.4.7
+Stable tag: 6.0.0
 License: Expat
 License URI: https://plugins.miniorange.com/mit-license
 
-SAML SSO (Single Sign On) for WordPress Login with Okta, Entra ID, Azure AD/B2C, G-Suite, Shibboleth, OneLogin, Keycloak, Salesforce [24/7 Support]
+SAML SSO (Single Sign On) for WordPress Login with Okta, Entra ID/Azure AD, GSuite, Salesforce & All SAML IdPs. Free Unlimited SSO [24/7 Support]
 
 == Description ==
 == SAML Single Sign On (SSO) Plugin to Simplify WordPress Login Experience ==
@@ -208,23 +208,139 @@ Enterprises use the **miniOrange WordPress SAML SSO** plugin along with our <a h
 We’re committed to ensuring you have a smooth experience with our **WordPress SAML Single Sign On (SSO) plugin**. If you have any questions, need customizations, or would like to request additional features, feel free to contact us at <a href=”mailto:samlsupport@xecurify.com” target=”_blank”>samlsupport@xecurify.com</a>.
 
 == Installation ==
+**Pre-requisites**
 
-= From your WordPress dashboard =
-1. Visit `Plugins > Add New`.
+**WordPress 3.7 or higher. The SAML plugin is tested up to WordPress 7.0.4.
+PHP 5.6 or higher.**
+
+**PHP extensions:** OpenSSL, cURL, and DOM must be enabled. OpenSSL validates the signature on the SAML response, DOM parses the SAML assertion XML, and cURL fetches IDP metadata. The SAML plugin cannot complete an SSO login if any of these are disabled.
+
+**HTTPS on your WordPress site:** Most Identity Providers reject a non-HTTPS ACS (AssertionConsumerService) URL when registering a SAML application, and the SAML assertion carries user identity data that should only travel over an encrypted connection. Run your site on a valid SSL certificate before setting up SAML SSO.
+
+**A SAML 2.0 compliant Identity Provider. The plugin works with any IDP that supports the SAML 2.0 protocol:** Azure AD / Microsoft Entra ID, Okta, ADFS, Google Workspace, Keycloak, Salesforce, Shibboleth, OneLogin, PingOne, Auth0, and others. IDPs that only support OAuth or OpenID Connect will not work with this SAML plugin.
+
+**Administrator access to both systems:** You need a WordPress administrator account and permission to create a SAML application at your Identity Provider, since the setup requires exchanging metadata in both directions.
+
+**From your WordPress dashboard**
+
+1. Visit Plugins > Add New.
 2. Search for `SAML SP Single Sign On`. Find and Install `SAML SP Single Sign On – SSO login`.
 3. Activate the SAML plugin from your Plugins page.
 
-= From WordPress.org =
+**From WordPress.org**
+
 1. Download SAML SP Single Sign On – SSO login plugin.
 2. Unzip and upload the `miniorange-saml-20-single-sign-on` directory to your `/wp-content/plugins/` directory.
 
-= Activate the SAML Plugin =
+**Activate the SAML Plugin**
+
 1. Go to your WordPress dashboard → Plugins → Installed Plugins and activate the miniOrange SSO using SAML 2.0 plugin
 2. Select your Identity Provider (IDP) from our <a href="https://plugins.miniorange.com/wordpress-saml-guides" target="_blank">**SAML Setup Guide Library**</a> and follow the step-by-step instructions to configure the connection and complete the SAML SSO setup.
 
-= Abilities API Setting =
+**Configure Your WordPress Site as a SAML Service Provider**
+
+1. In your WordPress dashboard, go to miniOrange SAML 2.0 SSO → Service Provider Metadata.
+
+2. Copy the SP Issuer / SP Entity ID: this is the unique identifier that represents your WordPress site in every SAML request, SAML response, and SAML assertion, and it is how your Identity Provider recognises which Service Provider is requesting authentication.
+
+3. Copy the ACS (AssertionConsumerService) URL, where the IDP posts the SAML response after authenticating the user.
+
+4. Paste these values into the SAML application at your Identity Provider, or upload the SP metadata XML file if your IDP supports metadata import.
+
+**Add Your SAML Identity Provider Details**
+
+Go to the IDP Configuration tab. Enter the SAML details supplied by your Identity Provider:
+
+1. **Identity Provider Name:** any label of your choice, such as Azure AD, Okta, or Company SSO. This name identifies the SAML connection inside the plugin and is used in the SAML SSO login link.
+
+2. **IdP Entity ID or Issuer:** the unique identifier of your Identity Provider. The SAML plugin uses it to confirm that each incoming SAML assertion was issued by the expected IDP.
+
+3. **SAML Login URL:** the SAML SSO endpoint where the SAML authentication request is sent. Use the SAML login endpoint from your IDP, not the IDP's ordinary user login page.
+
+4. **X.509 Certificate:** the public signing certificate from your Identity Provider, used to validate the signature on every SAML response. Paste it including the -----BEGIN CERTIFICATE----- and -----END CERTIFICATE----- lines.
+
+5. Click Save, then click Test Configuration to confirm the SAML SSO connection and view the attributes sent by your IDP.
+
+Alternatively, click Upload IDP Metadata to import your Identity Provider's metadata XML file or metadata URL, and the SAML issuer, login URL, and X.509 certificate are filled in automatically.
+
+**Character Encoding for the SAML Certificate**
+
+If your X.509 certificate is rejected or the SAML response fails signature validation, disable the Character encoding option in the IDP Configuration tab. It converts the SAML certificate to UTF-8 so every browser and PHP configuration reads it identically, and it clears most invalid certificate and signature verification errors during SAML SSO login.
+
+**Assertion Time Validity**
+
+Every SAML assertion carries a validity window. If the clock on your WordPress server differs from the clock at your Identity Provider, a valid SAML login can still fail with an assertion expired or NotOnOrAfter error. Increase the assertion time validity value (in minutes) to cover the clock difference between your WordPress site and your SAML IDP, then retry the SSO login. Keep the window as short as your environment allows, since a shorter SAML assertion validity period is the more secure setting.
+
+**Default Role Mapping for SAML SSO Users**
+
+1. Go to the Attribute / Role Mapping tab.
+
+2. Set the Default Role: the WordPress role assigned to every new user created through SAML SSO, typically Subscriber.
+
+3. Save. New users are now provisioned automatically on their first SAML SSO login with the role you selected.
+
+**Add the SAML SSO Button, Login URL, and Widget**
+
+Open the Redirection & SSO Links tab to choose how users start a SAML SSO login:
+
+1. **SAML SSO button:** enable the option to add a Single Sign On button on the WordPress login page, so users can launch SAML SSO directly from wp-login.php. 
+
+2. **SAML SSO login URL:** copy the SSO link generated in this tab and use it in a menu item, a post, a page, a custom template. Opening that URL starts the SAML SSO flow with your configured IDP.
+
+3. **Widget: go to Appearance** → Widgets and place the SAML login widget in your sidebar or footer to expose an SSO login link across the site. Your theme must support widget areas.
+
+**Common errors while installations**
+
+* **Why are the images not displaying properly in the free plugin after version 4.9.30?**
+
+ Cause: If you are experiencing broken images in the SAML SSO free plugin for WordPress after updating to version 4.9.30 or higher, it is because the images in the plugin have been converted to .webp format due to which server rules are applied by the hosting provider that might be blocking/deleting the .webp images.
+Solution: IIS (Internet Information Services) was blocking the .webp images, to resolve this issue, we recommend you to add the following code snippet in the web.config file.
+```<staticContent>
+    <mimeMap fileExtension=".webp" mimeType="image/webp" />
+</staticContent>
+```
+ 
+* **Why do I see an update notice for the plugin when I’m using the latest free version?**
+
+ If you're using the latest free version of our plugin and are hosted on WP Engine with Smart Plugin Manager enabled, you might see a false update notice for the paid plugin. This notice is incorrect and does not mean there’s a new version available for the free plugin.
+Reason: WP Engine’s Smart Plugin Manager occasionally misidentifies the paid plugin as an update for the free plugin. This is due to how it scans and compares plugins, even when they are separate products.
+Solution: You can safely ignore the update notice if you are using the free plugin.
+
+**Abilities API Setting**
+
 1. Connect AI agents like <a href="https://plugins.miniorange.com/setup-chatgpt-to-wordpress-abilities-api-using-mcp" target="_blank">Chatgpt</a>, <a href="https://plugins.miniorange.com/connect-wordpress-with-claude-mcp-guide" target="_blank">Claude</a>, Gemini, and <a href="https://plugins.miniorange.com/connect-wordpress-with-cursor-mcp-guide" target="_blank">Cursor</a> to your WordPress site using our SAML plugin. If your WordPress version is below 7.0, please install the WordPress MCP Adapter before starting the integration.
+
 2. In your WordPress dashboard, navigate to miniOrange SAML 2.0 SSO → Abilities API Settings and enable the Abilities API (MCP Public) option to allow AI agents to access your WordPress site.
+
+**Abilities Description**
+
+**Fix SAML SSO errors**
+
+1. mo-saml/fix-wpsamlerr010: fixes error WPSAMLERR010 by correcting the Entity ID, resolving the mismatch between the issuer value sent in the SAML response and the one saved in the plugin.
+
+2. mo-saml/fix-wpsamlerr012: fixes error WPSAMLERR012 by applying iconv character encoding to the X.509 certificate, so the SAML certificate is converted to UTF-8 and the SAML response signature validates correctly.
+
+**View your SAML SSO configuration**
+
+1. mo-saml/show-sso-configurations: displays your current SAML SSO configuration settings.
+
+2. mo-saml/get-idp-name: returns the name of the SAML Identity Provider configured in the plugin.
+
+3. mo-saml/get-sp-metadata: returns your WordPress site's Service Provider metadata, including the SP Entity ID and ACS URL you need to register at your IDP.
+
+**Manage SAML SSO settings**
+
+1. mo-saml/update-default-role: updates the default WordPress role assigned to users created through SAML SSO.
+
+2. mo-saml/enable-sso-button: enables the SAML SSO button on the WordPress login page.
+
+3. mo-saml/disable-sso-button: disables the SAML SSO button on the WordPress login page.
+
+**Get help**
+
+1. mo-saml/get-idp-guide-links: returns the setup guide links for supported SAML Identity Providers.
+
+2. mo-saml/send-support-request: sends a support request to the miniOrange SAML support team from within your WordPress site.
 
 == Frequently Asked Questions ==
 
@@ -275,7 +391,12 @@ Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@
 
 == Changelog ==
 
+= 6.0.0 =
+* Security: Improved existing WordPress user identification during SSO login to prevent incorrect account access.
+* Feature: Added "Identify User By" (Username / Email) under Attribute Mapping. Defaults to Email.
+
 = 5.4.7 =
+* Added compatibility with WordPress 7.1
 * Removed certificate mismatch fix option to enhance security
 
 = 5.4.6 =
@@ -420,8 +541,12 @@ For older changelog entries, please see the [additional changelog.txt file](http
 
 == Upgrade Notice ==
 
+= 6.0.0 =
+* Important: This major release includes changes to SSO user identification that may affect existing SSO logins. We recommend testing the update in a test environment before upgrading your production site, if available.
+
 = 5.4.7 =
-* Removed certificate mismatch fix option to enhance security
+* Added compatibility with WordPress 7.1
+* Removed certificate mismatch fix option to enhance security in SAML plugin
 
 = 5.4.6 =
 * Fix: Improved error handling for the SAML response
@@ -430,7 +555,7 @@ For older changelog entries, please see the [additional changelog.txt file](http
 * Bugfix: Fixed unauthorised access issue in SAML SSO
 
 = 5.4.4 = 
-* Removed support of insecure signature algorithms
+* Removed support of insecure signature algorithms in SAML plugin
 
 = 5.4.3 =
 Added compatibility with WordPress 7.0
@@ -540,7 +665,8 @@ Changed the guide links of Claude and Cursor Integrations in SAML plugin
 * Fix for wp-config.php file read flow in the SAML plugin
 
 = 5.1.5 =
-* Added PHPCS Fixes
+* Added PHPCS Fixes in the SAML plugin
+
 * Fix for the warning while editing the Theme
 * Performance Fixes in the SAML Plugin
 
@@ -644,7 +770,7 @@ Changed the guide links of Claude and Cursor Integrations in SAML plugin
 * Sanitization fixes for global variables
 
 = 4.9.23 =
-* Removed role mapping for existing users
+* Removed role mapping for existing users in the SAML plugin
 
 = 4.9.22 =
 * Fixed a bug with post login redirection

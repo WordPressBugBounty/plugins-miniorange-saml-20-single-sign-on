@@ -985,6 +985,19 @@ class Mo_SAML_Utilities {
 		return $sp_entity_id;
 	}
 	/**
+	 * Resolves the "Identify User By" setting to either 'username' or 'email', defaulting to
+	 * 'email' when nothing (or anything other than 'username') has been saved yet.
+	 *
+	 * @return string Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_USERNAME or ACCOUNT_MATCHER_EMAIL.
+	 */
+	public static function mo_saml_get_identify_user_by() {
+		if ( Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_USERNAME === get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER ) ) {
+			return Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_USERNAME;
+		}
+		return Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_EMAIL;
+	}
+
+	/**
 	 * Checks if the SP is configured or not.
 	 *
 	 * @return bool

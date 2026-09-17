@@ -461,3 +461,10 @@ jQuery(document).ready(function($){
         });
     }
 });
+
+// User Matching Preference: auto-save the Username/Email radio choice on change.
+jQuery(document).ready(function() {
+    jQuery('.mo-saml-identify-user-radio').on('change', function() {
+        this.form.submit();
+    });
+});

@@ -116,6 +116,8 @@ class Mo_Saml_Options_Enum_Attribute_Mapping extends Mo_SAML_Basic_Enum {
 	const ATTRIBUTE_LAST_NAME       = 'saml_am_last_name';
 	const ATTRIBUTE_GROUP_NAME      = 'saml_am_group_name';
 	const ATTRIBUTE_ACCOUNT_MATCHER = 'saml_am_account_matcher';
+	const ACCOUNT_MATCHER_USERNAME  = 'username';
+	const ACCOUNT_MATCHER_EMAIL     = 'email';
 }
 
 /**
@@ -218,7 +220,7 @@ class Mo_Saml_Options_Plugin_Constants extends Mo_SAML_Basic_Enum {
 	const CMS_NAME         = 'WP';
 	const APPLICATION_NAME = 'WP miniOrange SAML 2.0 SSO Plugin';
 	const APPLICATION_TYPE = 'SAML';
-	const VERSION          = '5.4.7';
+	const VERSION          = '6.0.0';
 	const HOSTNAME         = 'https://login.xecurify.com';
 	const WP_VERSION       = '6.9';
 	const PLUGIN_FILE       = 'miniorange-saml-20-single-sign-on/login.php';
@@ -980,6 +982,7 @@ class Mo_Saml_Error_Log extends Mo_SAML_Basic_Enum {
 	const INVALID_IDP_NAME_FORMAT                           = 'INVALID_IDP_NAME_FORMAT IDP_NAME = {{saml_identity_name}}';
 	const SP_ENTITY_ID                                      = '[Service Provider Metadata] Configuration saved:[ sp_entity_id = {{mo_saml_sp_entity_id}} ]';
 	const DEFAULT_ROLE_ID                                   = '[Role Mapping] Configuration saved:[ default_user_role = {{saml_am_default_user_role}} ]';
+	const IDENTIFY_USER_BY                                  = '[Attribute Mapping] Identify User By Configuration saved:[ saml_am_account_matcher = {{identify_user_by}} ]';
 	const SSO_SETTINGS                                      = '[SSO Settings] Configuration saved: [ SSO button added on WP login page  = {{mo_saml_add_sso_button_wp}} ].';
 	const UPLOAD_METADATA_EMPTY                             = '[Upload IDP Metadata] IDP Metadata is empty';
 	const UPLOAD_METADATA_NAME_EMPTY                        = '[Upload IDP Metadata] IDP Metadata File Name is empty';
@@ -1091,6 +1094,7 @@ class Mo_Saml_Messages extends Mo_SAML_Basic_Enum {
 			'CALL_REQUEST_SUBMIT'         => __( 'Thanks for getting in touch! We will reach out to you shortly.', 'miniorange-saml-20-single-sign-on' ),
 			'CALL_REQUEST_NOT_SUBMIT'     => __( 'Your callback request could not be submitted. Please try again.', 'miniorange-saml-20-single-sign-on' ),
 			'UPDATED_DEFAULT_ROLE'        => __( 'Role Mapping details saved successfully.', 'miniorange-saml-20-single-sign-on' ),
+			'UPDATED_IDENTIFY_USER'       => __( 'User identification settings saved successfully.', 'miniorange-saml-20-single-sign-on' ),
 			'DEMO_REQUEST_FAILED'         => __( 'Something went wrong. Please reach out to us using the Support/Contact Us form to get help with the demo.', 'miniorange-saml-20-single-sign-on' ),
 			'PASSWORD_PATTERN_INVALID'    => __( 'Minimum 6 characters should be present. Maximum 15 characters should be present. Only following symbols (!@#.$%^&*-_) are allowed.', 'miniorange-saml-20-single-sign-on' ),
 			'PASSWORD_MISMATCH'           => __( 'Passwords do not match.', 'miniorange-saml-20-single-sign-on' ),

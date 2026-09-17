@@ -81,6 +81,9 @@ class Mo_SAML_Base_Handler {
 			case 'login_widget_saml_role_mapping':
 				Mo_SAML_Role_Mapping_Handler::mo_saml_update_default_role( $post_array, $db_handler );
 				break;
+			case 'saml_am_identify_user':
+				Mo_SAML_Attribute_Mapping_Handler::mo_saml_update_identify_user( $post_array, $db_handler );
+				break;
 			case 'mo_saml_add_sso_button_wp_option':
 				Mo_SAML_SSO_Settings_Handler::mo_saml_add_sso_button( $post_array, $db_handler );
 				break;

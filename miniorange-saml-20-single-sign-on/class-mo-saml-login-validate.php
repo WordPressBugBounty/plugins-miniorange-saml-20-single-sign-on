@@ -325,7 +325,7 @@ class Mo_SAML_Login_Validate {
 		$last_name          = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_LAST_NAME );
 		$group_name         = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_GROUP_NAME );
 		$default_role       = get_option( Mo_Saml_Options_Enum_Role_Mapping::ROLE_DEFAULT_ROLE );
-		$check_if_match_by  = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER );
+		$identify_user_by   = Mo_SAML_Utilities::mo_saml_get_identify_user_by();
 		$user_email         = '';
 		$user_name          = '';
 
@@ -360,10 +360,6 @@ class Mo_SAML_Login_Validate {
 			} else {
 				$group_name = array();
 			}
-
-			if ( empty( $check_if_match_by ) ) {
-				$check_if_match_by = 'email';
-			}
 		}
 
 		if ( 'testValidate' === $relay_state ) {
@@ -371,7 +367,7 @@ class Mo_SAML_Login_Validate {
 			update_option( Mo_Saml_Sso_Constants::MO_SAML_TEST_STATUS, 1 );
 			$this->mo_saml_show_test_result( $first_name, $last_name, $user_email, $group_name, $attrs );
 		} else {
-			$this->mo_saml_login_user( $user_email, $first_name, $last_name, $user_name, $group_name, $default_role, $relay_state, $check_if_match_by );
+			$this->mo_saml_login_user( $user_email, $first_name, $last_name, $user_name, $group_name, $default_role, $relay_state, $identify_user_by );
 		}
 	}
 
@@ -430,10 +426,10 @@ class Mo_SAML_Login_Validate {
 					<div style="color: #a94442;font-size:14pt; margin-bottom:20px;">' . esc_html__( 'WARNING: Some Attributes Did Not Match.', 'miniorange-saml-20-single-sign-on' ) . '</div>
 					<div style="display:block;text-align:center;margin-bottom:4%;"><img style="width:15%;"src="' . esc_url( plugin_dir_url( __FILE__ ) ) . 'images/wrong.webp"></div>';
 		}
-		$match_account_by = get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER ) ? get_option( Mo_Saml_Options_Enum_Attribute_Mapping::ATTRIBUTE_ACCOUNT_MATCHER ) : 'email';
+		$identify_user_by = Mo_SAML_Utilities::mo_saml_get_identify_user_by();
 		if ( strlen( $name_id ) > 60 ) {
 			echo '<p><font color="#FF0000" style="font-size:14pt;font-weight:bold">' . esc_html__( 'Warning: The NameID value is longer than 60 characters. User will not be created during SSO.', 'miniorange-saml-20-single-sign-on' ) . '</font></p>';
-		} elseif ( 'email' === $match_account_by && ! filter_var( $name_id, FILTER_VALIDATE_EMAIL ) ) {
+		} elseif ( Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_EMAIL === $identify_user_by && ! filter_var( $name_id, FILTER_VALIDATE_EMAIL ) ) {
 			echo '<p><font color="#FF0000" style="font-size:14pt;font-weight:bold">' . esc_html__( 'Warning: The NameID value is not a valid Email ID', 'miniorange-saml-20-single-sign-on' ) . '</font></p>';
 		}
 		echo '<span style="font-size:14pt;"><b>' . esc_html__( 'Hello', 'miniorange-saml-20-single-sign-on' ) . '</b>, ' . esc_html( $user_email ) . '</span>';
@@ -525,25 +521,25 @@ class Mo_SAML_Login_Validate {
 	 *
 	 * @param string       $relay_state relay state parameter passed by IDP.
 	 *
-	 * @param string       $check_if_match_by default username, parameter from which users will be matched.
+	 * @param string       $identify_user_by Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_USERNAME or ACCOUNT_MATCHER_EMAIL; attribute used to match the existing WP user.
 	 * @throws Mo_Saml_Username_Length_Limit_Exceeded_Exception For username length limit exceeded.
 	 * @throws Mo_Saml_User_Creation_Exception For user creation failed.
 	 * @return void
 	 */
-	private function mo_saml_login_user( $user_email, $first_name, $last_name, $user_name, $group_name, $default_role, $relay_state, $check_if_match_by ) {
+	private function mo_saml_login_user( $user_email, $first_name, $last_name, $user_name, $group_name, $default_role, $relay_state, $identify_user_by ) {
 		$user_id = null;
-		if ( ( 'username' === $check_if_match_by && username_exists( $user_name ) ) || username_exists( $user_name ) ) {
+		if ( Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_USERNAME === $identify_user_by && username_exists( $user_name ) ) {
 			$user    = get_user_by( 'login', $user_name );
 			$user_id = $user->ID;
 
 			Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_USER_EXISTS', array( 'userName' => $user_name ) ), Mo_SAML_Logger::DEBUG );
-		} elseif ( email_exists( $user_email ) ) {
+		} elseif ( Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_EMAIL === $identify_user_by && email_exists( $user_email ) ) {
 
 			$user    = get_user_by( 'email', $user_email );
 			$user_id = $user->ID;
 
 			Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_EMAIL_EXISTS', array( 'user_email' => $user_email ) ), Mo_SAML_Logger::DEBUG );
-		} elseif ( ! username_exists( $user_name ) && ! email_exists( $user_email ) ) {
+		} else {
 			$random_password = wp_generate_password( 10, false );
 			if ( ! empty( $user_name ) ) {
 				$user_id = wp_create_user( $user_name, $random_password, $user_email );

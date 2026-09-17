@@ -91,6 +91,43 @@ function mo_saml_display_subtabs( $active_subtab ) {
 function mo_saml_display_attribute_mapping() {
 	?>
 	<div class="mo-saml-bootstrap-row align-items-top">
+		<div class="mo-saml-bootstrap-col-md-12">
+			<h4 class="form-head">
+				<span class="entity-info"><?php esc_html_e( 'User Matching Preference', 'miniorange-saml-20-single-sign-on' ); ?></span>
+			</h4>
+		</div>
+	</div>
+	<div class="mo-saml-bootstrap-bg-white mo-saml-bootstrap-mt-3 mo-saml-bootstrap-mb-4">
+		<?php
+		$mo_saml_identify_user_by     = Mo_SAML_Utilities::mo_saml_get_identify_user_by();
+		$mo_saml_identify_by_username = ( Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_USERNAME === $mo_saml_identify_user_by );
+		$mo_saml_identify_by_email    = ( Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_EMAIL === $mo_saml_identify_user_by );
+		?>
+		<form name="saml_form_am_identify_user" method="post" action="">
+			<?php wp_nonce_field( 'saml_am_identify_user' ); ?>
+			<input type="hidden" name="option" value="saml_am_identify_user" />
+			<div class="mo-saml-bootstrap-row align-items-top">
+				<div class="mo-saml-bootstrap-col-md-9">
+					<p class="prem-note mo-saml-bootstrap-mt-0"><i><?php esc_html_e( 'Choose which attribute should be used to identify (match) an existing WordPress user during SSO login.', 'miniorange-saml-20-single-sign-on' ); ?></i></p>
+				</div>
+			</div>
+			<div class="mo-saml-bootstrap-row align-items-top mo-saml-bootstrap-mt-2">
+				<div class="mo-saml-bootstrap-col-md-3">
+					<label style="cursor:pointer;">
+						<input type="radio" class="mo-saml-identify-user-radio" name="saml_am_identify_user_by" value="<?php echo esc_attr( Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_USERNAME ); ?>" <?php checked( $mo_saml_identify_by_username ); ?>>
+						<?php esc_html_e( 'Username', 'miniorange-saml-20-single-sign-on' ); ?>
+					</label>
+				</div>
+				<div class="mo-saml-bootstrap-col-md-3">
+					<label style="cursor:pointer;">
+						<input type="radio" class="mo-saml-identify-user-radio" name="saml_am_identify_user_by" value="<?php echo esc_attr( Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_EMAIL ); ?>" <?php checked( $mo_saml_identify_by_email ); ?>>
+						<?php esc_html_e( 'Email', 'miniorange-saml-20-single-sign-on' ); ?>
+					</label>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="mo-saml-bootstrap-row align-items-top">
 			<div class="mo-saml-bootstrap-col-md-12">
 				<h4 class="form-head">
 					<span class="entity-info"><?php esc_html_e( 'Attribute Mapping', 'miniorange-saml-20-single-sign-on' ); ?>
@@ -117,7 +154,7 @@ function mo_saml_display_attribute_mapping() {
 			</div>
 			<div class="mo-saml-bootstrap-row align-items-top">
 				<div class="mo-saml-bootstrap-col-md-3">
-					<h6 class="mo-saml-bootstrap-text-secondary"><?php esc_html_e( 'Username (required) ', 'miniorange-saml-20-single-sign-on' ); ?></span>:</h6>
+					<h6 class="mo-saml-bootstrap-text-secondary"><?php esc_html_e( 'Username (required) ', 'miniorange-saml-20-single-sign-on' ); ?>:</h6>
 				</div>
 				<div class="mo-saml-bootstrap-col-md-6">
 					<p class="mo-saml-bootstrap-mt-0">NameID</p>
