@@ -44,4 +44,9 @@ function mo_saml_delete_configuration_array() {
 			delete_option( $value );
 		}
 	}
+
+	// Remove replay protection records of consumed SAML Assertions. Prefix must match Mo_SAML_Utilities::USED_ASSERTION_PREFIX.
+	global $wpdb;
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk cleanup of plugin-owned rows on uninstall.
+	$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $wpdb->esc_like( 'mo_saml_used_assertion_' ) . '%' ) );
 }

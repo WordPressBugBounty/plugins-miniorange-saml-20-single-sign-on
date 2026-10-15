@@ -33,6 +33,22 @@ use RobRichards\XMLSecLibs\Mo_SAML_XML_Sec_Enc;
  */
 class Mo_SAML_Utilities {
 	/**
+	 * Option name prefix used to record consumed SAML Assertion IDs for replay protection.
+	 */
+	const USED_ASSERTION_PREFIX = 'mo_saml_used_assertion_';
+
+	/**
+	 * Time (in seconds) after its IssueInstant for which an Assertion ID is remembered.
+	 * Assertions issued earlier than this are rejected, so a purged ID can never be replayed.
+	 */
+	const USED_ASSERTION_RETENTION = DAY_IN_SECONDS;
+
+	/**
+	 * Cron hook that purges expired replay protection records.
+	 */
+	const PURGE_USED_ASSERTIONS_HOOK = 'mo_saml_purge_used_assertions';
+
+	/**
 	 * Generates Random ID of 21 characters.
 	 *
 	 * @return string
@@ -726,6 +742,84 @@ class Mo_SAML_Utilities {
 				throw new Mo_SAML_Invalid_Entity_ID_Exception( 'Invalid Issuer.' );
 			}
 		}
+	}
+
+	/**
+	 * Ensures a SAML Assertion is consumed only once (replay protection).
+	 *
+	 * The Issuer + Assertion ID pair is recorded with an atomic INSERT IGNORE on the unique option_name
+	 * column, so two concurrent submissions of the same Assertion cannot both succeed. Each record expires
+	 * USED_ASSERTION_RETENTION seconds after the later of the IssueInstant and the time it was consumed.
+	 * Assertions issued more than USED_ASSERTION_RETENTION seconds ago are rejected outright, which keeps
+	 * the protection effective even when assertion time validation is disabled. Expired records are
+	 * purged by a daily cron event.
+	 *
+	 * Must be called only after the signature, issuer and audience of the response have been verified.
+	 *
+	 * @param  Mo_SAML_Response $saml_response Contains SAML Response.
+	 * @param  string           $relay_state an url where users will be redirected after successful authentication.
+	 * @throws Mo_SAML_Replayed_Response_Exception For an Assertion that was already used or is too old.
+	 * @return void
+	 */
+	public static function mo_saml_prevent_assertion_replay( $saml_response, $relay_state ) {
+		global $wpdb;
+
+		$assertion     = current( $saml_response->mo_saml_get_assertions() );
+		$assertion_id  = $assertion->mo_saml_get_id();
+		$issue_instant = $assertion->mo_saml_get_issue_instant();
+		$now           = time();
+
+		$is_replay = false;
+		// Defensive only: the Mo_SAML_Assertion constructor already rejects a missing ID or invalid IssueInstant.
+		if ( empty( $assertion_id ) || empty( $issue_instant ) ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'SAML Assertion rejected: the Assertion has no ID or IssueInstant.', Mo_SAML_Logger::ERROR );
+			$is_replay = true;
+		} elseif ( $issue_instant + self::USED_ASSERTION_RETENTION <= $now ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'SAML Assertion rejected: IssueInstant ' . gmdate( 'Y-m-d\TH:i:s\Z', $issue_instant ) . ' is older than 24 hours. Check the IdP clock.', Mo_SAML_Logger::ERROR );
+			$is_replay = true;
+		} else {
+			$option_name = self::USED_ASSERTION_PREFIX . hash( 'sha256', $assertion->mo_saml_get_issuer() . '|' . $assertion_id );
+			$expires_at  = max( $issue_instant, $now ) + self::USED_ASSERTION_RETENTION;
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Atomic insert is required; add_option() upserts and cannot detect duplicates reliably.
+			$inserted = $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO {$wpdb->options} (option_name, option_value, autoload) VALUES (%s, %s, 'no')", $option_name, (string) $expires_at ) );
+
+			if ( false === $inserted ) {
+				Mo_SAML_Logger::mo_saml_add_log( 'Unable to record the SAML Assertion for replay protection. Database error: ' . $wpdb->last_error, Mo_SAML_Logger::ERROR );
+				wp_die( esc_html__( 'We could not sign you in. Please contact your administrator.', 'miniorange-saml-20-single-sign-on' ) );
+			}
+
+			if ( 1 !== $inserted ) {
+				Mo_SAML_Logger::mo_saml_add_log( 'SAML Assertion with ID "' . esc_html( $assertion_id ) . '" has already been used. Possible replay attack.', Mo_SAML_Logger::ERROR );
+				$is_replay = true;
+			} elseif ( ! wp_next_scheduled( self::PURGE_USED_ASSERTIONS_HOOK ) ) {
+				wp_schedule_event( $now + DAY_IN_SECONDS, 'daily', self::PURGE_USED_ASSERTIONS_HOOK );
+			}
+		}
+
+		if ( $is_replay ) {
+			if ( 'testValidate' === $relay_state ) {
+				mo_saml_display_test_config_error_page( Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR016'] );
+				exit;
+			}
+			// A logged-in user re-posting the Assertion (e.g. browser Back button) is sent on without creating a new session.
+			if ( is_user_logged_in() ) {
+				wp_safe_redirect( ! empty( $relay_state ) ? $relay_state : home_url() );
+				exit;
+			}
+			throw new Mo_SAML_Replayed_Response_Exception( 'SAML Assertion has already been used.' );
+		}
+	}
+
+	/**
+	 * Deletes expired replay protection records. Runs on the daily PURGE_USED_ASSERTIONS_HOOK cron event.
+	 *
+	 * @return void
+	 */
+	public static function mo_saml_purge_expired_used_assertions() {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk cleanup of plugin-owned rows that are never cached.
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s AND CAST(option_value AS UNSIGNED) < %d", $wpdb->esc_like( self::USED_ASSERTION_PREFIX ) . '%', time() ) );
 	}
 
 	/**

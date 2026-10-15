@@ -19,6 +19,7 @@ require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-encrypted-assertion
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-invalid-entity-id-exception.php';
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-invalid-status-code-exception.php';
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-missing-nameid-exception.php';
+require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-replayed-response-exception.php';
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-signature-not-found-exception.php';
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-sp-clock-ahead-of-idp-clock-exception.php';
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-sp-clock-behind-of-idp-clock-exception.php';
@@ -78,6 +79,8 @@ class Mo_Saml_User_Login_Handler {
 		} catch ( Mo_SAML_Invalid_Status_Code_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
 		} catch ( Mo_SAML_Missing_NameID_Exception $ex ) {
+			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
+		} catch ( Mo_SAML_Replayed_Response_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
 		} catch ( Mo_SAML_Signature_Not_Found_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );

@@ -146,11 +146,12 @@ class Mo_Saml_Options_Enum_Error_Codes extends Mo_SAML_Basic_Enum {
 			'faq'            => 'https://faq.miniorange.com/knowledgebase/wpsaml-error-015-dom-extension-not-installed/',
 		),
 		'WPSAMLERR016' => array(
-			'code'        => 'WPSAMLERR016',
-			'description' => 'This error code is shown to users when the plugin detects a duplicate saml response',
-			'fix'         => 'User will need to initiate the SSO again.',
-			'cause'       => 'Either user has reloaded the page while plugin was processing SAMLResponse or someone has tried to send a duplicated SAMLResponse.',
-			'faq'         => 'https://faq.miniorange.com/knowledgebase/wpsaml-error-016-duplicate-saml-response/',
+			'code'           => 'WPSAMLERR016',
+			'description'    => 'This error code is shown to users when the plugin detects a duplicate saml response',
+			'fix'            => 'User will need to initiate the SSO again.',
+			'cause'          => 'Either user has reloaded the page while plugin was processing SAMLResponse or someone has tried to send a duplicated SAMLResponse. Please start the SSO login again.',
+			'testconfig_msg' => 'This SAML Response has already been processed. Please initiate the Test Configuration again.',
+			'faq'            => 'https://faq.miniorange.com/knowledgebase/wpsaml-error-016-duplicate-saml-response/',
 		),
 		'WPSAMLERR017' => array(
 			'code'        => 'WPSAMLERR017',
