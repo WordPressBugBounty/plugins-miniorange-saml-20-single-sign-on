@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-xmlseclibs-processing-exception.php';
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-invalid-xml-exception.php';
+require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-saml-response-limit-exceeded-exception.php';
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-dom-extension-disabled-exception.php';
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-invalid-assertion-exception.php';
 require_once dirname( __DIR__ ) . '/exceptions/class-mo-saml-invalid-audience-uri-exception.php';
@@ -59,6 +60,8 @@ class Mo_Saml_User_Login_Handler {
 		} catch ( Mo_SAML_DOM_Extension_Disabled_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
 		} catch ( Mo_SAML_Invalid_XML_Exception $ex ) {
+			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
+		} catch ( Mo_SAML_Saml_Response_Limit_Exceeded_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );
 		} catch ( Mo_SAML_Invalid_Assertion_Exception $ex ) {
 			Mo_Saml_Exception_Handler::mo_saml_throw_exception( $ex );

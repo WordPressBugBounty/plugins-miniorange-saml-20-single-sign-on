@@ -320,5 +320,12 @@ class Mo_Saml_Options_Enum_Error_Codes extends Mo_SAML_Basic_Enum {
 			'cause'       => 'Subsite Limit Exceeded.',
 			'faq'         => 'https://faq.miniorange.com/knowledgebase/wpsaml-err039-subsite-limit-exceeded/',
 		),
+		'WPSAMLERR040' => array(
+			'code'           => 'WPSAMLERR040',
+			'description'    => 'The SAML Response from the Identity Provider exceeded the maximum allowed size.',
+			'fix'            => 'If this occurs during normal login, the IdP may be sending an unusually large response. Administrators can raise the limit with the mo_saml_max_saml_response_length filter. Otherwise contact <a href="mailto:samlsupport@xecurify.com">samlsupport@xecurify.com</a>.',
+			'cause'          => 'SAML Response size limit exceeded',
+			'testconfig_msg' => 'The SAML Response exceeded the maximum allowed size.',
+		),
 	);
 }

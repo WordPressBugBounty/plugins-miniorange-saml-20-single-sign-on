@@ -91,6 +91,13 @@ class Mo_SAML_XML_Security_DSig {
 	public $sig_node = null;
 
 	/**
+	 * Signed element (parent of ds:Signature), kept after reference validation detaches the signature node.
+	 *
+	 * @var DOMElement|null
+	 */
+	public $signed_root = null;
+
+	/**
 	 * Array of Id keys.
 	 *
 	 * @var array $id_keys signature ID.
@@ -145,6 +152,13 @@ class Mo_SAML_XML_Security_DSig {
 	 * @var array|null
 	 */
 	private $validated_nodes = null;
+
+	/**
+	 * Whether openssl_verify() succeeded on SignedInfo for this signature.
+	 *
+	 * @var bool
+	 */
+	private $signature_value_verified = false;
 
 	/**
 	 * Initialize class.
@@ -327,6 +341,14 @@ class Mo_SAML_XML_Security_DSig {
 				$exclusive     = true;
 				$with_comments = true;
 				break;
+			case 'http://www.w3.org/2006/12/xml-c14n11':
+				$exclusive     = false;
+				$with_comments = false;
+				break;
+			case 'http://www.w3.org/2006/12/xml-c14n11#WithComments':
+				$exclusive     = false;
+				$with_comments = true;
+				break;
 		}
 		//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- ownerDocument & documentElement are XML DOM properties.
 		if ( is_null( $ar_x_path ) && ( $node instanceof DOMNode ) && ( null !== $node->ownerDocument ) && $node->isSameNode( $node->ownerDocument->documentElement ) ) {
@@ -478,7 +500,6 @@ class Mo_SAML_XML_Security_DSig {
 		$query            = './secdsig:Transforms/secdsig:Transform';
 		$nodelist         = $xpath->query( $query, $ref_node );
 		$canonical_method = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
-		$ar_x_path        = null;
 		$prefix_list      = null;
 		foreach ( $nodelist as $transform ) {
 			$algorithm = $transform->getAttribute( 'Algorithm' );
@@ -530,36 +551,24 @@ class Mo_SAML_XML_Security_DSig {
 					} else {
 						$canonical_method = $algorithm;
 					}
-
 					break;
-				case 'http://www.w3.org/TR/1999/REC-xpath-19991116':
-				//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- firstChild is XML DOM property.
-					$node = $transform->firstChild;
-					while ( $node ) {
-						//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- localName is XML DOM property.
-						if ( 'Mo_SAML_XPath' === $node->localName ) {
-							$ar_x_path = array();
-							//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- nodeValue is XML DOM property.
-							$ar_x_path['query']      = '(.//. | .//@* | .//namespace::*)[' . $node->nodeValue . ']';
-							$ar_x_path['namespaces'] = array();
-							$nslist                  = $xpath->query( './namespace::*', $node );
-							foreach ( $nslist as $nsnode ) {
-								//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- localName is XML DOM property.
-								if ( 'xml' !== $nsnode->localName ) {
-									//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- localName & nodeValue are XML DOM properties.
-									$ar_x_path['namespaces'][ $nsnode->localName ] = $nsnode->nodeValue;
-								}
-							}
-							break;
-						}
-						//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- nextSibling is XML DOM property.
-						$node = $node->nextSibling;
+				case 'http://www.w3.org/2006/12/xml-c14n11':
+				case 'http://www.w3.org/2006/12/xml-c14n11#WithComments':
+					if ( ! $include_comment_nodes ) {
+						$canonical_method = 'http://www.w3.org/2006/12/xml-c14n11';
+					} else {
+						$canonical_method = $algorithm;
 					}
 					break;
+				case 'http://www.w3.org/2000/09/xmldsig#enveloped-signature':
+					break;
+				default:
+					\Mo_SAML_Logger::mo_saml_add_log( 'Unsupported transform algorithm: ' . $algorithm, \Mo_SAML_Logger::ERROR );
+					throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'Unsupported transform algorithm.' );
 			}
 		}
 		if ( $data instanceof DOMNode ) {
-			$data = $this->canonicalize_data( $obj_data, $canonical_method, $ar_x_path, $prefix_list );
+			$data = $this->canonicalize_data( $obj_data, $canonical_method, null, $prefix_list );
 		}
 		return $data;
 	}
@@ -688,6 +697,11 @@ class Mo_SAML_XML_Security_DSig {
 	 * @throws \Mo_SAML_XMLSecLibs_Processing_Exception Throws if Signature node is empty.
 	 */
 	public function validate_reference() {
+		if ( ! $this->signature_value_verified ) {
+			\Mo_SAML_Logger::mo_saml_add_log( 'Reference validation refused: signature value not verified', \Mo_SAML_Logger::ERROR );
+			throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'Reference validation refused: signature value not verified.' );
+		}
+
 		$doc_elem = $this->sig_node->ownerDocument->documentElement;
 		if ( ! $doc_elem->isSameNode( $this->sig_node ) ) {
 			if ( null !== $this->sig_node->parentNode ) {
@@ -946,7 +960,12 @@ class Mo_SAML_XML_Security_DSig {
 			throw new \Mo_SAML_XMLSecLibs_Processing_Exception( 'Unable to locate SignatureValue' );
 		}
 		//phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- base_64 encode/decode is necessary as per standards of SAML.
-		return $obj_key->mo_saml_verify_signature( $this->signed_info, base64_decode( $sig_value ) );
+		$result = $obj_key->mo_saml_verify_signature( $this->signed_info, base64_decode( $sig_value ) );
+		if ( 1 === $result ) {
+			$this->signature_value_verified = true;
+		}
+
+		return $result;
 	}
 
 	/**

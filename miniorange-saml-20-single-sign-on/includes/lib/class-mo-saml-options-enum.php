@@ -33,6 +33,30 @@ class Mo_Saml_Required_PHP_Extensions extends Mo_SAML_Basic_Enum {
 }
 
 /**
+ * Canonicalization methods and transforms a SAML signature may use.
+ */
+class Mo_Saml_Signature_Constants extends Mo_SAML_Basic_Enum {
+	const ALLOWED_SIGNATURE_CANONICALIZATION_METHODS = array(
+		'http://www.w3.org/2001/10/xml-exc-c14n#',
+		'http://www.w3.org/2001/10/xml-exc-c14n#WithComments',
+		'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
+		'http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments',
+		'http://www.w3.org/2006/12/xml-c14n11',
+		'http://www.w3.org/2006/12/xml-c14n11#WithComments',
+	);
+
+	const ALLOWED_SIGNATURE_TRANSFORMS = array(
+		'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
+		'http://www.w3.org/2001/10/xml-exc-c14n#',
+		'http://www.w3.org/2001/10/xml-exc-c14n#WithComments',
+		'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
+		'http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments',
+		'http://www.w3.org/2006/12/xml-c14n11',
+		'http://www.w3.org/2006/12/xml-c14n11#WithComments',
+	);
+}
+
+/**
  * Plugin page to show the extensions disabled or uninstalled.
  */
 class Mo_Saml_Plugin_Pages extends Mo_SAML_Basic_Enum {
@@ -220,9 +244,8 @@ class Mo_Saml_Options_Plugin_Constants extends Mo_SAML_Basic_Enum {
 	const CMS_NAME         = 'WP';
 	const APPLICATION_NAME = 'WP miniOrange SAML 2.0 SSO Plugin';
 	const APPLICATION_TYPE = 'SAML';
-	const VERSION          = '6.1.0';
+	const VERSION          = '6.2.0';
 	const HOSTNAME         = 'https://login.xecurify.com';
-	const WP_VERSION       = '6.9';
 	const PLUGIN_FILE       = 'miniorange-saml-20-single-sign-on/login.php';
 	const LICENSE_PLAN_NAME = 'wp_saml_sso_free';
 	const PLUGIN_VERSION_HIERARCHY = '1';

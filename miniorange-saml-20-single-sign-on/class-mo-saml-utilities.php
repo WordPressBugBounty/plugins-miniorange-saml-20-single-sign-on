@@ -49,6 +49,11 @@ class Mo_SAML_Utilities {
 	const PURGE_USED_ASSERTIONS_HOOK = 'mo_saml_purge_used_assertions';
 
 	/**
+	 * Default maximum byte length of decoded SAML Response XML.
+	 */
+	const DEFAULT_MAX_SAML_RESPONSE_LENGTH = 524288;
+
+	/**
 	 * Generates Random ID of 21 characters.
 	 *
 	 * @return string
@@ -335,7 +340,8 @@ class Mo_SAML_Utilities {
 		return $ret;
 	}
 	/**
-	 * Validate the SAML Response.
+	 * Locate a signature on a SAML element and record its certificates.
+	 * Does not canonicalize. Cryptographic checks run in mo_saml_validate_signature().
 	 *
 	 * @param  DOMElement $root Instance of DOMElement.
 	 * @throws Mo_SAML_Invalid_Assertion_Exception For more than one signature element in root.
@@ -363,35 +369,8 @@ class Mo_SAML_Utilities {
 
 		$signature_element          = $signature_element[0];
 		$obj_xml_sec_dsig->sig_node = $signature_element;
+		$obj_xml_sec_dsig->signed_root = $root;
 
-		/* Canonicalize the XMLDSig SignedInfo element in the message. */
-		$obj_xml_sec_dsig->canonicalize_signed_info();
-		/* Validate referenced xml nodes. */
-		if ( ! $obj_xml_sec_dsig->validate_reference() ) {
-			Mo_SAML_Logger::mo_saml_add_log( 'XMLSec: digest validation failed', Mo_SAML_Logger::ERROR );
-			throw new Mo_SAML_Invalid_Assertion_Exception( 'XMLSec: digest validation failed.' );
-		}
-
-		/* Check that $root is one of the signed nodes. */
-		$root_signed = false;
-		foreach ( $obj_xml_sec_dsig->get_validated_nodes() as $signed_node ) {
-			if ( $signed_node->isSameNode( $root ) ) {
-				$root_signed = true;
-				break;
-			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Can not convert into Snakecase, since it is a part of DOMElement class.
-			} elseif ( $root->parentNode instanceof DOMDocument && $signed_node->isSameNode( $root->ownerDocument ) ) {
-				/* $root is the root element of a signed document. */
-				$root_signed = true;
-				break;
-			}
-		}
-
-		if ( ! $root_signed ) {
-			Mo_SAML_Logger::mo_saml_add_log( 'XMLSec: The root element is not signed', Mo_SAML_Logger::ERROR );
-			throw new Mo_SAML_Invalid_Assertion_Exception( 'XMLSec: The root element is not signed.' );
-		}
-
-		/* Now we extract all available X509 certificates in the signature element. */
 		$certificates = array();
 		foreach ( self::mo_saml_xp_query( $signature_element, './ds:KeyInfo/ds:X509Data/ds:X509Certificate' ) as $cert_node ) {
 			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Can not convert into Snakecase, since it is a part of DOMElement class.
@@ -400,12 +379,122 @@ class Mo_SAML_Utilities {
 			$certificates[] = $cert_data;
 		}
 
-		$ret = array(
+		return array(
 			'Signature'    => $obj_xml_sec_dsig,
 			'Certificates' => $certificates,
 		);
+	}
 
-		return $ret;
+	/**
+	 * Structure-checks a signature recorded at parse time (no canonicalization).
+	 *
+	 * @param array $signature_data Parse-time signature bundle from mo_saml_validate_element().
+	 * @throws Mo_SAML_Invalid_Assertion_Exception When the signature structure is not allowed.
+	 * @return void
+	 */
+	public static function mo_saml_validate_parsed_signature_structure( array $signature_data ) {
+		$dsig     = $signature_data['Signature'];
+		$sig_node = $dsig->sig_node;
+		if ( ! $sig_node instanceof DOMElement ) {
+			self::mo_saml_reject_signature_structure( 'Signature node' );
+		}
+		//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- parentNode is a DOM property.
+		$root = $sig_node->parentNode;
+		if ( ! $root instanceof DOMElement ) {
+			self::mo_saml_reject_signature_structure( 'signed root' );
+		}
+		self::mo_saml_validate_signature_structure( $root, $sig_node );
+	}
+
+	/**
+	 * Rejects a SignedInfo with a disallowed canonicalization method or transform.
+	 * Runs before any canonicalization.
+	 *
+	 * @param DOMElement $root              Element the signature must cover.
+	 * @param DOMElement $signature_element ds:Signature element.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception When the signature structure is not allowed.
+	 * @return void
+	 */
+	public static function mo_saml_validate_signature_structure( DOMElement $root, DOMElement $signature_element ) {
+		$c14n = self::mo_saml_xp_query( $signature_element, './ds:SignedInfo/ds:CanonicalizationMethod' );
+		if ( 1 !== count( $c14n ) || ! in_array( $c14n[0]->getAttribute( 'Algorithm' ), Mo_Saml_Signature_Constants::ALLOWED_SIGNATURE_CANONICALIZATION_METHODS, true ) ) {
+			self::mo_saml_reject_signature_structure( 'canonicalization method' );
+		}
+
+		$reference = self::mo_saml_xp_query( $signature_element, './ds:SignedInfo/ds:Reference' );
+		if ( 1 !== count( $reference ) ) {
+			self::mo_saml_reject_signature_structure( 'Reference count' );
+		}
+		$signed_id = $root->getAttribute( 'ID' );
+		$uri       = $reference[0]->getAttribute( 'URI' );
+		if ( '' !== $uri && '#' . $signed_id !== $uri ) {
+			self::mo_saml_reject_signature_structure( 'Reference URI' );
+		}
+
+		foreach ( self::mo_saml_xp_query( $signature_element, './ds:SignedInfo/ds:Reference/ds:Transforms/ds:Transform' ) as $transform ) {
+			if ( ! in_array( $transform->getAttribute( 'Algorithm' ), Mo_Saml_Signature_Constants::ALLOWED_SIGNATURE_TRANSFORMS, true ) ) {
+				self::mo_saml_reject_signature_structure( 'transform' );
+			}
+		}
+	}
+
+	/**
+	 * Rejects an oversized posted SAMLResponse before base64 decode.
+	 *
+	 * @param string $posted_saml_response   Raw POST field value (base64 text).
+	 * @param int    $max_encoded_bytes      Maximum allowed base64 POST size in bytes.
+	 * @param string $relay_state            RelayState from the SAML POST.
+	 * @throws Mo_SAML_Saml_Response_Limit_Exceeded_Exception When the payload is too large.
+	 * @return void
+	 */
+	public static function mo_saml_reject_oversize_saml_response_post( $posted_saml_response, $max_encoded_bytes, $relay_state = '' ) {
+		if ( strlen( $posted_saml_response ) > $max_encoded_bytes ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'SAML Response rejected: POST payload exceeds ' . $max_encoded_bytes . ' bytes.', Mo_SAML_Logger::ERROR );
+			self::mo_saml_throw_saml_response_limit_exceeded( $relay_state );
+		}
+	}
+
+	/**
+	 * Rejects decoded SAML XML that exceeds the maximum allowed size.
+	 *
+	 * @param string $decoded_saml_response Decoded XML bytes.
+	 * @param int    $max_decoded_bytes     Maximum allowed decoded XML size in bytes.
+	 * @param string $relay_state           RelayState from the SAML POST.
+	 * @throws Mo_SAML_Saml_Response_Limit_Exceeded_Exception When the payload is too large.
+	 * @return void
+	 */
+	public static function mo_saml_reject_oversize_decoded_saml_response( $decoded_saml_response, $max_decoded_bytes, $relay_state = '' ) {
+		if ( strlen( $decoded_saml_response ) > $max_decoded_bytes ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'SAML Response rejected: decoded XML exceeds ' . $max_decoded_bytes . ' bytes.', Mo_SAML_Logger::ERROR );
+			self::mo_saml_throw_saml_response_limit_exceeded( $relay_state );
+		}
+	}
+
+	/**
+	 * Shows WPSAMLERR040 for test configuration or throws for the SSO login flow.
+	 *
+	 * @param string $relay_state RelayState from the SAML POST.
+	 * @throws Mo_SAML_Saml_Response_Limit_Exceeded_Exception When not in test configuration.
+	 * @return void
+	 */
+	private static function mo_saml_throw_saml_response_limit_exceeded( $relay_state ) {
+		if ( 'testValidate' === $relay_state ) {
+			mo_saml_display_test_config_error_page( Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR040'] );
+			exit;
+		}
+		throw new Mo_SAML_Saml_Response_Limit_Exceeded_Exception( 'SAML Response exceeds maximum allowed size.' );
+	}
+
+	/**
+	 * Logs a signature-structure rejection and throws the invalid-assertion error.
+	 *
+	 * @param string $reason Short rejection reason.
+	 * @throws Mo_SAML_Invalid_Assertion_Exception Always.
+	 * @return void
+	 */
+	private static function mo_saml_reject_signature_structure( $reason ) {
+		Mo_SAML_Logger::mo_saml_add_log( '[SAML Signature] Rejected ' . $reason, Mo_SAML_Logger::DEBUG );
+		throw new Mo_SAML_Invalid_Assertion_Exception( 'Invalid SAML Assertion' );
 	}
 
 	/**
@@ -418,6 +507,21 @@ class Mo_SAML_Utilities {
 	 */
 	public static function mo_saml_validate_signature( array $info, Mo_SAML_XML_Security_Key $key ) {
 		$obj_xml_sec_dsig = $info['Signature'];
+		$sig_node         = $obj_xml_sec_dsig->sig_node;
+		$root             = $obj_xml_sec_dsig->signed_root;
+		if ( ! $root instanceof DOMElement ) {
+			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- parentNode is a DOM property.
+			$root = $sig_node->parentNode;
+			if ( $root instanceof DOMElement ) {
+				$obj_xml_sec_dsig->signed_root = $root;
+			}
+		}
+		if ( ! $root instanceof DOMElement ) {
+			self::mo_saml_reject_signature_structure( 'signed root' );
+		}
+
+		self::mo_saml_validate_signature_structure( $root, $sig_node );
+		$obj_xml_sec_dsig->canonicalize_signed_info();
 
 		$sig_method = self::mo_saml_xp_query( $obj_xml_sec_dsig->sig_node, './ds:SignedInfo/ds:SignatureMethod' );
 		if ( empty( $sig_method ) ) {
@@ -460,6 +564,26 @@ class Mo_SAML_Utilities {
 		if ( 1 !== $obj_xml_sec_dsig->verify( $key ) ) {
 			Mo_SAML_Logger::mo_saml_add_log( 'Unable to validate Signature', Mo_SAML_Logger::ERROR );
 			throw new Mo_SAML_Invalid_Assertion_Exception( 'Unable to validate Signature' );
+		}
+
+		if ( ! $obj_xml_sec_dsig->validate_reference() ) {
+			Mo_SAML_Logger::mo_saml_add_log( 'XMLSec: digest validation failed', Mo_SAML_Logger::ERROR );
+			throw new Mo_SAML_Invalid_Assertion_Exception( 'XMLSec: digest validation failed.' );
+		}
+
+		$root_signed = false;
+		foreach ( $obj_xml_sec_dsig->get_validated_nodes() as $signed_node ) {
+			if ( $signed_node->isSameNode( $root ) ) {
+				$root_signed = true;
+				break;
+			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- parentNode and ownerDocument are DOM properties.
+			} elseif ( $root->parentNode instanceof DOMDocument && $signed_node->isSameNode( $root->ownerDocument ) ) {
+				$root_signed = true;
+				break;
+			}
+		}
+		if ( ! $root_signed ) {
+			self::mo_saml_reject_signature_structure( 'root element is not signed' );
 		}
 	}
 
@@ -590,7 +714,7 @@ class Mo_SAML_Utilities {
 	 *
 	 * @param  string           $current_url              URL or Endpoint on the SP where the IDP will redirect to with its authentication response.
 	 * @param  string           $cert_fingerprint         Conatains Certificate from the plugin.
-	 * @param  string           $signature_data           Signature Node in SAML Response.
+	 * @param  array            $signature_data           Signature data from mo_saml_validate_element().
 	 * @param  Mo_SAML_Response $response                 Contains SAML Response.
 	 * @param  string           $cert_number              Holds Cert. Number.
 	 * @param  string           $relay_state              an url where users will be redirected after successful authentication.
@@ -646,7 +770,7 @@ class Mo_SAML_Utilities {
 
 		if ( count( $certificates ) === 0 ) {
 
-			$stored_certs = maybe_unserialize( get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) );
+			$stored_certs = self::mo_saml_get_configured_idp_certificates();
 			$pem_cert     = $stored_certs[ $cert_number ];
 		} else {
 			$fp_array   = array();
@@ -818,8 +942,11 @@ class Mo_SAML_Utilities {
 	 */
 	public static function mo_saml_purge_expired_used_assertions() {
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk cleanup of plugin-owned rows that are never cached.
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s AND CAST(option_value AS UNSIGNED) < %d", $wpdb->esc_like( self::USED_ASSERTION_PREFIX ) . '%', time() ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk cleanup of plugin-owned rows; flush cache only when rows were removed.
+		$deleted = $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s AND CAST(option_value AS UNSIGNED) < %d", $wpdb->esc_like( self::USED_ASSERTION_PREFIX ) . '%', time() ) );
+		if ( $deleted > 0 ) {
+			wp_cache_flush();
+		}
 	}
 
 	/**
@@ -1089,6 +1216,29 @@ class Mo_SAML_Utilities {
 			return Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_USERNAME;
 		}
 		return Mo_Saml_Options_Enum_Attribute_Mapping::ACCOUNT_MATCHER_EMAIL;
+	}
+
+	/**
+	 * Configured IdP X.509 certificates, as PEM strings.
+	 *
+	 * @return string[]
+	 */
+	public static function mo_saml_get_configured_idp_certificates() {
+		$stored_certs = maybe_unserialize( get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) );
+		if ( is_string( $stored_certs ) ) {
+			$stored_certs = array( $stored_certs );
+		}
+		if ( ! is_array( $stored_certs ) ) {
+			return array();
+		}
+
+		$certificates = array();
+		foreach ( $stored_certs as $certificate ) {
+			if ( is_string( $certificate ) && '' !== trim( $certificate ) ) {
+				$certificates[] = $certificate;
+			}
+		}
+		return $certificates;
 	}
 
 	/**

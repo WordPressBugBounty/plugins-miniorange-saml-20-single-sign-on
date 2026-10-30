@@ -117,11 +117,19 @@ class Mo_SAML_Login_Validate {
 		}
 		//phpcs:ignore WordPress.Security.NonceVerification.Missing -- SAMLResponse request is sent by IDP, which can't create dynamic nonce to verify for each request.
 		if ( ! empty( $_POST['SAMLResponse'] ) ) {
-			//phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verification is not required while processing SAMLResponse.
-			$saml_response = sanitize_text_field( wp_unslash( $_POST['SAMLResponse'] ) );
+			if ( empty( Mo_SAML_Utilities::mo_saml_get_configured_idp_certificates() ) ) {
+				Mo_SAML_Logger::mo_saml_add_log( 'SAML Response rejected: IdP is not configured.', Mo_SAML_Logger::ERROR );
+				throw new Mo_SAML_Invalid_Assertion_Exception( 'IdP is not configured.' );
+			}
 
-			Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_SAML_RESPONSE', array( 'samlResponse' => $saml_response ) ), Mo_SAML_Logger::DEBUG );
-				//phpcs:ignore WordPress.Security.NonceVerification.Missing -- RelayState request is sent by IDP, which can't create dynamic nonce to verify for each request.
+			//phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Full base64 blob: type-checked, POST/decoded size limits, and strict base64_decode below (not sanitize_text_field).
+			$posted_saml_response = wp_unslash( $_POST['SAMLResponse'] );
+			if ( ! is_string( $posted_saml_response ) ) {
+				Mo_SAML_Logger::mo_saml_add_log( 'SAML Response rejected: payload is not a string.', Mo_SAML_Logger::ERROR );
+				throw new Mo_SAML_Invalid_Assertion_Exception( 'Invalid SAML Response.' );
+			}
+
+			//phpcs:ignore WordPress.Security.NonceVerification.Missing -- RelayState request is sent by IDP, which can't create dynamic nonce to verify for each request.
 			if ( ! empty( $_POST['RelayState'] ) && '/' !== $_POST['RelayState'] ) {
 				//phpcs:ignore WordPress.Security.NonceVerification.Missing -- RelayState request is sent by IDP, which can't create dynamic nonce to verify for each request.
 				$relay_state = sanitize_text_field( wp_unslash( $_POST['RelayState'] ) );
@@ -129,10 +137,39 @@ class Mo_SAML_Login_Validate {
 				$relay_state = '';
 			}
 
+			$max_decoded_saml_response_length = Mo_SAML_Utilities::DEFAULT_MAX_SAML_RESPONSE_LENGTH;
+			/**
+			 * Filter the maximum decoded SAML Response XML size enforced before parsing.
+			 *
+			 * @param int $max_bytes Plugin default from DEFAULT_MAX_SAML_RESPONSE_LENGTH (512 KiB decoded XML).
+			 */
+			$filtered_max_saml_response_length = apply_filters( 'mo_saml_max_saml_response_length', $max_decoded_saml_response_length );
+			if ( is_numeric( $filtered_max_saml_response_length ) && (int) $filtered_max_saml_response_length > 0 ) {
+				$max_decoded_saml_response_length = (int) $filtered_max_saml_response_length;
+			}
+
+			$max_post_saml_response_length = (int) ceil( $max_decoded_saml_response_length * 4 / 3 ) + 4;
+			// Raw POST may include line-wrapped base64 whitespace stripped before decode; exact XML cap is decoded check below.
+			$max_post_saml_response_length = (int) ceil( $max_post_saml_response_length * 1.05 );
+
+			Mo_SAML_Utilities::mo_saml_reject_oversize_saml_response_post( $posted_saml_response, $max_post_saml_response_length, $relay_state );
+
 			Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_RELAYSTATE_RECEIVED', array( 'relayState' => $relay_state ) ), Mo_SAML_Logger::DEBUG );
-			$raw_saml_response = $saml_response;
+
+			$saml_response_encoded = preg_replace( '/\s+/', '', $posted_saml_response );
 			//phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- SAML response is base64 encoded.
-			$decoded_saml_response = base64_decode( $saml_response, true );
+			$decoded_saml_response = base64_decode( $saml_response_encoded, true );
+			if ( false === $decoded_saml_response ) {
+				Mo_SAML_Logger::mo_saml_add_log( 'SAML Response rejected: invalid base64 encoding.', Mo_SAML_Logger::ERROR );
+				throw new Mo_SAML_Invalid_XML_Exception( 'Invalid SAML Response encoding.' );
+			}
+
+			Mo_SAML_Utilities::mo_saml_reject_oversize_decoded_saml_response( $decoded_saml_response, $max_decoded_saml_response_length, $relay_state );
+
+			Mo_SAML_Logger::mo_saml_add_log(
+				'[MO SAML SSO] SAML Response received (sha256=' . hash( 'sha256', $decoded_saml_response ) . ', postLength=' . strlen( $posted_saml_response ) . ', decodedLength=' . strlen( $decoded_saml_response ) . ')',
+				Mo_SAML_Logger::DEBUG
+			);
 
 			$document = Mo_SAML_Utilities::mo_saml_safe_load_xml( $decoded_saml_response );
 			//phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- documentElement property is Method of DOMDocument.
@@ -166,7 +203,7 @@ class Mo_SAML_Login_Validate {
 				Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_INVAILD_SAML_STATUS' ), Mo_SAML_Logger::ERROR );
 			}
 
-			$cert_from_plugin = maybe_unserialize( get_option( Mo_Saml_Options_Enum_Service_Provider::X509_CERTIFICATE ) );
+			$cert_from_plugin = Mo_SAML_Utilities::mo_saml_get_configured_idp_certificates();
 
 			$acs_url                 = site_url() . '/';
 			$saml_response           = new Mo_SAML_Response( $saml_response_xml );
@@ -187,6 +224,13 @@ class Mo_SAML_Login_Validate {
 
 			$assertion_signature_data = current( $assertions )->mo_saml_get_signature_data();
 
+			if ( ! empty( $response_signature_data ) ) {
+				Mo_SAML_Utilities::mo_saml_validate_parsed_signature_structure( $response_signature_data );
+			}
+			if ( ! empty( $assertion_signature_data ) ) {
+				Mo_SAML_Utilities::mo_saml_validate_parsed_signature_structure( $assertion_signature_data );
+			}
+
 			if ( empty( $assertion_signature_data ) && empty( $response_signature_data ) ) {
 
 				Mo_SAML_Logger::mo_saml_add_log( Mo_Saml_Error_Log::mo_saml_write_message( 'LOGIN_WIDGET_RESPONSE_ASSERATION_NOT_SIGNED' ), Mo_SAML_Logger::ERROR );
@@ -198,34 +242,33 @@ class Mo_SAML_Login_Validate {
 					throw new Mo_SAML_Signature_Not_Found_Exception( 'No signature was found in the SAML Response or Assertion.' );
 				}
 			}
-			if ( is_array( $cert_from_plugin ) ) {
-				foreach ( $cert_from_plugin as $key => $value ) {
-					$plugin_cert         = $value;
-					$cert_fp_from_plugin = Mo_SAML_XML_Security_Key::mo_saml_get_raw_thumbprint( $value );
 
-					$cert_fp_from_plugin = $this->mo_saml_convert_to_windows_iconv( $cert_fp_from_plugin );
-					$cert_fp_from_plugin = preg_replace( '/\s+/', '', $cert_fp_from_plugin );
-					if ( ! empty( $response_signature_data ) ) {
-						$valid_signature = Mo_SAML_Utilities::mo_saml_process_response( $acs_url, $cert_fp_from_plugin, $response_signature_data, $saml_response, $key, $relay_state );
-					}
-					if ( ! empty( $assertion_signature_data ) ) {
-						$valid_signature = Mo_SAML_Utilities::mo_saml_process_response( $acs_url, $cert_fp_from_plugin, $assertion_signature_data, $saml_response, $key, $relay_state );
-					}
-					if ( $valid_signature ) {
-						break;
-					}
-				}
-			} else {
-				$plugin_cert         = $cert_from_plugin;
-				$cert_fp_from_plugin = Mo_SAML_XML_Security_Key::mo_saml_get_raw_thumbprint( $cert_from_plugin );
+			$sp_base_url = get_option( Mo_Saml_Options_Enum_Identity_Provider::SP_BASE_URL );
+			if ( empty( $sp_base_url ) ) {
+				$sp_base_url = site_url();
+			}
+			// verify the issuer and audience from saml response.
+			$issuer      = get_option( Mo_Saml_Options_Enum_Service_Provider::ISSUER );
+			$sp_enity_id = get_option( Mo_Saml_Options_Enum_Identity_Provider::SP_ENTITY_ID );
+			if ( empty( $sp_enity_id ) ) {
+				$sp_enity_id = $sp_base_url . '/wp-content/plugins/miniorange-saml-20-single-sign-on/';
+			}
+			Mo_SAML_Utilities::mo_saml_validate_issuer_and_audience( $saml_response, $sp_enity_id, $issuer, $relay_state );
+
+			foreach ( $cert_from_plugin as $key => $value ) {
+				$plugin_cert         = $value;
+				$cert_fp_from_plugin = Mo_SAML_XML_Security_Key::mo_saml_get_raw_thumbprint( $value );
+
 				$cert_fp_from_plugin = $this->mo_saml_convert_to_windows_iconv( $cert_fp_from_plugin );
 				$cert_fp_from_plugin = preg_replace( '/\s+/', '', $cert_fp_from_plugin );
 				if ( ! empty( $response_signature_data ) ) {
-					$valid_signature = Mo_SAML_Utilities::mo_saml_process_response( $acs_url, $cert_fp_from_plugin, $response_signature_data, $saml_response, 0, $relay_state );
+					$valid_signature = Mo_SAML_Utilities::mo_saml_process_response( $acs_url, $cert_fp_from_plugin, $response_signature_data, $saml_response, $key, $relay_state );
 				}
-
 				if ( ! empty( $assertion_signature_data ) ) {
-					$valid_signature = Mo_SAML_Utilities::mo_saml_process_response( $acs_url, $cert_fp_from_plugin, $assertion_signature_data, $saml_response, 0, $relay_state );
+					$valid_signature = Mo_SAML_Utilities::mo_saml_process_response( $acs_url, $cert_fp_from_plugin, $assertion_signature_data, $saml_response, $key, $relay_state );
+				}
+				if ( $valid_signature ) {
+					break;
 				}
 			}
 			if ( $response_signature_data ) {
@@ -262,20 +305,9 @@ class Mo_SAML_Login_Validate {
 				}
 			}
 
-			$sp_base_url = get_option( Mo_Saml_Options_Enum_Identity_Provider::SP_BASE_URL );
-			if ( empty( $sp_base_url ) ) {
-				$sp_base_url = site_url();
-			}
-			// verify the issuer and audience from saml response.
-			$issuer      = get_option( Mo_Saml_Options_Enum_Service_Provider::ISSUER );
-			$sp_enity_id = get_option( Mo_Saml_Options_Enum_Identity_Provider::SP_ENTITY_ID );
-			if ( empty( $sp_enity_id ) ) {
-				$sp_enity_id = $sp_base_url . '/wp-content/plugins/miniorange-saml-20-single-sign-on/';
-			}
-			Mo_SAML_Utilities::mo_saml_validate_issuer_and_audience( $saml_response, $sp_enity_id, $issuer, $relay_state );
 			// Reject an Assertion that has already been consumed (replay protection). Runs only after the response is fully verified.
 			Mo_SAML_Utilities::mo_saml_prevent_assertion_replay( $saml_response, $relay_state );
-			update_option( Mo_Saml_Options_Test_Configuration::SAML_RESPONSE, $raw_saml_response );
+			update_option( Mo_Saml_Options_Test_Configuration::SAML_RESPONSE, $saml_response_encoded, false );
 
 			$ssoemail        = current( current( $assertions )->mo_saml_get_name_id() );
 			$attrs           = current( $assertions )->mo_saml_get_attributes();
