@@ -241,14 +241,15 @@ class Mo_Saml_Options_Error_Constants extends Mo_SAML_Basic_Enum {
  * Defines Plugin Constants.
  */
 class Mo_Saml_Options_Plugin_Constants extends Mo_SAML_Basic_Enum {
-	const CMS_NAME         = 'WP';
-	const APPLICATION_NAME = 'WP miniOrange SAML 2.0 SSO Plugin';
-	const APPLICATION_TYPE = 'SAML';
-	const VERSION          = '6.2.0';
-	const HOSTNAME         = 'https://login.xecurify.com';
-	const PLUGIN_FILE       = 'miniorange-saml-20-single-sign-on/login.php';
-	const LICENSE_PLAN_NAME = 'wp_saml_sso_free';
-	const PLUGIN_VERSION_HIERARCHY = '1';
+	const CMS_NAME                  = 'WP';
+	const APPLICATION_NAME          = 'WP miniOrange SAML 2.0 SSO Plugin';
+	const APPLICATION_TYPE          = 'SAML';
+	const VERSION                   = '6.2.1';
+	const HALLOWEEN_SALE_END_DATE   = '2026-11-10 23:59:59';
+	const HOSTNAME                  = 'https://login.xecurify.com';
+	const PLUGIN_FILE               = 'miniorange-saml-20-single-sign-on/login.php';
+	const LICENSE_PLAN_NAME         = 'wp_saml_sso_free';
+	const PLUGIN_VERSION_HIERARCHY  = '1';
 }
 
 /**
