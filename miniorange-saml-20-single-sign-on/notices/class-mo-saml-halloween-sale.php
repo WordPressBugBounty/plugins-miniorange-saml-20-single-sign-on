@@ -293,7 +293,7 @@ class Mo_Saml_Halloween_Sale {
 		}
 		$use_case = isset( $_POST['usecase'] ) ? sanitize_textarea_field( wp_unslash( $_POST['usecase'] ) ) : '';
 		$customer = new Mo_SAML_Customer();
-		if ( ! $customer->mo_saml_send_halloween_sale_request( $email, $use_case ) ) {
+		if ( ! $customer->mo_saml_send_sale_request( $email, 'Halloween', $use_case ) ) {
 			wp_send_json_error( array( 'message' => __( 'We could not send your request right now. Please try again, or email us at samlsupport@xecurify.com.', 'miniorange-saml-20-single-sign-on' ) ) );
 		}
 		wp_send_json_success();

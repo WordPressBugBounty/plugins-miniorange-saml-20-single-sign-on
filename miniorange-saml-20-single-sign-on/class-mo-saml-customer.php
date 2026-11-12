@@ -167,14 +167,15 @@ class Mo_SAML_Customer {
 	/**
 	 * This function is used for sending support query from plugin by making a call to the rest/customer/contact-us endpoint.
 	 *
-	 * @param string $email       Customer's Email.
-	 * @param string $phone       Customer's Phone.
-	 * @param string $query       Customer's Query.
-	 * @param bool   $call_setup  Customer's Request for call.
+	 * @param string $email              Customer's Email.
+	 * @param string $phone              Customer's Phone.
+	 * @param string $query              Customer's Query.
+	 * @param bool   $call_setup         Customer's Request for call.
+	 * @param bool   $skip_admin_notice  Skip the stored admin notice on connection failure. AJAX callers show their own error.
 	 *
-	 * @return array $response    Response of the API call for call request.
+	 * @return string|null Response body, or null when the request could not be sent.
 	 */
-	public function mo_saml_submit_contact_us( $email, $phone, $query, $call_setup ) {
+	public function mo_saml_submit_contact_us( $email, $phone, $query, $call_setup, $skip_admin_notice = false ) {
 		$url          = Mo_Saml_Options_Plugin_Constants::HOSTNAME . '/moas/rest/customer/contact-us';
 		$current_user = wp_get_current_user();
 
@@ -215,8 +216,14 @@ class Mo_SAML_Customer {
 			'blocking'    => true,
 			'headers'     => $headers,
 		);
-		$response = Mo_SAML_Utilities::mo_saml_wp_remote_post( $url, $args );
-		return $response;
+		if ( $skip_admin_notice ) {
+			$response = wp_remote_post( $url, $args );
+			if ( is_wp_error( $response ) ) {
+				return null;
+			}
+			return wp_remote_retrieve_body( $response );
+		}
+		return Mo_SAML_Utilities::mo_saml_wp_remote_post( $url, $args );
 	}
 
 	/**
@@ -297,81 +304,22 @@ class Mo_SAML_Customer {
 	}
 
 	/**
-	 * Send Halloween sale discount request to miniOrange SAML support.
+	 * Send a sale discount request (Halloween, Black Friday, End of Year, ...) through the existing support query.
 	 *
-	 * @param string $email    Customer email.
-	 * @param string $use_case Optional use case the customer described.
+	 * @param string $email     Customer email.
+	 * @param string $sale_name Sale name as support should see it, e.g. "Black Friday".
+	 * @param string $use_case  Optional use case the customer described.
 	 *
-	 * @return bool True when the notify API accepted the email.
+	 * @return bool True when the contact-us API accepted the query.
 	 */
-	public function mo_saml_send_halloween_sale_request( $email, $use_case = '' ) {
-		$url = Mo_Saml_Options_Plugin_Constants::HOSTNAME . '/moas/api/notify/send';
-
-		$customer_key = $this->default_customer_key;
-		$api_key      = $this->default_api_key;
-
-		$current_time_in_millis = self::mo_saml_get_timestamp();
-		$current_time_in_millis = number_format( $current_time_in_millis, 0, '', '' );
-		$hash_value             = hash( 'sha512', $customer_key . $current_time_in_millis . $api_key );
-		$subject                = 'Query for a Halloween discount for SAML - ' . $email;
-
-		$current_user = wp_get_current_user();
-		$first_name   = $current_user->user_firstname ? $current_user->user_firstname : '';
-		$last_name    = $current_user->user_lastname ? $current_user->user_lastname : '';
-		if ( isset( $_SERVER['SERVER_NAME'] ) ) {
-			$company = sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) );
-		} else {
-			$company = wp_parse_url( site_url(), PHP_URL_HOST );
-		}
+	public function mo_saml_send_sale_request( $email, $sale_name, $use_case = '' ) {
 		$phone = get_option( Mo_Saml_Customer_Constants::ADMIN_PHONE );
-		$query = $use_case ? $use_case : 'Can I get the discount code for the Halloween deal?';
+		$phone = is_string( $phone ) ? $phone : '';
+		$query = $use_case ? $use_case : 'Can I get the discount code for the ' . $sale_name . ' deal?';
+		$query = '[' . $sale_name . ' Sale - SAML] ' . $query;
 
-		$content = '<div>Hello,'
-			. '<br><br>First Name : ' . esc_html( $first_name )
-			. '<br><br>Last Name : ' . esc_html( $last_name )
-			. '<br><br>Company : <a href="' . esc_url( site_url() ) . '" target="_blank">' . esc_html( $company ) . '</a>'
-			. '<br><br>Phone Number : ' . ( $phone ? '<a href="tel:' . esc_attr( $phone ) . '">' . esc_html( $phone ) . '</a>' : '' )
-			. '<br><br>Email : <a href="mailto:' . esc_attr( $email ) . '" target="_blank">' . esc_html( $email ) . '</a>'
-			. '<br><br>Query : <b>[Halloween Sale - SAML]</b><br>' . nl2br( esc_html( $query ) ) . '</div>';
-
-		$fields = array(
-			'customerKey' => $customer_key,
-			'sendEmail'   => true,
-			'email'       => array(
-				'customerKey' => $customer_key,
-				'fromEmail'   => $email,
-				'fromName'    => 'miniOrange',
-				'toEmail'     => 'info@xecurify.com',
-				'toName'      => 'samlsupport@xecurify.com',
-				'bccEmail'    => 'samlsupport@xecurify.com',
-				'subject'     => $subject,
-				'content'     => $content,
-			),
-		);
-
-		$headers = array(
-			'Content-Type'  => 'application/json',
-			'Customer-Key'  => $customer_key,
-			'Timestamp'     => $current_time_in_millis,
-			'Authorization' => $hash_value,
-		);
-		$args    = array(
-			'method'      => 'POST',
-			'body'        => wp_json_encode( $fields ),
-			'timeout'     => '15',
-			'redirection' => '5',
-			'httpversion' => '1.0',
-			'blocking'    => true,
-			'headers'     => $headers,
-		);
-
-		// Use wp_remote_post directly: mo_saml_wp_remote_post() returns only the body string.
-		$response = wp_remote_post( $url, $args );
-		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			return false;
-		}
-		$body = json_decode( wp_remote_retrieve_body( $response ), true );
-		return is_array( $body ) && isset( $body['status'] ) && 0 === strcasecmp( (string) $body['status'], 'SUCCESS' );
+		$response = $this->mo_saml_submit_contact_us( $email, $phone, $query, false, true );
+		return ! is_null( $response ) && false !== $response && 'Query submitted.' === $response;
 	}
 
 	/**

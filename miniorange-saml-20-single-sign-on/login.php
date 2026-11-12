@@ -3,7 +3,7 @@
  * Plugin Name: SAML Single Sign On – SSO Login
  * Plugin URI: https://miniorange.com/
  * Description: miniOrange SAML plugin allows sso/login using Azure, Azure B2C, Okta, ADFS, Keycloak, Onelogin, Salesforce, Google Apps (Gsuite), Salesforce, Shibboleth, Centrify, Ping, Auth0 and other Identity Providers. It acts as a SAML Service Provider which can be configured to establish a trust between the plugin and IDP to securely authenticate and login the user to WordPress site.
- * Version: 6.2.1
+ * Version: 6.2.2
  * Author: miniOrange
  * Author URI: https://miniorange.com/
  * License: Expat
@@ -29,8 +29,8 @@ require_once MO_SAML_PLUGIN_DIR . 'mo-saml-settings-page.php';
 require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-utilities.php';
 require_once MO_SAML_PLUGIN_DIR . 'class-mo-saml-wp-config-editor.php';
 require_once MO_SAML_PLUGIN_DIR . 'handlers/class-mo-saml-user-login-handler.php';
-require_once MO_SAML_PLUGIN_DIR . 'notices/class-mo-saml-black-friday-sale.php';
 require_once MO_SAML_PLUGIN_DIR . 'notices/class-mo-saml-halloween-sale.php';
+require_once MO_SAML_PLUGIN_DIR . 'notices/class-mo-saml-seasonal-sale.php';
 require_once MO_SAML_PLUGIN_DIR . 'handlers/class-mo-saml-register-abilities.php';
 /**
  * The Main class of the miniOrange SAML SSO Plugin.
@@ -326,7 +326,6 @@ class Mo_SAML_Login {
 	 */
 	public function plugin_settings_style( $page ) {
 		wp_enqueue_style( 'mo_saml_notice_style', plugins_url( 'includes/css/notice.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
-		wp_enqueue_style( 'mo_saml_black_friday_sale_style', plugins_url( 'includes/css/black-friday-sale-banner.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
 		if ( 'plugins.php' === $page ) {
 			wp_enqueue_style( 'mo_saml_feedback_plugins_page_style', plugins_url( 'includes/css/style_settings.min.css', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, 'all' );
 		}
@@ -384,7 +383,6 @@ class Mo_SAML_Login {
 			wp_enqueue_script( 'mo_saml_admin_settings_phone_script', plugins_url( 'includes/js/phone.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
 		}
 		wp_enqueue_script( 'mo_saml_notice_script', plugins_url( 'includes/js/notice.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
-		wp_enqueue_script( 'mo_saml_black_friday_sale_banner_script', plugins_url( 'includes/js/black-friday-sale-banner.min.js', __FILE__ ), array(), Mo_Saml_Options_Plugin_Constants::VERSION, false );
 	}
 
 	/**

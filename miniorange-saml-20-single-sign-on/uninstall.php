@@ -46,6 +46,7 @@ function mo_saml_delete_configuration_array() {
 	}
 
 	delete_option( 'mo_saml_halloween_sale_notice_snoozed_until' );
+	delete_option( 'mo_saml_sale_notice_snoozed_until' );
 
 	// Remove replay protection records of consumed SAML Assertions. Prefix must match Mo_SAML_Utilities::USED_ASSERTION_PREFIX.
 	global $wpdb;

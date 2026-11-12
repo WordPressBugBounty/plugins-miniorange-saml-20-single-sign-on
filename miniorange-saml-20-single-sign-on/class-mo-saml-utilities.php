@@ -1015,8 +1015,8 @@ class Mo_SAML_Utilities {
 		if ( ! is_wp_error( $response ) ) {
 			return $response['body'];
 		} else {
-			update_option( Mo_Saml_Options_Enum::SAML_MESSAGE, __( 'Unable to connect to the Internet. Please try again.', 'miniorange-saml-20-single-sign-on' ) );
-			( new self() )->mo_saml_show_error_message();
+				update_option( Mo_Saml_Options_Enum::SAML_MESSAGE, __( 'Unable to connect to the Internet. Please try again.', 'miniorange-saml-20-single-sign-on' ) );
+				( new self() )->mo_saml_show_error_message();
 			return null;
 		}
 	}
