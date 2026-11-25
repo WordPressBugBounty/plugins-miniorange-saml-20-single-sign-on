@@ -5,7 +5,7 @@ Tags: SAML authentication, SSO, Single Sign On, Azure AD, saml
 Requires at least: 3.7
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 6.2.2
+Stable tag: 6.3.0
 License: Expat
 License URI: https://plugins.miniorange.com/mit-license
 
@@ -329,7 +329,7 @@ Solution: You can safely ignore the update notice if you are using the free plug
 
 **Fix SAML SSO errors**
 
-1. mo-saml/fix-wpsamlerr010: fixes error WPSAMLERR010 by correcting the Entity ID, resolving the mismatch between the issuer value sent in the SAML response and the one saved in the plugin.
+1. mo-saml/fix-wpsamlerr010: fixes error WPSAMLERR010 by replacing the saved IdP Entity ID with the issuer value received in the last signature-verified SAML response from Test Configuration. It does nothing if no verified issuer is available.
 
 2. mo-saml/fix-wpsamlerr012: fixes error WPSAMLERR012 by applying iconv character encoding to the X.509 certificate, so the SAML certificate is converted to UTF-8 and the SAML response signature validates correctly.
 
@@ -406,6 +406,9 @@ Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@
 
 
 == Changelog ==
+
+= 6.3.0 =
+* Security: Reordered entity ID validation 
 
 = 6.2.2 =
 * UI changes in the SAML Plugin
@@ -568,6 +571,9 @@ Visit Help & FAQ section in the SAML plugin OR email us at <a href="mailto:info@
 For older changelog entries, please see the [additional changelog.txt file](https://plugins.svn.wordpress.org/miniorange-saml-20-single-sign-on/trunk/changelog.txt) provided with the SAML plugin.
 
 == Upgrade Notice ==
+
+= 6.3.0 =
+* Security: Reordered entity ID validation
 
 = 6.2.2 =
 * UI changes in the SAML Plugin

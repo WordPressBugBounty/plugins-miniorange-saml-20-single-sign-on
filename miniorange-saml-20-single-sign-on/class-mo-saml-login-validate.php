@@ -253,7 +253,9 @@ class Mo_SAML_Login_Validate {
 			if ( empty( $sp_enity_id ) ) {
 				$sp_enity_id = $sp_base_url . '/wp-content/plugins/miniorange-saml-20-single-sign-on/';
 			}
-			Mo_SAML_Utilities::mo_saml_validate_issuer_and_audience( $saml_response, $sp_enity_id, $issuer, $relay_state );
+			// Returns false only for an issuer mismatch during Test Configuration. Nothing is persisted here: the received
+			// issuer is stored for the "Fix Entity ID" flow only after the signature has been verified below.
+			$is_issuer_valid = Mo_SAML_Utilities::mo_saml_validate_issuer_and_audience( $saml_response, $sp_enity_id, $issuer, $relay_state );
 
 			foreach ( $cert_from_plugin as $key => $value ) {
 				$plugin_cert         = $value;
@@ -305,6 +307,15 @@ class Mo_SAML_Login_Validate {
 				}
 			}
 
+			// Issuer mismatch during Test Configuration: the signature has now been verified against the configured IdP
+			// certificate, so the received issuer is trusted and can be stored for the admin "Fix Entity ID" flow.
+			if ( false === $is_issuer_valid ) {
+				$received_issuer = sanitize_text_field( trim( (string) current( $assertions )->mo_saml_get_issuer() ) );
+				update_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER, $received_issuer );
+				wp_safe_redirect( admin_url() . '?page=mo_saml_settings&option=test_config_error_wpsamlerr010' );
+				exit;
+			}
+
 			// Reject an Assertion that has already been consumed (replay protection). Runs only after the response is fully verified.
 			Mo_SAML_Utilities::mo_saml_prevent_assertion_replay( $saml_response, $relay_state );
 			update_option( Mo_Saml_Options_Test_Configuration::SAML_RESPONSE, $saml_response_encoded, false );
@@ -324,8 +335,10 @@ class Mo_SAML_Login_Validate {
 			}
 
 			if ( 'mo_saml_fix_entity_id' === $_REQUEST['option'] && check_admin_referer( 'mo_saml_fix_entity_id' ) ) {
-				$saml_required_issuer = get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER );
-				update_option( Mo_Saml_Options_Enum_Service_Provider::ISSUER, $saml_required_issuer );
+				$saml_required_issuer = sanitize_text_field( trim( (string) get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER ) ) );
+				if ( ! empty( $saml_required_issuer ) ) {
+					update_option( Mo_Saml_Options_Enum_Service_Provider::ISSUER, $saml_required_issuer );
+				}
 				wp_safe_redirect( '?option=testConfig' );
 				exit;
 			}

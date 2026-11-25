@@ -814,57 +814,53 @@ class Mo_SAML_Utilities {
 	 * @param  string           $relay_state an url where users will be redirected after successful authentication.
 	 * @throws Mo_SAML_Invalid_Audience_URI_Exception For invalid audience URI.
 	 * @throws Mo_SAML_Invalid_Entity_ID_Exception For invalid issuer.
-	 * @return bool
+	 * @return bool True when the issuer and audience are valid. False only for an issuer mismatch during Test
+	 *              Configuration (testValidate); the caller must verify the signature before acting on it. This
+	 *              method runs before signature verification and therefore never writes to the database.
 	 */
 	public static function mo_saml_validate_issuer_and_audience( $saml_response, $sp_entity_id, $issuer_to_validate_against, $relay_state ) {
 		$issuer    = current( $saml_response->mo_saml_get_assertions() )->mo_saml_get_issuer();
 		$assertion = current( $saml_response->mo_saml_get_assertions() );
 		$audiences = $assertion->mo_saml_get_valid_audiences();
-		if ( strcmp( $issuer_to_validate_against, $issuer ) === 0 ) {
-			if ( ! empty( $audiences ) ) {
-				if ( in_array( $sp_entity_id, $audiences, true ) ) {
-					return true;
-				} else {
-
-					Mo_SAML_Logger::mo_saml_add_log(
-						Mo_Saml_Error_Log::mo_saml_write_message(
-							'UTILITIES_INVALID_AUDIENCE_URI',
-							array(
-								'spEntityId' => $sp_entity_id,
-								'audiences'  => $audiences,
-							)
-						),
-						Mo_SAML_Logger::ERROR
-					);
-					$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR009'];
-					if ( 'testValidate' === $relay_state ) {
-						mo_saml_display_test_config_error_page( $error_code );
-						exit;
-					} else {
-						throw new Mo_SAML_Invalid_Audience_URI_Exception( 'Invalid Audience URI.' );
-					}
+		if ( strcmp( (string) $issuer_to_validate_against, (string) $issuer ) === 0 ) {
+			if ( empty( $audiences ) || in_array( $sp_entity_id, $audiences, true ) ) {
+				return true;
+			} else {
+				// The audiences are unauthenticated at this point, so they are sanitized before being written to the log.
+				Mo_SAML_Logger::mo_saml_add_log(
+					Mo_Saml_Error_Log::mo_saml_write_message(
+						'UTILITIES_INVALID_AUDIENCE_URI',
+						array(
+							'spEntityId' => sanitize_text_field( (string) $sp_entity_id ),
+							'audiences'  => array_map( 'sanitize_text_field', array_map( 'strval', (array) $audiences ) ),
+						)
+					),
+					Mo_SAML_Logger::ERROR
+				);
+				$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR009'];
+				if ( 'testValidate' === $relay_state ) {
+					mo_saml_display_test_config_error_page( $error_code );
+					exit;
 				}
+				throw new Mo_SAML_Invalid_Audience_URI_Exception( 'Invalid Audience URI.' );
 			}
 		} else {
-
+			// The received issuer is unauthenticated at this point, so it is sanitized before being written to the log.
 			Mo_SAML_Logger::mo_saml_add_log(
 				Mo_Saml_Error_Log::mo_saml_write_message(
 					'UTILITIES_INVALID_ISSUER',
 					array(
-						'issuerToValidateAgainst' => $issuer_to_validate_against,
-						'issuer'                  => $issuer,
+						'issuerToValidateAgainst' => sanitize_text_field( $issuer_to_validate_against ),
+						'issuer'                  => sanitize_text_field( $issuer ),
 					)
 				),
 				Mo_SAML_Logger::ERROR
 			);
-			$error_code = Mo_Saml_Options_Enum_Error_Codes::$error_codes['WPSAMLERR010'];
 			if ( 'testValidate' === $relay_state ) {
-				update_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER, $issuer );
-				wp_safe_redirect( admin_url() . '?page=mo_saml_settings&option=test_config_error_wpsamlerr010' );
-				exit;
-			} else {
-				throw new Mo_SAML_Invalid_Entity_ID_Exception( 'Invalid Issuer.' );
+				// Do not persist or redirect here: the caller stores the received issuer only after signature verification.
+				return false;
 			}
+			throw new Mo_SAML_Invalid_Entity_ID_Exception( 'Invalid Issuer.' );
 		}
 	}
 

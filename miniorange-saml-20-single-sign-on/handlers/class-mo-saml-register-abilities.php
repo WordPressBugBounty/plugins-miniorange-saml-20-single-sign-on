@@ -124,7 +124,7 @@ class Mo_SAML_Register_Abilities {
 			'mo-saml/fix-wpsamlerr010',
 			array(
 				'label'               => 'Fix Entity ID WPSAMLERR010',
-				'description'         => 'Fix the entity ID in the plugin',
+				'description'         => 'Fix error WPSAMLERR010 (IdP Entity ID mismatch) by overwriting the configured IdP Entity ID with the Issuer received in the last signature-verified SAML Response from Test Configuration. Fails if no verified Issuer is available. This changes the plugin configuration.',
 				'category'            => 'mo-saml-sso',
 				'input_schema'        => array(
 					'type'                 => 'object',
@@ -144,7 +144,13 @@ class Mo_SAML_Register_Abilities {
 					'required'   => array( 'success', 'message' ),
 				),
 				'execute_callback'    => function () {
-					$saml_required_issuer = get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER );
+					$saml_required_issuer = sanitize_text_field( trim( (string) get_option( Mo_Saml_Sso_Constants::MO_SAML_REQUIRED_ISSUER ) ) );
+					if ( empty( $saml_required_issuer ) ) {
+						return array(
+							'success' => false,
+							'message' => 'No verified IdP Entity ID is available. Run Test Configuration first.',
+						);
+					}
 					update_option( Mo_Saml_Options_Enum_Service_Provider::ISSUER, $saml_required_issuer );
 					return array(
 						'success' => true,
@@ -155,7 +161,7 @@ class Mo_SAML_Register_Abilities {
 					array(
 						'show_in_rest' => true,
 						'annotations'  => array(
-							'readonly'      => true,
+							'readonly'      => false,
 							'idempotent'    => true,
 							'openWorldHint' => true,
 						),
@@ -204,7 +210,7 @@ class Mo_SAML_Register_Abilities {
 					array(
 						'show_in_rest' => true,
 						'annotations'  => array(
-							'readonly'      => true,
+							'readonly'      => false,
 							'idempotent'    => true,
 							'openWorldHint' => true,
 						),
@@ -283,7 +289,7 @@ class Mo_SAML_Register_Abilities {
 					array(
 						'show_in_rest' => true,
 						'annotations'  => array(
-							'readonly'      => true,
+							'readonly'      => false,
 							'idempotent'    => true,
 							'openWorldHint' => true,
 						),
@@ -532,7 +538,7 @@ class Mo_SAML_Register_Abilities {
 					array(
 						'show_in_rest' => true,
 						'annotations'  => array(
-							'readonly'      => true,
+							'readonly'      => false,
 							'idempotent'    => true,
 							'openWorldHint' => true,
 						),
@@ -591,7 +597,7 @@ class Mo_SAML_Register_Abilities {
 					array(
 						'show_in_rest' => true,
 						'annotations'  => array(
-							'readonly'      => true,
+							'readonly'      => false,
 							'idempotent'    => true,
 							'openWorldHint' => true,
 						),
@@ -667,7 +673,7 @@ class Mo_SAML_Register_Abilities {
 					array(
 						'show_in_rest' => true,
 						'annotations'  => array(
-							'readonly'      => true,
+							'readonly'      => false,
 							'idempotent'    => true,
 							'openWorldHint' => true,
 						),
